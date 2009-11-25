@@ -1,0 +1,18 @@
+<Addin namespace="FSpot" 
+	id="Facespot"
+	version="0.1.0"
+	name="Facespot"
+	description="Semi-auto Face Detection and Recognition Extension for F-Spot"
+	author="Kanit Wongsuphasawat, Thiraphat Charoensripongsa"
+	url="http://facespot.wordpress.com"
+	category="Face"
+	defaultEnabled="true">
+	<Dependencies>
+		<Addin id="Core" version="1.1"/>
+	</Dependencies>
+	<Extension path = "/FSpot/Menus/Tools">
+		<Command id="MyTool" _label = "Start my tool" command_type = "Test.TestCommand" />
+	</Extension>
+</Addin>
+
+

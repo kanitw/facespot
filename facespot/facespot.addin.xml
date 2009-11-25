@@ -1,9 +1,0 @@
-<Addin namespace="FSpot">
-	<Dependencies>
-		<Addin id="Core" version="1.1"/>
-	</Dependencies>
-	<Extension path = "/FSpot/Menus/Tools">
-		<Command id="MyTool" _label = "Start my tool" command_type = "MyClass" />
-	</Extension>
-</Addin>
-

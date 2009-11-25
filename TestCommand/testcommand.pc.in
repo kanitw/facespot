@@ -1,0 +1,6 @@
+Name: TestCommand
+Description: TestCommand
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/TestCommand.dll

@@ -1,12 +1,28 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ctype="Workspace" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" ctype="Workspace" />
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/FaceSidebar.cs" ctype="Workbench">
+    <Files>
+      <File FileName="Assembly Browser" />
+      <File FileName="FaceSpot/FaceSidebar.cs" Line="42" Column="69" />
+      <File FileName="FaceSpot/facespot.addin.xml" Line="15" Column="45" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State selected="True" />
+        <State expanded="True">
+          <Node name="FaceSpot" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="FaceSidebar.cs" selected="True" />
+          </Node>
+          <Node name="FaceSpotFaceEditor" expanded="True">
+            <Node name="References" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
