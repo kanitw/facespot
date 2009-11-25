@@ -30,6 +30,7 @@ namespace FaceSpot
 		
 		VBox mainVBox;
 		Button addFaceButton;
+		Button detectFaceButton;
 		Label headerLabel;
 		Label pleaseSelectPictureLabel;
 		
@@ -56,7 +57,10 @@ namespace FaceSpot
 			pleaseSelectPictureLabel.Markup = "<span weight=\"bold\">" +
 				Catalog.GetString("Please Select Picture Label") + "</span>";
 			
-			addFaceButton = new Button(Catalog.GetString("Add New Face"));
+			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
+			mainVBox.PackStart(detectFaceButton,false,false,0);
+			
+			addFaceButton = new Button(Catalog.GetString("Manually Add New Face"));
 			mainVBox.PackEnd(addFaceButton,false,false,0);
 			
 			ShadowType = ShadowType.None;
