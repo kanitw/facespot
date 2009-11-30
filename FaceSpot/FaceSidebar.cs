@@ -35,7 +35,9 @@ namespace FaceSpot
 		Label pleaseSelectPictureLabel;
 		
 		Expander knownFaceExpander;
+		TreeView knowFaceTreeView;
 		Expander unknownFaceExpander;
+		
 		
 		public FaceSidebarPage Page;
 	
@@ -55,10 +57,10 @@ namespace FaceSpot
 			
 			pleaseSelectPictureLabel = new Label ();
 			pleaseSelectPictureLabel.Markup = "<span weight=\"bold\">" +
-				Catalog.GetString("Please Select Picture Label") + "</span>";
+				Catalog.GetString("Please Select an Image") + "</span>";
 			
 			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
-			mainVBox.PackStart(detectFaceButton,false,false,0);
+			mainVBox.PackEnd(detectFaceButton,false,false,0);
 			
 			addFaceButton = new Button(Catalog.GetString("Manually Add New Face"));
 			mainVBox.PackEnd(addFaceButton,false,false,0);
@@ -117,7 +119,8 @@ namespace FaceSpot
 		/// <summary>
 		/// Remove Face Detection Frame Hilight on the .....
 		/// </summary>
-		private void ClearPhotoFaces(){
+		private void ClearPhotoFaces()
+		{
 			Remove(mainVBox);
 			Add(pleaseSelectPictureLabel);
 			ShowAll();

@@ -5,20 +5,27 @@
   </MonoDevelop.Ide.DebuggingService>
   <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/FaceSidebar.cs" ctype="Workbench">
     <Files>
-      <File FileName="Assembly Browser" />
-      <File FileName="FaceSpot/FaceSidebar.cs" Line="42" Column="69" />
-      <File FileName="FaceSpot/facespot.addin.xml" Line="15" Column="45" />
+      <File FileName="FaceSpot/FaceSidebar.cs" Line="46" Column="26" />
+      <File FileName="FaceSpot/FaceSidebar.addin.xml" Line="2" Column="21" />
+      <File FileName="FaceSpot/FaceService.addin.xml" Line="9" Column="23" />
+      <File FileName="FaceSpot/FaceService.cs" Line="16" Column="3" />
+      <File FileName="FaceSpotService/FaceService.addin.xml" Line="9" Column="23" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="FaceSpot" expanded="True">
-            <Node name="References" expanded="True" />
-            <Node name="FaceSidebar.cs" selected="True" />
+            <Node name="References" expanded="True">
+              <Node name="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" selected="True" />
+            </Node>
           </Node>
           <Node name="FaceSpotFaceEditor" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
+          <Node name="FaceSpotService" expanded="True">
+            <Node name="References" expanded="True" />
+          </Node>
+          <Node name="TestCommand" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

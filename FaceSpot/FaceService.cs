@@ -4,16 +4,11 @@ using FSpot.Extensions;
 
 namespace FaceSpot
 {
-
-
 	public class FaceService : IService
 	{
-
 		public FaceService ()
 		{
-			
 		}
-		
 		
 		public bool Start()
 		{
