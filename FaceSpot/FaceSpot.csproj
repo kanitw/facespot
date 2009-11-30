@@ -46,11 +46,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FaceSidebar.cs" />
-    <Compile Include="FaceService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FaceSidebar.addin.xml" />
-    <EmbeddedResource Include="FaceService.addin.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
