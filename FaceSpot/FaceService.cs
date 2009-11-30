@@ -8,6 +8,7 @@ namespace FaceSpot
 	{
 		public FaceService ()
 		{
+			
 		}
 		
 		public bool Start()
