@@ -21,6 +21,7 @@ namespace FaceSpot
 		
 		protected override Gdk.Pixbuf Process (Gdk.Pixbuf input, Cms.Profile input_profile)
 		{
+			//Implement this
 			throw new System.NotImplementedException ();
 		}
 		
