@@ -9,12 +9,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceSpot", "FaceSpot\FaceSp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceSpotService", "FaceSpotService\FaceSpotService.csproj", "{6812C1E5-5B74-4D6F-BB7B-FEA3CFEC14B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceSpotSidebar", "FaceSpotSidebar\FaceSpotSidebar.csproj", "{318BE3F4-1E05-4D60-BB12-0FF0ED00BE53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{318BE3F4-1E05-4D60-BB12-0FF0ED00BE53}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{318BE3F4-1E05-4D60-BB12-0FF0ED00BE53}.Debug|x86.Build.0 = Debug|Any CPU
+		{318BE3F4-1E05-4D60-BB12-0FF0ED00BE53}.Release|x86.ActiveCfg = Release|Any CPU
+		{318BE3F4-1E05-4D60-BB12-0FF0ED00BE53}.Release|x86.Build.0 = Release|Any CPU
 		{5BA44955-298A-4793-85F7-237B306F8663}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{5BA44955-298A-4793-85F7-237B306F8663}.Debug|x86.Build.0 = Debug|Any CPU
 		{5BA44955-298A-4793-85F7-237B306F8663}.Release|x86.ActiveCfg = Release|Any CPU

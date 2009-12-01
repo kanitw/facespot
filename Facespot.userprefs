@@ -3,26 +3,25 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/FaceService.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotService/FaceService.cs" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpot/FaceSidebar.cs" Line="33" Column="3" />
-      <File FileName="FaceSpot/FaceSidebar.addin.xml" Line="2" Column="21" />
-      <File FileName="FaceSpot/FaceService.addin.xml" Line="15" Column="44" />
-      <File FileName="FaceSpot/FaceService.cs" Line="11" Column="4" />
-      <File FileName="FaceSpotService/FaceService.addin.xml" Line="1" Column="1" />
-      <File FileName="Assembly Browser" />
+      <File FileName="FaceSpotService/FaceService.addin.xml" Line="15" Column="42" />
+      <File FileName="FaceSpotFaceEditor/FaceSpotFaceEditor.addin.xml" Line="13" Column="1" />
+      <File FileName="TestCommand/testcommand.addin.xml" Line="1" Column="1" />
+      <File FileName="TestCommand/TestCommand.cs" Line="13" Column="2" />
+      <File FileName="FaceSpot/AssemblyInfo.cs" Line="1" Column="1" />
+      <File FileName="FaceSpotService/FaceService.cs" Line="27" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="FaceSpot" expanded="True">
-            <Node name="FaceService.cs" selected="True" />
-          </Node>
+          <Node name="FaceSpot" expanded="True" />
           <Node name="FaceSpotFaceEditor" expanded="True" />
-          <Node name="FaceSpotService" expanded="True">
+          <Node name="FaceSpotService" expanded="True" />
+          <Node name="FaceSpotSidebar" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
-          <Node name="TestCommand" expanded="True" />
+          <Node name="TestCommand" expanded="True" selected="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

@@ -27,7 +27,7 @@ namespace FaceSpot
 		public override Gtk.Widget ConfigurationWidget ()
 		{
 			VBox vbox = new VBox();
-			Label faceFound = 
+			//Label faceFound = 
 			return vbox;
 		}
 
