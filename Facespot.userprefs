@@ -3,14 +3,19 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotService/FaceService.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotSidebar/FaceSidebar.cs" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpotService/FaceService.addin.xml" Line="15" Column="42" />
-      <File FileName="FaceSpotFaceEditor/FaceSpotFaceEditor.addin.xml" Line="13" Column="1" />
+      <File FileName="../refacespot/facespot/FaceSpot/FaceService.addin.xml" Line="1" Column="1" />
+      <File FileName="../refacespot/facespot/FaceSpot/FaceService.cs" Line="11" Column="4" />
+      <File FileName="FaceSpotService/FaceService.addin.xml" Line="1" Column="1" />
+      <File FileName="FaceSpotFaceEditor/FaceSpotFaceEditor.addin.xml" Line="1" Column="1" />
       <File FileName="TestCommand/testcommand.addin.xml" Line="1" Column="1" />
-      <File FileName="TestCommand/TestCommand.cs" Line="13" Column="2" />
+      <File FileName="TestCommand/TestCommand.cs" Line="1" Column="1" />
       <File FileName="FaceSpot/AssemblyInfo.cs" Line="1" Column="1" />
       <File FileName="FaceSpotService/FaceService.cs" Line="27" Column="3" />
+      <File FileName="FaceSpot/FaceStore.cs" Line="7" Column="1" />
+      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="150" Column="21" />
+      <File FileName="FaceSpotFaceEditor/FaceEditor.cs" Line="22" Column="74" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,10 +23,8 @@
           <Node name="FaceSpot" expanded="True" />
           <Node name="FaceSpotFaceEditor" expanded="True" />
           <Node name="FaceSpotService" expanded="True" />
-          <Node name="FaceSpotSidebar" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
-          <Node name="TestCommand" expanded="True" selected="True" />
+          <Node name="FaceSpotSidebar" expanded="True" selected="True" />
+          <Node name="TestCommand" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

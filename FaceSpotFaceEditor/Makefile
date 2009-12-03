@@ -11,30 +11,30 @@ include $(top_srcdir)/config.make
 ifeq ($(CONFIG),DEBUG_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
-ASSEMBLY = ../bin/Debug/TestCommand.dll
+ASSEMBLY = ../bin/Debug/FaceSpotFaceEditor.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
 PROJECT_REFERENCES = 
 BUILD_DIR = ../bin/Debug
 
-TESTCOMMAND_DLL_MDB_SOURCE=../bin/Debug/TestCommand.dll.mdb
-TESTCOMMAND_DLL_MDB=$(BUILD_DIR)/TestCommand.dll.mdb
-TESTCOMMAND_DLL=
+FACESPOTFACEEDITOR_DLL_MDB_SOURCE=../bin/Debug/FaceSpotFaceEditor.dll.mdb
+FACESPOTFACEEDITOR_DLL_MDB=$(BUILD_DIR)/FaceSpotFaceEditor.dll.mdb
+FACESPOTFACEEDITOR_DLL=
 
 endif
 
 ifeq ($(CONFIG),RELEASE_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
-ASSEMBLY = ../bin/Release/TestCommand.dll
+ASSEMBLY = ../bin/Release/FaceSpotFaceEditor.dll
 ASSEMBLY_MDB = 
 COMPILE_TARGET = library
 PROJECT_REFERENCES = 
 BUILD_DIR = ../bin/Release
 
-TESTCOMMAND_DLL_MDB=
-TESTCOMMAND_DLL_SOURCE=../bin/Debug/TestCommand.dll
-TESTCOMMAND_DLL=$(BUILD_DIR)/TestCommand.dll
+FACESPOTFACEEDITOR_DLL_MDB=
+FACESPOTFACEEDITOR_DLL_SOURCE=../bin/Debug/FaceSpotFaceEditor.dll
+FACESPOTFACEEDITOR_DLL=$(BUILD_DIR)/FaceSpotFaceEditor.dll
 
 endif
 
@@ -42,33 +42,33 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
-	$(TESTCOMMAND_DLL_MDB) \
-	$(TESTCOMMAND_DLL)  
+	$(FACESPOTFACEEDITOR_DLL_MDB) \
+	$(FACESPOTFACEEDITOR_DLL)  
 
 LINUX_PKGCONFIG = \
-	$(TESTCOMMAND_PC)  
+	$(FACESPOTFACEEDITOR_PC)  
 
 
 RESGEN=resgen2
 
-TESTCOMMAND_PC = $(BUILD_DIR)/testcommand.pc
+FACESPOTFACEEDITOR_PC = $(BUILD_DIR)/facespotfaceeditor.pc
 
 FILES = \
-	TestCommand.cs 
+	AssemblyInfo.cs \
+	FaceEditor.cs 
 
 DATA_FILES = 
 
 RESOURCES = \
-	testcommand.addin.xml,TestCommand.testcommand.addin.xml 
+	FaceSpotFaceEditor.addin.xml,FaceSpot.FaceSpotFaceEditor.addin.xml 
 
 EXTRAS = \
-	Makefile \
-	testcommand.pc.in 
+	facespotfaceeditor.pc.in 
 
 REFERENCES =  \
+	System \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:f-spot \
-	-pkg:gnome-vfs-sharp-2.0 \
 	Mono.Posix
 
 DLL_REFERENCES = 
@@ -83,8 +83,8 @@ include $(top_srcdir)/Makefile.include
 
 
 
-$(eval $(call emit-deploy-wrapper,TESTCOMMAND_PC,testcommand.pc))
-$(eval $(call emit-deploy-target,TESTCOMMAND_DLL))
+$(eval $(call emit-deploy-wrapper,FACESPOTFACEEDITOR_PC,facespotfaceeditor.pc))
+$(eval $(call emit-deploy-target,FACESPOTFACEEDITOR_DLL))
 
 
 $(eval $(call emit_resgen_targets))
@@ -107,10 +107,10 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(TESTCOMMAND_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(FACESPOTFACEEDITOR_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(libdir)/pkgconfig'
-	$(call cp,$(TESTCOMMAND_PC),$(DESTDIR)$(libdir)/pkgconfig)
-	$(call cp,$(TESTCOMMAND_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(FACESPOTFACEEDITOR_PC),$(DESTDIR)$(libdir)/pkgconfig)
+	$(call cp,$(FACESPOTFACEEDITOR_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -118,9 +118,9 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(TESTCOMMAND_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(TESTCOMMAND_PC),$(DESTDIR)$(libdir)/pkgconfig)
-	$(call rm,$(TESTCOMMAND_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(FACESPOTFACEEDITOR_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(FACESPOTFACEEDITOR_PC),$(DESTDIR)$(libdir)/pkgconfig)
+	$(call rm,$(FACESPOTFACEEDITOR_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

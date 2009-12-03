@@ -28,41 +28,51 @@ namespace FaceSpot
 	public class FaceSidebarWidget : ScrolledWindow {
 		Delay updateDelay;
 		
-		VBox mainVBox;
+		VBox mainVBox;//,faceVBox;
+		VPaned faceVPane;
 		Button addFaceButton;
 		Button detectFaceButton;
 		Label headerLabel;
 		Label pleaseSelectPictureLabel;
 		
 		Expander knownFaceExpander, unknownFaceExpander;
+		HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
 		FSpot.Widgets.IconView knownFaceIconView,unknownFaceIconView;
 		PhotoList knownFaceList,unknownFaceList;
 			
-		//TreeView knowFaceTreeView;
-		
-		
 		public FaceSidebarPage Page;
 	
 		public FaceSidebarWidget ()
 		{
 			mainVBox = new VBox();
-			mainVBox.Spacing = 6;
+			//mainVBox.Spacing = 6;
+			//faceVBox = new VBox();
+			faceVPane = new VPaned();
 			
 			headerLabel =  new Label (Catalog.GetString ("Not Implemented Yet"));
 			mainVBox.PackStart(headerLabel,false,false,0);
 			
 			knownFaceExpander = new Expander("Faces");
-			mainVBox.PackStart(knownFaceExpander,false,false,0);
+			
+			//faceVBox.PackStart(knownFaceExpander,true,true,0);
+			//faceVPane.Add(knownFaceExpander);
+			faceVPane.Pack1(knownFaceExpander,true,true);
 			knownFaceScrolledWindow = new ScrolledWindow();
 			knownFaceExpander.Add(knownFaceScrolledWindow);
 			
+//			faceHandleBox = new HandleBox();
+//			faceHandleBox.HandlePosition = PositionType.Top;
+//			faceVBox.PackStart(faceHandleBox,false,false,0);
+			
 			unknownFaceExpander = new Expander("Unknown Faces");
-			mainVBox.PackStart(unknownFaceExpander,false,false,0);
+			//faceVBox.PackStart(unknownFaceExpander,true,true,0);
+			//faceVPane.Add(unknownFaceExpander);
+			faceVPane.Pack2(unknownFaceExpander,true,true);
 			unknownFaceScrolledWindow = new ScrolledWindow();
 			unknownFaceExpander.Add(unknownFaceScrolledWindow);
 			
-			
+			mainVBox.PackStart(faceVPane,true,true,0);
 			
 			pleaseSelectPictureLabel = new Label ();
 			pleaseSelectPictureLabel.Markup = "<span weight=\"bold\">" +
@@ -115,16 +125,36 @@ namespace FaceSpot
 			try 
 			{
 				ClearPhotoFaces();
+				if( SelectedItem == null)return;
+				
+				FSpot.Photo photo = (FSpot.Photo) SelectedItem;
+				#region Wrong Code just for test UI
+				uint [] version_ids = photo.VersionIds;
+				IBrowsableItem [] items = new IBrowsableItem [version_ids.Length];
+		
+				int i = items.Length;
+				int selected_version_id = -1;
+				foreach (uint id in version_ids) {
+					i--;
+					FSpot.Utils.Log.Debug (string.Format ("Adding version {0} to items[{1}].", id, i));
+					items[i] = (photo.GetVersion (id));
+					if (id == photo.DefaultVersionId)
+						selected_version_id = i;
+				}
+				#endregion
+				
 				Remove(pleaseSelectPictureLabel);
 				Add(mainVBox);
 				//get knownFaceList
 				
 				//TODO Add knownFaceList Code Fetch
-				IBrowsableItem[] knownFaceItems = new IBrowsableItem[0];
+				IBrowsableItem[] knownFaceItems = items;//new IBrowsableItem[0];
 				
 				knownFaceList = new PhotoList(knownFaceItems);
 				knownFaceIconView = new FSpot.Widgets.IconView(knownFaceList);
 				knownFaceScrolledWindow.Add(knownFaceIconView);
+				knownFaceExpander.Expanded = true;
+				
 				
 				//get unknownFaceList	
 				
@@ -134,6 +164,7 @@ namespace FaceSpot
 				unknownFaceList = new PhotoList(unknownFaceItems);
 				unknownFaceIconView = new FSpot.Widgets.IconView(unknownFaceList);
 				unknownFaceScrolledWindow.Add(unknownFaceIconView);
+				unknownFaceExpander.Expanded = true;
 				ShowAll();
 			}
 			catch (Exception e){

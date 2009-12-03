@@ -1,0 +1,6 @@
+Name: FaceSpotService
+Description: FaceSpotService
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/FaceSpotService.dll

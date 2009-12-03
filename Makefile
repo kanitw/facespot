@@ -12,10 +12,10 @@ include $(top_srcdir)/rules.make
 
 #Warning: This is an automatically generated file, do not edit!
 ifeq ($(CONFIG),DEBUG_X86)
- SUBDIRS =  facespot TestCommand
+ SUBDIRS =  TestCommand FaceSpotFaceEditor FaceSpot FaceSpotService FaceSpotSidebar
 endif
 ifeq ($(CONFIG),RELEASE_X86)
- SUBDIRS =  facespot TestCommand
+ SUBDIRS =  TestCommand FaceSpotFaceEditor FaceSpot FaceSpotService FaceSpotSidebar
 endif
 
 
