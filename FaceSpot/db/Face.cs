@@ -53,9 +53,11 @@ namespace FaceSpot
 			this.leftX = leftX;
 			this.topY = topY;
 			this.width = width;
-			
+			this.photo = photo;
+			//TODO Possible Error
+			photo_md5 = photo.MD5Sum;
 		}
-
+		
 		//TODO Add Function for move/scale(1:1) Face
 		
 		public void Dispose()
@@ -63,6 +65,10 @@ namespace FaceSpot
 			//TODO Add required child item dispose
 			
 			System.GC.SuppressFinalize(this);
+		}
+		public static PixbufCache getFaceImageFromPhoto(uint left,uint top,uint width, Photo photo)
+		{
+			throw new NotImplementedException();	
 		}
 	}
 }
