@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{318BE3F4-1E05-4D60-BB12-0FF0ED00BE53}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FaceSpotSidebar</RootNamespace>
+    <RootNamespace>FaceSpot</RootNamespace>
     <AssemblyName>FaceSpotSidebar</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FaceSidebar.cs" />
+    <Compile Include="FaceSidebarWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FaceSidebar.addin.xml" />

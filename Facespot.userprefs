@@ -3,27 +3,24 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/FaceBrowser.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotSidebar/FaceSidebarWidget.cs" ctype="Workbench">
     <Files>
-      <File FileName="../refacespot/facespot/FaceSpot/FaceService.addin.xml" Line="1" Column="1" />
-      <File FileName="../refacespot/facespot/FaceSpot/FaceService.cs" Line="1" Column="1" />
-      <File FileName="FaceSpotService/FaceService.addin.xml" Line="1" Column="1" />
-      <File FileName="FaceSpotFaceEditor/FaceSpotFaceEditor.addin.xml" Line="1" Column="1" />
-      <File FileName="TestCommand/testcommand.addin.xml" Line="1" Column="1" />
-      <File FileName="TestCommand/TestCommand.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/AssemblyInfo.cs" Line="1" Column="1" />
-      <File FileName="FaceSpotService/FaceService.cs" Line="1" Column="1" />
-      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="150" Column="21" />
-      <File FileName="FaceSpotFaceEditor/FaceEditor.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/FaceBrowser.cs" Line="27" Column="17" />
+      <File FileName="FaceSpotFaceEditor/FaceEditor.cs" Line="21" Column="3" />
+      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="17" Column="3" />
+      <File FileName="FaceSpot/ui/FaceSelectionWidget.cs" Line="18" Column="1" />
+      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="28" Column="2" />
+      <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="19" Column="36" />
+      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="4" Column="19" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="FaceSpot" expanded="True">
-            <Node name="FaceBrowser.cs" selected="True" />
+            <Node name="References" expanded="True" />
+            <Node name="db" expanded="True" />
+            <Node name="ui" expanded="True" />
           </Node>
-          <Node name="FaceSpotFaceEditor" expanded="True" />
+          <Node name="FaceSpotFaceEditor" expanded="True" selected="True" />
           <Node name="FaceSpotService" expanded="True" />
           <Node name="FaceSpotSidebar" expanded="True" />
           <Node name="TestCommand" expanded="True" />

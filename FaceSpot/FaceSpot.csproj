@@ -43,13 +43,17 @@
       <Package>f-spot</Package>
     </Reference>
     <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="FSpot.Widgets, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="FaceBrowser.cs" />
     <Compile Include="db\Face.cs" />
     <Compile Include="db\FaceSpotDb.cs" />
     <Compile Include="db\FaceStore.cs" />
+    <Compile Include="ui\FaceSelectionWidget.cs" />
+    <Compile Include="ui\FaceBrowser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

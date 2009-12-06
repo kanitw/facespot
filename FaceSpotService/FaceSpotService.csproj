@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6812C1E5-5B74-4D6F-BB7B-FEA3CFEC14B2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FaceSpotService</RootNamespace>
+    <RootNamespace>FaceSpot</RootNamespace>
     <AssemblyName>FaceSpotService</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
