@@ -42,12 +42,21 @@
     <Reference Include="FSpot.Utils, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
+    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="FaceSpotDb.cs" />
-    <Compile Include="FaceStore.cs" />
-    <Compile Include="Face.cs" />
+    <Compile Include="FaceBrowser.cs" />
+    <Compile Include="db\Face.cs" />
+    <Compile Include="db\FaceSpotDb.cs" />
+    <Compile Include="db\FaceStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <EmbeddedResource Include="FaceSpot.addin.xml" />
+    <EmbeddedResource Include="ui\FaceBrowser.glade" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="db\" />
+  </ItemGroup>
 </Project>
