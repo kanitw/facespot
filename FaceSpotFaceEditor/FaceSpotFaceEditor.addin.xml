@@ -1,7 +1,7 @@
 <Addin namespace="FSpot"
 	id="FacespotFaceEditor"
 	version="0.1.0"
-	name="Facespot"
+	name="FaceSpotFaceEditor"
 	description="Semi-auto Face Detection and Recognition Extension for F-Spot"
 	author="Kanit Wongsuphasawat, Thiraphat Charoensripongsa"
 	url="http://facespot.wordpress.com"

@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using Gtk;
+using Gdk;
 using Mono.Unix;
 using FSpot;
 using FSpot.Utils;
@@ -78,7 +79,24 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		void AddFaceButtonClicked (object sender, EventArgs e)
 		{
-			
+			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
+			if( Rectangle.Zero == view.Selection) 
+			{
+				string msg = Catalog.GetString ("No selection available");
+				string desc = Catalog.GetString ("This tool requires an active selection. Please select a region of the photo and try the operation again");
+
+				FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window,
+										DialogFlags.DestroyWithParent,
+										Gtk.MessageType.Error, ButtonsType.Ok,
+										msg,
+										desc);
+
+				md.Run ();
+				md.Destroy ();
+				return;
+			}else{
+				
+			}
 		}
 		//TODO Ham : revise this code part
 		#region to revise
