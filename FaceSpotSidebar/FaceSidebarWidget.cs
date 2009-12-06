@@ -1,6 +1,12 @@
-
 using System;
-
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using Gtk;
+using Mono.Unix;
+using FSpot;
+using FSpot.Utils;
+using FSpot.Widgets;
 namespace FaceSpot
 {
 

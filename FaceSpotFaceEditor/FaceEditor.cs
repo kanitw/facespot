@@ -2,6 +2,7 @@
 using System;
 using FSpot.Editors;
 using Mono.Unix;
+using Gtk;
 
 namespace FaceSpot
 {
@@ -16,7 +17,7 @@ namespace FaceSpot
 			HasSettings = true;
 			
 			ApplyLabel = Catalog.GetString("Apply");
-			Initialized += delegate { State.PhotoImageView.PhotoChanged += delegate { UpdateSelectionCombo (); }; };
+			//Initialized += delegate { State.PhotoImageView.PhotoChanged += delegate { UpdateSelectionCombo (); }; };
 		}
 		
 		protected override Gdk.Pixbuf Process (Gdk.Pixbuf input, Cms.Profile input_profile)
@@ -31,7 +32,5 @@ namespace FaceSpot
 			//Label faceFound = 
 			return vbox;
 		}
-
-
 	}
 }

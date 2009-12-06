@@ -35,6 +35,6 @@ namespace FaceSpot
 			//TODO Add this
  			throw new System.NotImplementedException ();
  		}
-
+		//TODO Add more Query
 	}
 }
