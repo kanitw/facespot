@@ -8,6 +8,8 @@ using Mono.Unix;
 using FSpot;
 using FSpot.Utils;
 using FSpot.Widgets;
+using FaceSpot;
+
 namespace FaceSpot
 {
 
@@ -95,7 +97,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				md.Destroy ();
 				return;
 			}else{
-				
+				//Face f = new Face(
 			}
 		}
 		//TODO Ham : revise this code part
