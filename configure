@@ -4,7 +4,7 @@ PACKAGE=facespot
 prefix=/usr/local
 config=DEBUG_X86
 configurations=" DEBUG_X86 RELEASE_X86"
-common_packages=" f-spot;0.6.1.5 gnome-vfs-sharp-2.0;2.24.1 gtk-sharp-2.0;2.12.9"
+common_packages=" f-spot;0.6.1.5 glade-sharp-2.0;2.12.9 gtk-sharp-2.0;2.12.9"
 
 
 usage ()

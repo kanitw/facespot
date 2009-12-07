@@ -46,7 +46,6 @@ namespace FaceSpot.Db
 		
 		string photo_md5;
 		
-		
 		public Photo photo;
 		/// <summary>
 		/// 

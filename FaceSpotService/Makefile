@@ -54,14 +54,13 @@ RESGEN=resgen2
 FACESPOTSERVICE_PC = $(BUILD_DIR)/facespotservice.pc
 
 FILES = \
-	MyClass.cs \
 	AssemblyInfo.cs \
 	FaceService.cs 
 
 DATA_FILES = 
 
 RESOURCES = \
-	FaceService.addin.xml,FaceSpotService.FaceService.addin.xml 
+	FaceService.addin.xml,FaceSpot.FaceService.addin.xml 
 
 EXTRAS = \
 	facespotservice.pc.in 

@@ -1,12 +1,12 @@
 <Addin namespace="FSpot"
 	id="FaceSpotService"
-	version="0.1.0"
+	version="0.8"
 	name="FaceSpotService"
-	description="Semi-auto Face Detection and Recognition Extension for F-Spot : Auto Face-Detection &amp; Face Suggestion Service"
+	description="Semi-auto Face Detection and Recognition Extension for F-Spot : Auto Face-Detection - Face Suggestion Service"
 	author="Kanit Wongsuphasawat, Thiraphat Charoensripongsa"
 	url="http://facespot.wordpress.com"
-	category="FaceSpot"
-	defaultEnabled="true"
+	category="Services"
+	defaultEnabled="false"
 >
 	<Dependencies>
 		<Addin id="Core" version="0.7"/>

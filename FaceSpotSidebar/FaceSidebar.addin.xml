@@ -1,12 +1,12 @@
 <Addin namespace="FSpot"
 	id="FaceSpotSidebar"
-	version="0.1.0"
+	version="0.8"
 	name="FaceSpotSidebar"
 	description="Semi-auto Face Detection and Recognition Extension for F-Spot : FaceSideBar "
 	author="Kanit Wongsuphasawat, Thiraphat Charoensripongsa"
 	url="http://facespot.wordpress.com"
 	category="FaceSpot"
-	defaultEnabled="true"
+	defaultEnabled="false"
 >
 	<Dependencies>
 		<Addin id="Core" version="0.7"/>

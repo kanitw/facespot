@@ -13,8 +13,12 @@ namespace FaceSpot.Db
 	{
 		private static FaceSpotDb instance;
 		public static FaceSpotDb Instance {
-			get { return instance; }
-			set { instance = value; }
+			get {
+				if (instance == null) 
+					instance = new FaceSpotDb ();	
+				return instance; 
+			}
+			//set { instance = value; }
 		}
 		
 		FaceStore face_store;

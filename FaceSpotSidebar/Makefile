@@ -11,40 +11,44 @@ include $(top_srcdir)/config.make
 ifeq ($(CONFIG),DEBUG_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
-ASSEMBLY = ../bin/Debug/FaceSpot.dll
+ASSEMBLY = ../bin/Debug/FaceSpotSidebar.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
-PROJECT_REFERENCES = 
+PROJECT_REFERENCES =  \
+	../bin/Debug/FaceSpot.dll
 BUILD_DIR = ../bin/Debug
 
+FACESPOT_DLL_SOURCE=../bin/Debug/FaceSpot.dll
 FSPOT_BLING_DLL_SOURCE=../../../../../usr/lib/f-spot/FSpot.Bling.dll
 GTK_SHARP_BEANS_DLL_SOURCE=../../../../../usr/lib/f-spot/gtk-sharp-beans.dll
 GTK_SHARP_BEANS_DLL_CONFIG_SOURCE=../../../../../usr/lib/f-spot/gtk-sharp-beans.dll.config
 GIO_SHARP_DLL_SOURCE=../../../../../usr/lib/f-spot/gio-sharp.dll
 GIO_SHARP_DLL_CONFIG_SOURCE=../../../../../usr/lib/f-spot/gio-sharp.dll.config
-FACESPOT_DLL_MDB_SOURCE=../bin/Debug/FaceSpot.dll.mdb
-FACESPOT_DLL_MDB=$(BUILD_DIR)/FaceSpot.dll.mdb
-FACESPOT_DLL=
+FACESPOTSIDEBAR_DLL_MDB_SOURCE=../bin/Debug/FaceSpotSidebar.dll.mdb
+FACESPOTSIDEBAR_DLL_MDB=$(BUILD_DIR)/FaceSpotSidebar.dll.mdb
+FACESPOTSIDEBAR_DLL=
 
 endif
 
 ifeq ($(CONFIG),RELEASE_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
-ASSEMBLY = ../bin/Release/FaceSpot.dll
+ASSEMBLY = ../bin/Release/FaceSpotSidebar.dll
 ASSEMBLY_MDB = 
 COMPILE_TARGET = library
-PROJECT_REFERENCES = 
+PROJECT_REFERENCES =  \
+	../bin/Release/FaceSpot.dll
 BUILD_DIR = ../bin/Release
 
+FACESPOT_DLL_SOURCE=../bin/Debug/FaceSpot.dll
 FSPOT_BLING_DLL_SOURCE=../../../../../usr/lib/f-spot/FSpot.Bling.dll
 GTK_SHARP_BEANS_DLL_SOURCE=../../../../../usr/lib/f-spot/gtk-sharp-beans.dll
 GTK_SHARP_BEANS_DLL_CONFIG_SOURCE=../../../../../usr/lib/f-spot/gtk-sharp-beans.dll.config
 GIO_SHARP_DLL_SOURCE=../../../../../usr/lib/f-spot/gio-sharp.dll
 GIO_SHARP_DLL_CONFIG_SOURCE=../../../../../usr/lib/f-spot/gio-sharp.dll.config
-FACESPOT_DLL_MDB=
-FACESPOT_DLL_SOURCE=../bin/Debug/FaceSpot.dll
-FACESPOT_DLL=$(BUILD_DIR)/FaceSpot.dll
+FACESPOTSIDEBAR_DLL_MDB=
+FACESPOTSIDEBAR_DLL_SOURCE=../bin/Debug/FaceSpotSidebar.dll
+FACESPOTSIDEBAR_DLL=$(BUILD_DIR)/FaceSpotSidebar.dll
 
 endif
 
@@ -52,56 +56,49 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
+	$(FACESPOT_DLL) \
 	$(FSPOT_BLING_DLL) \
 	$(GTK_SHARP_BEANS_DLL) \
 	$(GTK_SHARP_BEANS_DLL_CONFIG) \
 	$(GIO_SHARP_DLL) \
 	$(GIO_SHARP_DLL_CONFIG) \
-	$(FACESPOT_DLL_MDB) \
-	$(FACESPOT_DLL)  
+	$(FACESPOTSIDEBAR_DLL_MDB) \
+	$(FACESPOTSIDEBAR_DLL)  
 
 LINUX_PKGCONFIG = \
-	$(FACESPOT_PC)  
+	$(FACESPOTSIDEBAR_PC)  
 
 
 RESGEN=resgen2
 
+FACESPOT_DLL = $(BUILD_DIR)/FaceSpot.dll
 FSPOT_BLING_DLL = $(BUILD_DIR)/FSpot.Bling.dll
 GTK_SHARP_BEANS_DLL = $(BUILD_DIR)/gtk-sharp-beans.dll
 GTK_SHARP_BEANS_DLL_CONFIG = $(BUILD_DIR)/gtk-sharp-beans.dll.config
 GIO_SHARP_DLL = $(BUILD_DIR)/gio-sharp.dll
 GIO_SHARP_DLL_CONFIG = $(BUILD_DIR)/gio-sharp.dll.config
-FACESPOT_PC = $(BUILD_DIR)/facespot.pc
+FACESPOTSIDEBAR_PC = $(BUILD_DIR)/facespotsidebar.pc
 
 FILES = \
 	AssemblyInfo.cs \
-	db/Face.cs \
-	db/FaceSpotDb.cs \
-	db/FaceStore.cs \
-	ui/FaceSelectionWidget.cs \
-	ui/FaceBrowser.cs \
-	ui/FaceWidget.cs 
+	FaceSidebar.cs \
+	FaceSidebarWidget.cs 
 
 DATA_FILES = 
 
 RESOURCES = \
-	FaceSpot.addin.xml,FaceSpot.FaceSpot.addin.xml \
-	ui/FaceBrowser.glade,FaceSpot.ui.FaceBrowser.glade 
+	FaceSidebar.addin.xml,FaceSpot.FaceSidebar.addin.xml 
 
 EXTRAS = \
-	db \
-	facespot.pc.in 
+	facespotsidebar.pc.in 
 
 REFERENCES =  \
 	System \
 	-pkg:gtk-sharp-2.0 \
-	Mono.Posix \
 	-pkg:f-spot \
-	-pkg:glade-sharp-2.0 \
-	Mono.Data.SqliteClient
+	Mono.Posix
 
-DLL_REFERENCES =  \
-	../../../../../usr/lib/f-spot/FSpot.Bling.dll
+DLL_REFERENCES = 
 
 CLEANFILES = $(PROGRAMFILES) $(LINUX_PKGCONFIG) 
 
@@ -113,13 +110,14 @@ include $(top_srcdir)/Makefile.include
 
 
 
+$(eval $(call emit-deploy-target,FACESPOT_DLL))
 $(eval $(call emit-deploy-target,FSPOT_BLING_DLL))
 $(eval $(call emit-deploy-target,GTK_SHARP_BEANS_DLL))
 $(eval $(call emit-deploy-target,GTK_SHARP_BEANS_DLL_CONFIG))
 $(eval $(call emit-deploy-target,GIO_SHARP_DLL))
 $(eval $(call emit-deploy-target,GIO_SHARP_DLL_CONFIG))
-$(eval $(call emit-deploy-wrapper,FACESPOT_PC,facespot.pc))
-$(eval $(call emit-deploy-target,FACESPOT_DLL))
+$(eval $(call emit-deploy-wrapper,FACESPOTSIDEBAR_PC,facespotsidebar.pc))
+$(eval $(call emit-deploy-target,FACESPOTSIDEBAR_DLL))
 
 
 $(eval $(call emit_resgen_targets))
@@ -142,15 +140,16 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(FACESPOT_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(FSPOT_BLING_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(GTK_SHARP_BEANS_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(GTK_SHARP_BEANS_DLL_CONFIG),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(GIO_SHARP_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(GIO_SHARP_DLL_CONFIG),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(FACESPOT_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(FACESPOTSIDEBAR_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(libdir)/pkgconfig'
-	$(call cp,$(FACESPOT_PC),$(DESTDIR)$(libdir)/pkgconfig)
-	$(call cp,$(FACESPOT_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(FACESPOTSIDEBAR_PC),$(DESTDIR)$(libdir)/pkgconfig)
+	$(call cp,$(FACESPOTSIDEBAR_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -158,14 +157,15 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(FACESPOT_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(FSPOT_BLING_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(GTK_SHARP_BEANS_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(GTK_SHARP_BEANS_DLL_CONFIG),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(GIO_SHARP_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(GIO_SHARP_DLL_CONFIG),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(FACESPOT_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(FACESPOT_PC),$(DESTDIR)$(libdir)/pkgconfig)
-	$(call rm,$(FACESPOT_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(FACESPOTSIDEBAR_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(FACESPOTSIDEBAR_PC),$(DESTDIR)$(libdir)/pkgconfig)
+	$(call rm,$(FACESPOTSIDEBAR_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

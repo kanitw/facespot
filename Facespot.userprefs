@@ -3,20 +3,13 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotSidebar/FaceSidebarWidget.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/FaceSpot.addin.xml" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpotFaceEditor/FaceEditor.cs" Line="34" Column="4" />
-      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="17" Column="3" />
-      <File FileName="FaceSpot/ui/FaceSelectionWidget.cs" Line="18" Column="1" />
-      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="11" Column="26" />
-      <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="19" Column="36" />
-      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="13" Column="19" />
-      <File FileName="FaceSpot/db/FaceStore.cs" Line="15" Column="20" />
-      <File FileName="FaceSpot/db/Face.cs" Line="65" Column="36" />
-      <File FileName="FaceSpotFaceEditor/FaceSpotFaceEditor.addin.xml" Line="4" Column="20" />
-      <File FileName="FaceSpot/FaceSpot.addin.xml" Line="4" Column="17" />
-      <File FileName="FaceSpotService/FaceService.addin.xml" Line="2" Column="21" />
-      <File FileName="FaceSpotSidebar/FaceSidebar.addin.xml" Line="1" Column="1" />
+      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="1" Column="1" />
+      <File FileName="FaceSpotService/FaceService.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/FaceSpot.addin.xml" Line="7" Column="1" />
+      <File FileName="FaceSpotService/FaceService.addin.xml" Line="3" Column="14" />
+      <File FileName="FaceSpotSidebar/FaceSidebar.addin.xml" Line="3" Column="14" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -26,10 +19,9 @@
             <Node name="db" expanded="True" />
             <Node name="ui" expanded="True" />
           </Node>
-          <Node name="FaceSpotFaceEditor" expanded="True">
+          <Node name="FaceSpotService" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
-          <Node name="FaceSpotService" expanded="True" />
           <Node name="FaceSpotSidebar" expanded="True" selected="True">
             <Node name="References" expanded="True" />
           </Node>

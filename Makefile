@@ -1,5 +1,5 @@
 
-EXTRA_DIST =  rules.make configure Makefile.include
+EXTRA_DIST =  rules.make configure Makefile.include ../../../../usr/lib/f-spot/FSpot.Bling.dll
 
 all: all-recursive
 
@@ -12,10 +12,10 @@ include $(top_srcdir)/rules.make
 
 #Warning: This is an automatically generated file, do not edit!
 ifeq ($(CONFIG),DEBUG_X86)
- SUBDIRS =  TestCommand FaceSpotFaceEditor FaceSpot FaceSpotService FaceSpotSidebar
+ SUBDIRS =  FaceSpot FaceSpotService FaceSpotSidebar
 endif
 ifeq ($(CONFIG),RELEASE_X86)
- SUBDIRS =  TestCommand FaceSpotFaceEditor FaceSpot FaceSpotService FaceSpotSidebar
+ SUBDIRS =  FaceSpot FaceSpotService FaceSpotSidebar
 endif
 
 

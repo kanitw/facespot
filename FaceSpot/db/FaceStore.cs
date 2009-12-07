@@ -11,14 +11,15 @@ namespace FaceSpot.Db
 {
 	public class FaceStore : DbStore<Face>
 	{
+		//TODO Consider whether to override Emit Add, Change, Removed
+		
 		const string ALL_FIELD_NAME = "id, photo_id, tag_id, tag_confirm, left_x, top_y, width, photo_md5 ";
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
 		{
 			//TODO Add Ensure FaceThumbnailDirectory ?? (Similar to PhotoStore.cs)(
 			
-			//FIXME Detect Whether faces table has been initialized on the database
-			if ( ! is_new) return;
+			if ( ! is_new && Database.TableExists("faces")) return;
 			//Add Database Initialization
 			//Note : If you change query here - you need to change "all_field" too
 			Database.ExecuteNonQuery(
@@ -108,12 +109,14 @@ namespace FaceSpot.Db
 		
 		public override void Remove (Face item)
 		{
-			//TODO Add this
-			throw new System.NotImplementedException ();
+			RemoveFromCache (item);
+			Database.ExecuteNonQuery (
+				new DbCommand ("DELETE FROM faces WHERE id = :id", "id", item.Id));
+			//EmitRemoved ();
 		}
 		
 		//TODO Add more Query
 		
-		//TODO Add "Emit" classes
+		//TODO Add "Emit" classes if necessary
 	}
 }

@@ -1,14 +1,14 @@
 <Addin namespace="FSpot" 
 	id="FaceSpot"
-	version="0.1.0"
+	version="0.8"
 	name="FaceSpot"
 	description="Semi-auto Face Detection and Recognition Extension for F-Spot"
 	author="Kanit Wongsuphasawat, Thiraphat Charoensripongsa"
 	url="http://facespot.wordpress.com"
 	category="FaceSpot"
-	defaultEnabled="true">
+	defaultEnabled="false">
 	<Dependencies>
-		<Addin id="Core" version="1.1"/>
+		<Addin id="Core" version="0.7"/>
 	</Dependencies>
 	<Extension path = "/FSpot/Menus/Tools">
 		<Command id="FaceSpot" _label = "FaceBrowser" command_type = "FaceSpot.FaceBrowser" />

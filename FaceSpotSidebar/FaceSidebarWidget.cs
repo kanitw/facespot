@@ -163,7 +163,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				
 				knownFaceList = new PhotoList(knownFaceItems);
 				knownFaceIconView = new FSpot.Widgets.IconView(knownFaceList);
-				knownFaceScrolledWindow.Add(knownFaceIconView);
+				knownFaceScrolledWindow.AddWithViewport(knownFaceIconView);
 				knownFaceExpander.Expanded = true;
 				
 				
@@ -174,7 +174,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				
 				unknownFaceList = new PhotoList(unknownFaceItems);
 				unknownFaceIconView = new FSpot.Widgets.IconView(unknownFaceList);
-				unknownFaceScrolledWindow.Add(unknownFaceIconView);
+				unknownFaceScrolledWindow.AddWithViewport(unknownFaceIconView);
 				unknownFaceExpander.Expanded = true;
 				ShowAll();
 			}
