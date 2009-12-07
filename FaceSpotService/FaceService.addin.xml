@@ -1,6 +1,6 @@
 <Addin namespace="FSpot"
 	id="FaceSpotService"
-	version="0.8"
+	version="0.7"
 	name="FaceSpotService"
 	description="Semi-auto Face Detection and Recognition Extension for F-Spot : Auto Face-Detection - Face Suggestion Service"
 	author="Kanit Wongsuphasawat, Thiraphat Charoensripongsa"
@@ -9,7 +9,7 @@
 	defaultEnabled="false"
 >
 	<Dependencies>
-		<Addin id="Core" version="0.7"/>
+		<Addin id="Core" version="0.6"/>
 	</Dependencies>
 	 <Extension path = "/FSpot/Services">
                 <Service class="FaceSpot.FaceService"/>

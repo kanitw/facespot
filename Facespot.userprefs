@@ -3,13 +3,16 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/FaceSpot.addin.xml" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotSidebar/FaceSidebar.addin.xml" ctype="Workbench">
     <Files>
       <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="1" Column="1" />
       <File FileName="FaceSpotService/FaceService.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/FaceSpot.addin.xml" Line="7" Column="1" />
+      <File FileName="FaceSpot/FaceSpot.addin.xml" Line="3" Column="14" />
       <File FileName="FaceSpotService/FaceService.addin.xml" Line="3" Column="14" />
       <File FileName="FaceSpotSidebar/FaceSidebar.addin.xml" Line="3" Column="14" />
+      <File FileName="FaceSpot/db/Face.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="79" Column="3" />
+      <File FileName="Assembly Browser" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
