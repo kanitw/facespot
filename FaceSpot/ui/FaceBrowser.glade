@@ -58,6 +58,20 @@
           <widget class="GtkStatusbar" id="StatusBar">
             <property name="visible">True</property>
             <property name="spacing">2</property>
+            <child>
+              <widget class="GtkHScale" id="zoomScale">
+                <property name="width_request">100</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="draw_value">False</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="expand">False</property>
