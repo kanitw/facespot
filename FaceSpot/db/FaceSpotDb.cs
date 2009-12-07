@@ -2,7 +2,7 @@
 using System;
 using Banshee.Database;
 using FSpot.Utils;
-namespace FaceSpot
+namespace FaceSpot.Db
 {
 
 	/// <summary>
@@ -40,11 +40,15 @@ namespace FaceSpot
 			alreadyDisposed = true;
 		}
 		#endregion
-	~FaceSpotDb ()
-	{
-		Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());
-		Dispose (false);
-	}
+		~FaceSpotDb ()
+		{
+			Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());
+			Dispose (false);
+		}
 		
+		public Face CreateFace()
+		{
+			
+		}
 	}
 }

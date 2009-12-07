@@ -2,7 +2,7 @@
 using System;
 using Banshee.Database;
 
-namespace FaceSpot
+namespace FaceSpot.Db
 {
 
 

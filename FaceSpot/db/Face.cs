@@ -2,7 +2,7 @@
 using System;
 using FSpot;
 using Gdk;
-namespace FaceSpot
+namespace FaceSpot.Db
 {
 	public class Face : DbItem, IDisposable
 		//TODO Decide whether should it implement IComparable
@@ -42,11 +42,14 @@ namespace FaceSpot
 		const int faceDefaultWidth = 100;
 		public Pixbuf faceImage;
 		
+		bool manuallyDetected, manuallyRecognized;
+		
 		string photo_md5;
+		
 		
 		public Photo photo;
 		
-		public Face (uint id,uint leftX,uint topY,uint width,Pixbuf faceImage,Photo photo) 
+		protected Face (uint id,uint leftX,uint topY,uint width,Pixbuf faceImage,Photo photo) 
 			: base (id)
 		{
 			this.faceID = id;
