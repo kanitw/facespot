@@ -57,7 +57,7 @@ namespace FaceSpot.Db
 		/// </summary>
 		public bool tagConfirmed;
 		
-		protected Face (uint id,uint leftX,uint topY,uint width,Pixbuf faceImage,Photo photo) 
+		public Face (uint id,uint leftX,uint topY,uint width,Photo photo) 
 			: base (id)
 		{
 			this.faceID = id;

@@ -183,4 +183,14 @@
       </widget>
     </child>
   </widget>
+  <widget class="GtkMenu" id="SideBarMenu">
+    <property name="visible">True</property>
+    <child>
+      <widget class="GtkMenuItem" id="menuitem1">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">menuitem1</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+  </widget>
 </glade-interface>

@@ -49,6 +49,17 @@
     <Reference Include="Cms, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
+    <Reference Include="Mono.Data.SqliteClient" />
+    <Reference Include="FSpot.Query, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="FSpot.JobScheduler, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="FSpot.Bling, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\usr\lib\f-spot\FSpot.Bling.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />

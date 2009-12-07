@@ -2,6 +2,7 @@
 using System;
 using Banshee.Database;
 using FSpot.Utils;
+using FSpot;
 namespace FaceSpot.Db
 {
 
@@ -10,6 +11,12 @@ namespace FaceSpot.Db
 	/// </summary>
 	public class FaceSpotDb : IDisposable
 	{
+		private static FaceSpotDb instance;
+		public static FaceSpotDb Instance {
+			get { return instance; }
+			set { instance = value; }
+		}
+		
 		FaceStore face_store;
 		
 		bool empty;
@@ -20,9 +27,29 @@ namespace FaceSpot.Db
 		public QueuedSqliteDatabase FaceDatabase{
 			get { return faceDatabase;}	
 		}
+
+		public FaceStore Faces {
+			get {
+				return face_store;
+			}
+			set {
+				face_store = value;
+			}
+		}
+		QueuedSqliteDatabase Database {
+			get { return Core.Database.Database; }	
+		}
+
 		
-		public FaceSpotDb ()
+		private FaceSpotDb ()
 		{
+			uint timer = Log.DebugTimerStart ();
+			Database.BeginTransaction ();
+			//FIXME Decide whether to use true/false value
+			face_store = new FaceStore (Database, true);
+			
+			Database.CommitTransaction ();
+			Log.DebugTimerPrint (timer, "FaceSpot Db Initialization took {0}");
 		}
 		#region Dispose
 		public void Dispose ()
@@ -46,9 +73,5 @@ namespace FaceSpot.Db
 			Dispose (false);
 		}
 		
-		public Face CreateFace()
-		{
-			
-		}
 	}
 }

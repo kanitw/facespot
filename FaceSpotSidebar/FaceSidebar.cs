@@ -19,10 +19,11 @@ namespace FaceSpot
 			(SidebarWidget as FaceSidebarWidget).Page = this;
 		}
 		
-		protected override void AddedToSidebar()
+		protected override void AddedToSidebar ()
 		{
 			FaceSidebarWidget widget = SidebarWidget as FaceSidebarWidget;
 			Sidebar.SelectionChanged += widget.HandleSelectionChanged;
+			
 		}
 	}
 	
