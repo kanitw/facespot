@@ -41,7 +41,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			headerLabel =  new Label (Catalog.GetString ("Not Implemented Yet"));
 			mainVBox.PackStart(headerLabel,false,false,0);
 			
-			knownFaceExpander = new Expander("Faces");
+			knownFaceExpander = new Expander("In this photo:");
 			
 			//faceVBox.PackStart(knownFaceExpander,true,true,0);
 			//faceVPane.Add(knownFaceExpander);
@@ -53,7 +53,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 //			faceHandleBox.HandlePosition = PositionType.Top;
 //			faceVBox.PackStart(faceHandleBox,false,false,0);
 			
-			unknownFaceExpander = new Expander("Unknown Faces");
+			unknownFaceExpander = new Expander("Who's also in this photo");
 			//faceVBox.PackStart(unknownFaceExpander,true,true,0);
 			//faceVPane.Add(unknownFaceExpander);
 			faceVPane.Pack2(unknownFaceExpander,true,true);

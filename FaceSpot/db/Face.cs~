@@ -48,13 +48,7 @@ namespace FaceSpot.Db
 		
 		
 		public Photo photo;
-		/// <summary>
-		/// 
-		/// </summary>
 		public Tag tag;
-		/// <summary>
-		/// 
-		/// </summary>
 		public bool tagConfirmed;
 		
 		protected Face (uint id,uint leftX,uint topY,uint width,Pixbuf faceImage,Photo photo) 

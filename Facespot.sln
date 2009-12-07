@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceSpotFaceEditor", "FaceSpotFaceEditor\FaceSpotFaceEditor.csproj", "{8A8E96C0-D71A-4B4A-AE07-740FA3369A8F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceSpot", "FaceSpot\FaceSpot.csproj", "{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceSpotService", "FaceSpotService\FaceSpotService.csproj", "{6812C1E5-5B74-4D6F-BB7B-FEA3CFEC14B2}"
@@ -23,17 +21,13 @@ Global
 		{6812C1E5-5B74-4D6F-BB7B-FEA3CFEC14B2}.Debug|x86.Build.0 = Debug|Any CPU
 		{6812C1E5-5B74-4D6F-BB7B-FEA3CFEC14B2}.Release|x86.ActiveCfg = Release|Any CPU
 		{6812C1E5-5B74-4D6F-BB7B-FEA3CFEC14B2}.Release|x86.Build.0 = Release|Any CPU
-		{8A8E96C0-D71A-4B4A-AE07-740FA3369A8F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8A8E96C0-D71A-4B4A-AE07-740FA3369A8F}.Debug|x86.Build.0 = Debug|Any CPU
-		{8A8E96C0-D71A-4B4A-AE07-740FA3369A8F}.Release|x86.ActiveCfg = Release|Any CPU
-		{8A8E96C0-D71A-4B4A-AE07-740FA3369A8F}.Release|x86.Build.0 = Release|Any CPU
 		{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}.Debug|x86.Build.0 = Debug|Any CPU
 		{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}.Release|x86.ActiveCfg = Release|Any CPU
 		{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = FaceSpotFaceEditor\FaceSpotFaceEditor.csproj
+		StartupItem = FaceSpot\FaceSpot.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
