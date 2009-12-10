@@ -1,14 +1,12 @@
 using System;
-using System.IO;
-using System.Text;
-using System.Collections.Generic;
 using Gtk;
 using Gdk;
 using Mono.Unix;
 using FSpot;
-using FSpot.Utils;
 using FSpot.Widgets;
+using FSpot.Utils;
 using FaceSpot;
+using FaceSpot.Db;
 
 namespace FaceSpot
 {
@@ -33,6 +31,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 	
 		public FaceSidebarWidget ()
 		{
+			
 			mainVBox = new VBox();
 			//mainVBox.Spacing = 6;
 			//faceVBox = new VBox();
@@ -81,8 +80,9 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		void AddFaceButtonClicked (object sender, EventArgs e)
 		{
+			Log.Debug ("Add Face Button Clicked");
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
-			if( Rectangle.Zero == view.Selection) 
+			if (Rectangle.Zero == view.Selection) 
 			{
 				string msg = Catalog.GetString ("No selection available");
 				string desc = Catalog.GetString ("This tool requires an active selection. Please select a region of the photo and try the operation again");
@@ -96,8 +96,18 @@ public class FaceSidebarWidget : ScrolledWindow {
 				md.Run ();
 				md.Destroy ();
 				return;
-			}else{
-				//Face f = new Face(
+			} else {
+				//TODO add 1:1 constraint to selection
+				Log.Debug ("Create Face");
+				Face face = FaceSpotDb.Instance.Faces.CreateFace (
+					(FSpot.Photo)SelectedItem, 
+					(uint)view.Selection.Left,
+					(uint)view.Selection.Top,
+					(uint)view.Selection.Width);
+				Log.Debug ("New Dialog");
+				FaceEditorDialog dialog = new FaceEditorDialog (face);
+				Log.Debug ("Before Show All");
+				dialog.Dialog.ShowAll ();
 			}
 		}
 		//TODO Ham : revise this code part

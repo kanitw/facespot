@@ -14,8 +14,10 @@ namespace FaceSpot.Db
 		private static FaceSpotDb instance;
 		public static FaceSpotDb Instance {
 			get {
-				if (instance == null) 
+				if (instance == null) {
+					FSpot.Utils.Log.Debug (">>Init FaceSpotDb");
 					instance = new FaceSpotDb ();	
+				}
 				return instance; 
 			}
 			//set { instance = value; }
@@ -34,6 +36,9 @@ namespace FaceSpot.Db
 
 		public FaceStore Faces {
 			get {
+//				if (face_store == null) {
+//					
+//				}
 				return face_store;
 			}
 			set {

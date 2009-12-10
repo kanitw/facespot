@@ -66,6 +66,7 @@
     <Compile Include="ui\FaceSelectionWidget.cs" />
     <Compile Include="ui\FaceBrowser.cs" />
     <Compile Include="ui\FaceWidget.cs" />
+    <Compile Include="ui\FaceEditorDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
