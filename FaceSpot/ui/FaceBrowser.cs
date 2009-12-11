@@ -15,6 +15,11 @@ namespace FaceSpot
 	{
 		protected string dialog_name = "browserWindow";
 		protected Glade.XML xml;
+		private void initGladeXML()
+		{
+			xml = new Glade.XML(null,"FaceSpot.ui.FaceBrowser.glade",dialog_name,"f-spot");
+			xml.Autoconnect(this);
+		}
 		
 		private Gtk.Window browserWindow;
 		
@@ -32,15 +37,13 @@ namespace FaceSpot
 			//TODO change Console to appropriate FSpot Debugger
 			Console.WriteLine ("Executing FaceSpotBrowser");
 			Log.Trace ("FaceBrowser", "Executing FaceSpotBrowser");
+			initGladeXML();
 			
-			xml = new Glade.XML(null,"FaceSpot.ui.FaceBrowser.glade",dialog_name,"f-spot");
-			xml.Autoconnect(this);
 			menuitem_preference.Activated += Menuitem_preferenceActivated;
 			browserWindow = (Gtk.Window) xml.GetWidget(dialog_name);
 			//TestDialog dialog = new TestDialog ();  
 			//dialog.ShowDialog ();
 			browserWindow.ShowAll();
-			
 		}
 
 		void Menuitem_preferenceActivated (object sender, EventArgs e)
@@ -80,7 +83,6 @@ namespace FaceSpot
 
 			this.AddButton ("_Close", ResponseType.Close);
 			//this.Response += HandleResponse;
-
 			ShowAll ();
 		}
 	}

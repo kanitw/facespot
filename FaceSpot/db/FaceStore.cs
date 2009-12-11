@@ -100,7 +100,7 @@ namespace FaceSpot.Db
 					":width", width,
 					":photo_md5", "aaa",//photo.MD5Sum,
 					":time", unix_time,
-					":thumbnail_name", "xxx");
+					":thumbnail_name", "xxx"+photo.Id);
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
 			Face face = new Face (0, leftX, topY, width, photo);

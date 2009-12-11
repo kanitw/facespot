@@ -6,7 +6,7 @@ using FaceSpot.Db;
 
 namespace FaceSpot
 {
-	public class FaceEditorDialog : GladeDialog
+	public class FaceEditorDialog //: GladeDialog
 	{
 		[Widget] HBox mainHBox;
 		[Widget] Image faceImage;
@@ -14,11 +14,22 @@ namespace FaceSpot
 		[Widget] Button okButton;
 		[Widget] ComboBox personComboBox;
 		
-		Face face;
+		private Gtk.Dialog faceEditorDialog ;
 		
-		public FaceEditorDialog (Face face) : base("FaceEditorDialog","FaceSpot.ui.FaceBrowser.glade")
+		Face face;
+		protected Glade.XML xml;
+		protected string dialog_name = "FaceEditorDialog";
+		//TODO if bug fixed - arrange this part of code
+		private void initGladeXML()
 		{
-			
+			xml = new Glade.XML(null,"FaceSpot.ui.FaceBrowser.glade",dialog_name,"f-spot");
+			xml.Autoconnect(this);
+			faceEditorDialog = (Gtk.Dialog) xml.GetWidget(dialog_name);
+		}
+		public FaceEditorDialog (Face face) //: base("FaceEditorDialog","FaceSpot.ui.FaceBrowser.glade")
+		{
+			initGladeXML();
+			faceEditorDialog.ShowAll();
 		}
 	}
 }
