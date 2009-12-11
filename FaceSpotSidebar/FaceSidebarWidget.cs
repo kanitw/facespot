@@ -31,7 +31,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 	
 		public FaceSidebarWidget ()
 		{
-			
 			mainVBox = new VBox();
 			//mainVBox.Spacing = 6;
 			//faceVBox = new VBox();
@@ -98,6 +97,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 				return;
 			} else {
 				//TODO add 1:1 constraint to selection
+				if( view.Selection.Height != view.Selection.Width){
+					view.SelectionXyRatio = 1;
+					view.SelectionXyRatio = 0;
+				}
 				Log.Debug ("Create Face");
 				Face face = FaceSpotDb.Instance.Faces.CreateFace (
 					(FSpot.Photo)SelectedItem, 
@@ -105,9 +108,13 @@ public class FaceSidebarWidget : ScrolledWindow {
 					(uint)view.Selection.Top,
 					(uint)view.Selection.Width);
 				Log.Debug ("New Dialog");
-				FaceEditorDialog dialog = new FaceEditorDialog (face);
-				Log.Debug ("Before Show All");
-				dialog.Dialog.ShowAll ();
+				try{
+					FaceEditorDialog dialog = new FaceEditorDialog (face);
+					Log.Debug ("Before Show All");
+					dialog.Dialog.ShowAll ();
+				} catch (Exception ex){
+					Log.Exception(ex);	
+				}
 			}
 		}
 		//TODO Ham : revise this code part
@@ -175,7 +182,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 				knownFaceIconView = new FSpot.Widgets.IconView(knownFaceList);
 				knownFaceScrolledWindow.AddWithViewport(knownFaceIconView);
 				knownFaceExpander.Expanded = true;
-				
 				
 				//get unknownFaceList	
 				

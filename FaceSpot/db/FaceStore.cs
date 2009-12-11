@@ -20,25 +20,41 @@ namespace FaceSpot.Db
 			//TODO Add Ensure FaceThumbnailDirectory ?? (Similar to PhotoStore.cs)(
 			
 			if ( ! is_new && Database.TableExists("faces")) return;
+			Log.Debug("Facestore Db Init");
 			//Add Database Initialization
 			//Note : If you change query here - you need to change "all_field" too
+			try{
 			Database.ExecuteNonQuery(
 				"CREATE TABLE faces (\n"+
-			    "	id INTEGER PRIMARY KEY NOT NULL, \n" +
+			    "	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
 			    "	photo_id INTEGER NOT NULL, \n"+
-				" 	tag_id INTEGER NOT NULL, \n" +
-				"   tag_confirm BOOLEAN, \n"+
+				" 	tag_id INTEGER NULL, \n" +
+				"   tag_confirm BOOLEAN NULL, \n"+
 			    "	left_x INTEGER NOT NULL, \n"+
 			    "	top_y INTEGER NOT NULL, \n"+
 			    "	width INTEGER NOT NULL, \n"+
 			    " 	photo_md5 STRING NOT NULL, \n"+
 				"	time INTEGER NOT NULL, \n"+
-				"	thumbnail_name STRING UNIQUE NOT NULL, \n"
+				"	thumbnail_name STRING UNIQUE NOT NULL \n"
 				+")"  );
-			
+			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
+				Log.Exception(ex);	
+			}
 			//TODO Add Database Index / Links
+			try{
 			Database.ExecuteNonQuery("CREATE INDEX idx_photo_id ON faces(photo_id)");
-			Database.ExecuteNonQuery("CREATE INDEX idx_photo_id ON faces(tag_id)");
+			
+			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
+				Log.Exception(ex);	
+			}
+			try{
+			Database.ExecuteNonQuery("CREATE INDEX idx_tag_id ON faces(tag_id)");
+			}
+			catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
+				Log.Exception(ex);	
+			}
+			
+			//FIXME Add "Alter" Table Query
 		}
 		
 		public override Face Get (uint id)
@@ -72,8 +88,8 @@ namespace FaceSpot.Db
 		{
 			long unix_time = DbUtils.UnixTimeFromDateTime( photo.Time);
 			//FIXME Check Whether MD5 Sum of Photo has been generated
-			uint id = (uint)Database.Execute (
-				new DbCommand (
+			Log.Debug("CreateFace : Db Exec Query");
+			DbCommand dbcom = new DbCommand (
 					"INSERT INTO faces (photo_id, left_x," +
 					"top_y, width, photo_md5, time, thumbnail_name)" +
 					"VALUES (:photo_id, :left_x," +
@@ -82,12 +98,14 @@ namespace FaceSpot.Db
 					":left_x", leftX,
 					":top_y", topY,
 					":width", width,
-					":photo_md5",photo.MD5Sum,
+					":photo_md5", "aaa",//photo.MD5Sum,
 					":time", unix_time,
-					":thumbnail_name", "")
-				);
-			Face face = new Face (id, leftX, topY, width, photo);
+					":thumbnail_name", "xxx");
+			Log.Debug(dbcom.ToString());
+			uint id = (uint)Database.Execute (					dbcom				);
+			Face face = new Face (0, leftX, topY, width, photo);
 			//TODO Finish this part of code
+			Log.Debug("Finished createFace : Db Exec Query");
 			return face;
 		}
 		
@@ -132,6 +150,12 @@ namespace FaceSpot.Db
 			Database.ExecuteNonQuery (
 				new DbCommand ("DELETE FROM faces WHERE id = :id", "id", item.Id));
 			//EmitRemoved ();
+		}
+		
+		public void clearDatabase(){
+			Log.Debug("Drop table Faces");
+			Database.ExecuteNonQuery(new DbCommand("DROP TABLE faces"));
+			
 		}
 		
 		//TODO Add more Query

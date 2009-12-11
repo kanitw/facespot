@@ -21,12 +21,11 @@ namespace FaceSpot
 		[Glade.Widget] HPaned MainHPaned;
 		[Glade.Widget] VBox MainVBox;
 		[Glade.Widget] Statusbar StatusBar;
+		[Glade.Widget] MenuItem	 menuitem_preference;
 //		[Glade.Widget]
 //		[Glade.Widget]
 //		[Glade.Widget]
 //		[Glade.Widget]
-		
-		
 		
 		public void Run (object o, EventArgs e)
 		{
@@ -36,10 +35,17 @@ namespace FaceSpot
 			
 			xml = new Glade.XML(null,"FaceSpot.ui.FaceBrowser.glade",dialog_name,"f-spot");
 			xml.Autoconnect(this);
+			menuitem_preference.Activated += Menuitem_preferenceActivated;
 			browserWindow = (Gtk.Window) xml.GetWidget(dialog_name);
 			//TestDialog dialog = new TestDialog ();  
 			//dialog.ShowDialog ();
 			browserWindow.ShowAll();
+			
+		}
+
+		void Menuitem_preferenceActivated (object sender, EventArgs e)
+		{
+			
 		}
 	}
 	

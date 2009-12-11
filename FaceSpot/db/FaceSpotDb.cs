@@ -49,13 +49,12 @@ namespace FaceSpot.Db
 			get { return Core.Database.Database; }	
 		}
 
-		
 		private FaceSpotDb ()
 		{
 			uint timer = Log.DebugTimerStart ();
 			Database.BeginTransaction ();
 			//FIXME Decide whether to use true/false value
-			face_store = new FaceStore (Database, true);
+			face_store = new FaceStore (Database, false);
 			
 			Database.CommitTransaction ();
 			Log.DebugTimerPrint (timer, "FaceSpot Db Initialization took {0}");
