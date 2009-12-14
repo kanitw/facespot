@@ -29,8 +29,6 @@ namespace FaceSpot
 		[Glade.Widget] MenuItem	 menuitem_preference;
 //		[Glade.Widget]
 //		[Glade.Widget]
-//		[Glade.Widget]
-//		[Glade.Widget]
 		
 		public void Run (object o, EventArgs e)
 		{

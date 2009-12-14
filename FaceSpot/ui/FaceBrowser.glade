@@ -257,6 +257,7 @@
   </widget>
   <widget class="GtkDialog" id="FaceEditorDialog">
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Face</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
@@ -289,8 +290,9 @@
                     <property name="height_request">34</property>
                     <property name="visible">True</property>
                     <property name="add_tearoffs">True</property>
-                    <property name="tearoff_title">ddd</property>
-                    <property name="items" translatable="yes" context="yes">ddd</property>
+                    <property name="tearoff_title">Unknown</property>
+                    <property name="items" translatable="yes" context="yes">Unknown
+New Person</property>
                   </widget>
                   <packing>
                     <property name="x">11</property>

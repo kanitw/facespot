@@ -12,6 +12,12 @@ namespace FaceSpot
 {
 
 public class FaceSidebarWidget : ScrolledWindow {
+		enum FaceEditMode {
+			Add,
+			Edit
+		}
+		FaceEditMode mode = FaceEditMode.Add;
+		
 		Delay updateDelay;
 		
 		VBox mainVBox;//,faceVBox;
@@ -102,6 +108,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 					view.SelectionXyRatio = 0;
 				}
 				Log.Debug ("Create Face");
+				//
+				FaceSpotDb.Instance.Database.BeginTransaction();
 				Face face = FaceSpotDb.Instance.Faces.CreateFace (
 					(FSpot.Photo)SelectedItem, 
 					(uint)view.Selection.Left,
@@ -111,6 +119,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				try{
 					FaceEditorDialog dialog = new FaceEditorDialog (face);
 					Log.Debug ("Before Show All");
+					FaceSpotDb.Instance.Database.CommitTransaction();
 					//dialog.sho
 					//dialog.Dialog.ShowAll ();
 				} catch (Exception ex){

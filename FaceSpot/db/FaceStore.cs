@@ -1,4 +1,3 @@
-
 using System;
 using Banshee.Database;
 using Mono.Data.SqliteClient;
@@ -10,15 +9,12 @@ using FSpot.Extensions;
 namespace FaceSpot.Db
 {
 	public class FaceStore : DbStore<Face>
-	{
-		//TODO Consider whether to override Emit Add, Change, Removed
+	{	//TODO Consider whether to override Emit Add, Change, Removed
 		
 		const string ALL_FIELD_NAME = "id, photo_id, tag_id, tag_confirm, left_x, top_y, width, photo_md5, time, thumbnail_name ";
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
 		{
-			//TODO Add Ensure FaceThumbnailDirectory ?? (Similar to PhotoStore.cs)(
-			
 			if ( ! is_new && Database.TableExists("faces")) return;
 			Log.Debug("Facestore Db Init");
 			//Add Database Initialization
@@ -34,26 +30,23 @@ namespace FaceSpot.Db
 			    "	top_y INTEGER NOT NULL, \n"+
 			    "	width INTEGER NOT NULL, \n"+
 			    " 	photo_md5 STRING NOT NULL, \n"+
-				"	time INTEGER NOT NULL, \n"+
-				"	thumbnail_name STRING UNIQUE NOT NULL \n"
-				+")"  );
+				"	time INTEGER NOT NULL \n"+
+				")"  );
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
-			//TODO Add Database Index / Links
-			try{
-			Database.ExecuteNonQuery("CREATE INDEX idx_photo_id ON faces(photo_id)");
 			
+			try{
+				Database.ExecuteNonQuery("CREATE INDEX idx_photo_id ON faces(photo_id)");
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
 			try{
-			Database.ExecuteNonQuery("CREATE INDEX idx_tag_id ON faces(tag_id)");
+				Database.ExecuteNonQuery("CREATE INDEX idx_tag_id ON faces(tag_id)");
 			}
 			catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
-			
 			//FIXME Add "Alter" Table Query
 		}
 		
@@ -86,24 +79,26 @@ namespace FaceSpot.Db
 		
 		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width)
 		{
+			if(photo == null) Log.Debug("Null");
 			long unix_time = DbUtils.UnixTimeFromDateTime( photo.Time);
 			//FIXME Check Whether MD5 Sum of Photo has been generated
 			Log.Debug("CreateFace : Db Exec Query");
 			DbCommand dbcom = new DbCommand (
 					"INSERT INTO faces (photo_id, left_x," +
-					"top_y, width, photo_md5, time, thumbnail_name)" +
+					"top_y, width, photo_md5, time)" +
 					"VALUES (:photo_id, :left_x," +
-					":top_y, :width, :photo_md5, :time, :thumbnail_name)",
+					":top_y, :width, :photo_md5, :time)",
 					":photo_id", photo.Id,
 					":left_x", leftX,
 					":top_y", topY,
 					":width", width,
 					":photo_md5", "aaa",//photo.MD5Sum,
-					":time", unix_time,
-					":thumbnail_name", "xxx"+photo.Id);
+					":time", unix_time);
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
 			Face face = new Face (0, leftX, topY, width, photo);
+			
+			
 			//TODO Finish this part of code
 			Log.Debug("Finished createFace : Db Exec Query");
 			return face;
@@ -153,13 +148,11 @@ namespace FaceSpot.Db
 		}
 		
 		public void clearDatabase(){
-			Log.Debug("Drop table Faces");
+			Log.Debug("DROP TABLE faces");
 			Database.ExecuteNonQuery(new DbCommand("DROP TABLE faces"));
-			
 		}
 		
 		//TODO Add more Query
-		
 		//TODO Add "Emit" classes if necessary
 	}
 }

@@ -46,11 +46,15 @@ namespace FaceSpot
 			}else if( selected){
 				selected = false;	
 				
-//				if(firsttime) firsttime = false;
-//				else {
-					MainWindow.Toplevel.PhotoView.View.SelectionXyRatio = 0.0;
-					Log.Debug("FaceSidebar UnSelected");	
-//				}
+				if(firsttime ) firsttime = false;
+				else {
+					Log.Debug("FaceSidebar UnSelected");
+					try {
+						MainWindow.Toplevel.PhotoView.View.SelectionXyRatio = 0.0;
+					} catch(NullReferenceException ne){
+						Log.Exception(ne);	
+					}
+				}
 			}
 		}
 	}

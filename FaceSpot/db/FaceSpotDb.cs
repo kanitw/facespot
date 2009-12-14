@@ -29,10 +29,6 @@ namespace FaceSpot.Db
 		string path;
 		
 		bool alreadyDisposed;
-		QueuedSqliteDatabase faceDatabase;
-		public QueuedSqliteDatabase FaceDatabase{
-			get { return faceDatabase;}	
-		}
 
 		public FaceStore Faces {
 			get {
@@ -45,7 +41,7 @@ namespace FaceSpot.Db
 				face_store = value;
 			}
 		}
-		QueuedSqliteDatabase Database {
+		public QueuedSqliteDatabase Database {
 			get { return Core.Database.Database; }	
 		}
 
@@ -69,7 +65,7 @@ namespace FaceSpot.Db
 		{
 			if(alreadyDisposed)return;
 			if(isDisposing){//Free managed resources
-				FaceDatabase.Dispose();
+			//	FaceDatabase.Dispose();
 			}
 			//Free eunmanaged resources
 			alreadyDisposed = true;

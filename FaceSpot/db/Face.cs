@@ -2,6 +2,9 @@
 using System;
 using FSpot;
 using Gdk;
+using FSpot.Widgets;
+using FSpot.Utils;
+	
 namespace FaceSpot.Db
 {
 	public class Face : DbItem, IDisposable
@@ -47,6 +50,8 @@ namespace FaceSpot.Db
 		string photo_md5;
 		
 		public Photo photo;
+		
+		public Pixbuf pixbuf;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -66,6 +71,17 @@ namespace FaceSpot.Db
 			this.photo = photo;
 			//TODO Possible Error
 			photo_md5 = photo.MD5Sum;
+			
+			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
+			Pixbuf input = view.Pixbuf;
+			Log.Debug("Face: Creating Pixbuf");
+			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation ((int)view.PixbufOrientation <= 4 ? input.Width : input.Height,
+											    (int)view.PixbufOrientation <= 4 ? input.Height : input.Width,
+											    view.Selection, view.PixbufOrientation);
+			pixbuf = new Pixbuf(input.Colorspace,input.HasAlpha,input.BitsPerSample,
+				                            selection.Width,selection.Height);
+			input.CopyArea (selection.X, selection.Y,
+					selection.Width, selection.Height, pixbuf, 0, 0);
 		}
 		
 		//TODO Add Function for move/scale(1:1) Face
