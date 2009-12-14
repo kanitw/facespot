@@ -72,6 +72,7 @@
     <Compile Include="ui\GladeDialog.cs" />
     <Compile Include="FaceSpot.cs" />
     <Compile Include="ui\FaceIconView.cs" />
+    <Compile Include="ui\FacePopupMenu.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

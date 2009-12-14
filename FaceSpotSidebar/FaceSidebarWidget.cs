@@ -34,7 +34,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		PhotoList knownFaceList,unknownFaceList;
 			
 		public FaceSidebarPage Page;
-	
+		const string SelectImageMarkup = "<span weight=\"bold\">" +"Please Select an Image" + "</span>";
 		public FaceSidebarWidget ()
 		{
 			mainVBox = new VBox();
@@ -42,8 +42,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 			//faceVBox = new VBox();
 			faceVPane = new VPaned();
 			
-			headerLabel =  new Label (Catalog.GetString ("Not Implemented Yet"));
-			mainVBox.PackStart(headerLabel,false,false,0);
+			pleaseSelectPictureLabel = new Label ();
+			pleaseSelectPictureLabel.Markup = SelectImageMarkup;
+			//headerLabel =  new Label (Catalog.GetString ("Not Implemented Yet"));
+			mainVBox.PackStart(pleaseSelectPictureLabel,false,false,0);
 			
 			knownFaceExpander = new Expander("In this photo:");
 			
@@ -66,9 +68,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			
 			mainVBox.PackStart(faceVPane,true,true,0);
 			
-			pleaseSelectPictureLabel = new Label ();
-			pleaseSelectPictureLabel.Markup = "<span weight=\"bold\">" +
-				Catalog.GetString("Please Select an Image") + "</span>";
+			
 			
 			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
 			mainVBox.PackEnd(detectFaceButton,false,false,0);
@@ -77,9 +77,14 @@ public class FaceSidebarWidget : ScrolledWindow {
 			mainVBox.PackEnd(addFaceButton,false,false,0);
 			addFaceButton.Clicked += AddFaceButtonClicked;
 			
+			knownFaceScrolledWindow.Visible = false;
+				unknownFaceScrolledWindow.Visible = false;
+			
 			ShadowType = ShadowType.None;
 			BorderWidth = 0;
-			Add(pleaseSelectPictureLabel);
+			//AddWithViewport(pleaseSelectPictureLabel);
+			AddWithViewport (mainVBox);
+			//mainVBox.Visible = false;
 			ShowAll();
 		}
 
@@ -156,9 +161,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 		#endregion
 		
 		bool vboxRemoved = true;
-		/// <summary>
-		/// Show all faces on the sidebar and also draw faces frame on the screen
-		/// </summary>
 		private void ShowPhotoFaces()
 		{
 			try 
@@ -167,9 +169,14 @@ public class FaceSidebarWidget : ScrolledWindow {
 				if( SelectedItem == null)return;
 				
 				FSpot.Photo photo = (FSpot.Photo) SelectedItem;
-				Remove(pleaseSelectPictureLabel);
-				AddWithViewport (mainVBox);
-				vboxRemoved = true;
+				if(vboxRemoved){
+					//AddWithViewport (mainVBox); 
+					//mainVBox.Visible = true;
+					pleaseSelectPictureLabel.Markup = "Image Selected";
+					knownFaceScrolledWindow.Visible = true;
+					unknownFaceScrolledWindow.Visible = true;
+					vboxRemoved = false;
+				}
 				
 				//IBrowsableItem[] knownFaceItems = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 				Face[] knownFaces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
@@ -198,17 +205,22 @@ public class FaceSidebarWidget : ScrolledWindow {
 		/// </summary>
 		private void ClearPhotoFaces()
 		{
-			Log.Debug("Remove VBox");
-			if(!vboxRemoved )
-				Remove(mainVBox);
-			Add(pleaseSelectPictureLabel);
 			
+			if(!vboxRemoved ){
+				//Remove(mainVBox); 
+				//mainVBox.Visible = false;
+				Log.Debug("Remove VBox");
+				knownFaceScrolledWindow.Visible = false;
+				unknownFaceScrolledWindow.Visible = false;
+				pleaseSelectPictureLabel.Markup = SelectImageMarkup;
+				vboxRemoved = true;
+			}
 			foreach (Widget w in knownFaceScrolledWindow){
-				Log.Debug("Remove Widget "+ w.ToString());
+				//Log.Debug("Remove Widget "+ w.ToString());
 				knownFaceScrolledWindow.Remove(w);
 			}
 			foreach (Widget w in unknownFaceScrolledWindow){
-					Log.Debug("Remove Widget "+ w.ToString());
+					//Log.Debug("Remove Widget "+ w.ToString());
 				unknownFaceScrolledWindow.Remove(w);
 			}
 			ShowAll();
