@@ -285,21 +285,6 @@
               <widget class="GtkLayout" id="layout2">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkComboBox" id="personComboBox">
-                    <property name="width_request">341</property>
-                    <property name="height_request">34</property>
-                    <property name="visible">True</property>
-                    <property name="add_tearoffs">True</property>
-                    <property name="tearoff_title">Unknown</property>
-                    <property name="items" translatable="yes" context="yes">Unknown
-New Person</property>
-                  </widget>
-                  <packing>
-                    <property name="x">11</property>
-                    <property name="y">32</property>
-                  </packing>
-                </child>
-                <child>
                   <widget class="GtkLabel" id="label1">
                     <property name="width_request">63</property>
                     <property name="height_request">25</property>
@@ -310,6 +295,18 @@ New Person</property>
                   <packing>
                     <property name="x">8</property>
                     <property name="y">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkComboBoxEntry" id="peopleComboBoxEntry">
+                    <property name="width_request">341</property>
+                    <property name="height_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="text_column">0</property>
+                  </widget>
+                  <packing>
+                    <property name="x">11</property>
+                    <property name="y">32</property>
                   </packing>
                 </child>
               </widget>
@@ -328,7 +325,7 @@ New Person</property>
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="cancelButton">
+              <widget class="GtkButton" id="cancel_button">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -341,7 +338,7 @@ New Person</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="okButton">
+              <widget class="GtkButton" id="ok_button">
                 <property name="label" translatable="yes">OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

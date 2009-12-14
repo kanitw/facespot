@@ -119,7 +119,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				try{
 					FaceEditorDialog dialog = new FaceEditorDialog (face);
 					Log.Debug ("Before Show All");
-					FaceSpotDb.Instance.Database.CommitTransaction();
+					//FaceSpotDb.Instance.Database.CommitTransaction();
 					//dialog.sho
 					//dialog.Dialog.ShowAll ();
 				} catch (Exception ex){
