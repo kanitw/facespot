@@ -109,7 +109,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				}
 				Log.Debug ("Create Face");
 				//
-				FaceSpotDb.Instance.Database.BeginTransaction();
+				FaceSpotDb.Instance.BeginTransaction();
 				Face face = FaceSpotDb.Instance.Faces.CreateFace (
 					(FSpot.Photo)SelectedItem, 
 					(uint)view.Selection.Left,

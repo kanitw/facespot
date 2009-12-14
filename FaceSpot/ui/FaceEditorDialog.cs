@@ -60,6 +60,8 @@ namespace FaceSpot
 			PopulatePeopleCategories(peopleTreeStore,PeopleTag,it,0);
 			
 			peopleComboBoxEntry.Model = peopleTreeStore;
+			//FIXME Fix entryCompletion Bug!!
+			
 			entryCompletion.Model = peopleTreeStore;
 			peopleComboBoxEntry.Entry.Completion = entryCompletion;
 			//peopleComboBoxEntry.TextColumn = 1;
@@ -117,31 +119,39 @@ namespace FaceSpot
 		void CancelButtonClicked (object sender, EventArgs e)
 		{
 			FaceSpotDb.Instance.RollbackTransaction ();
-			transactionCleared = true;
-			this.Dialog.Destroy ();
-			this.Dialog.Dispose ();
+			ClearEditor();
 		}
 
 		void OkButtonClicked (object sender, EventArgs e)
 		{
 			//TODO Add UPDATE TAG 
-			Log.Debug("OK : "+ peopleComboBoxEntry.ActiveText);
+			
 			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName(peopleComboBoxEntry.ActiveText.Trim());
 			if(selectedTag != null){
+				Log.Debug("FaceEditor OK : Found Tag"+ peopleComboBoxEntry.ActiveText);
 				FaceSpotDb.Instance.Faces.AddTag(face,selectedTag,true);
 			}else {
 				if(peopleComboBoxEntry.ActiveText.Trim().Length > 0){
-						
+					Log.Debug("FaceEditor OK : New Tag Tag"+ peopleComboBoxEntry.ActiveText);		
 				}else {
+					Log.Debug("FaceEditor OK : No Tag"+ peopleComboBoxEntry.ActiveText);
 					//Dialog noFaceDialog = new Dialog("No Face Dialog",this,DialogFlags.DestroyWithParent,
 					//                                 "cancel","ok");
 					//noFaceDialog.ShowAll();
 				}
 			}
 			FaceSpotDb.Instance.CommitTransaction ();
+			ClearEditor ();
+		}
+
+		private void ClearEditor ()
+		{
+			MainWindow.Toplevel.PhotoView.View.Selection = Rectangle.Zero;
 			transactionCleared = true;
 			this.Dialog.Destroy ();
 			this.Dialog.Dispose ();
 		}
+
+		
 	}
 }

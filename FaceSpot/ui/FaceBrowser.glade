@@ -256,17 +256,22 @@
     </child>
   </widget>
   <widget class="GtkDialog" id="FaceEditorDialog">
+    <property name="width_request">520</property>
+    <property name="height_request">200</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Face</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
+        <property name="width_request">110</property>
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <widget class="GtkHBox" id="mainHBox">
+            <property name="width_request">520</property>
+            <property name="height_request">150</property>
             <property name="visible">True</property>
             <child>
               <widget class="GtkImage" id="faceImage">
@@ -283,7 +288,11 @@
             </child>
             <child>
               <widget class="GtkLayout" id="layout2">
+                <property name="width_request">400</property>
+                <property name="height_request">150</property>
                 <property name="visible">True</property>
+                <property name="width">400</property>
+                <property name="height">150</property>
                 <child>
                   <widget class="GtkLabel" id="label1">
                     <property name="width_request">63</property>
