@@ -117,7 +117,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 					(uint)view.Selection.Width);
 				Log.Debug ("New Dialog");
 				try{
-					FaceEditorDialog dialog = new FaceEditorDialog (face);
+					FaceEditorDialog dialog = new FaceEditorDialog (face,this);
 					Log.Debug ("Before Show All");
 					//FaceSpotDb.Instance.Database.CommitTransaction();
 					//dialog.sho

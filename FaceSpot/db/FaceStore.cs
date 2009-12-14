@@ -131,7 +131,7 @@ namespace FaceSpot.Db
 //				
 //			}
 			if(use_transactions) Database.CommitTransaction();
-			Log.DebugTimerPrint (timer, "Commit took {0}");
+			Log.DebugTimerPrint (timer, "Face Commit took {0}");
  		}
 		
 		public void AddTag (Face face,Tag tag, bool confirmed)
@@ -149,12 +149,13 @@ namespace FaceSpot.Db
 			RemoveFromCache (item);
 			Database.ExecuteNonQuery (
 				new DbCommand ("DELETE FROM faces WHERE id = :id", "id", item.Id));
-			//EmitRemoved ();
+			//TODO Study What is EmitRemoved ();
 		}
 		
 		public void clearDatabase(){
 			Log.Debug("DROP TABLE faces");
 			Database.ExecuteNonQuery(new DbCommand("DROP TABLE faces"));
+			//TODO Remove all pictures
 		}
 		
 		//TODO Add more Query

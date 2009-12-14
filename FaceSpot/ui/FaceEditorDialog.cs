@@ -90,16 +90,17 @@ namespace FaceSpot
 
 		protected string dialog_name = "FaceEditorDialog";
 
-		public FaceEditorDialog (Face face) : base("FaceEditorDialog", "FaceSpot.ui.FaceBrowser.glade")
+		public FaceEditorDialog (Face face, Widget parent) : base("FaceEditorDialog", "FaceSpot.ui.FaceBrowser.glade")
 		{
 			this.face =face;
 			entryCompletion = new EntryCompletion();
 			
 			//entryCompletion.MatchFunc = entryCompletionMatchFunc 
 			
-			
-			
-			
+			Dialog.Parent = parent;
+			Dialog.Modal  = true;
+			//Dialog.TransientFor = parent;
+				
 			Gdk.Pixbuf pix = face.pixbuf;
 			//TODO Determine Resize Method
 			faceImage.Pixbuf = pix.ScaleSimple (100, 100, InterpType.Hyper);
@@ -124,17 +125,17 @@ namespace FaceSpot
 
 		void OkButtonClicked (object sender, EventArgs e)
 		{
-			//TODO Add UPDATE TAG 
-			
 			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName(peopleComboBoxEntry.ActiveText.Trim());
 			if(selectedTag != null){
 				Log.Debug("FaceEditor OK : Found Tag"+ peopleComboBoxEntry.ActiveText);
 				FaceSpotDb.Instance.Faces.AddTag(face,selectedTag,true);
 			}else {
 				if(peopleComboBoxEntry.ActiveText.Trim().Length > 0){
-					Log.Debug("FaceEditor OK : New Tag Tag"+ peopleComboBoxEntry.ActiveText);		
+					Log.Debug("FaceEditor OK : New Tag Tag"+ peopleComboBoxEntry.ActiveText);
+					//TODO Add Confirmation That new Alert will be created
 				}else {
 					Log.Debug("FaceEditor OK : No Tag"+ peopleComboBoxEntry.ActiveText);
+					//TODO Add Alert How to
 					//Dialog noFaceDialog = new Dialog("No Face Dialog",this,DialogFlags.DestroyWithParent,
 					//                                 "cancel","ok");
 					//noFaceDialog.ShowAll();
