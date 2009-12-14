@@ -101,7 +101,7 @@ namespace FaceSpot
 			Dialog.Modal  = true;
 			//Dialog.TransientFor = parent;
 				
-			Gdk.Pixbuf pix = face.pixbuf;
+			Gdk.Pixbuf pix = face.iconPixbuf;
 			//TODO Determine Resize Method
 			faceImage.Pixbuf = pix.ScaleSimple (100, 100, InterpType.Hyper);
 			ok_button.Clicked += OkButtonClicked;
@@ -132,7 +132,9 @@ namespace FaceSpot
 			}else {
 				if(peopleComboBoxEntry.ActiveText.Trim().Length > 0){
 					Log.Debug("FaceEditor OK : New Tag Tag"+ peopleComboBoxEntry.ActiveText);
-					//TODO Add Confirmation That new Alert will be created
+					TagCommands.Create createCom = new TagCommands.Create(MainWindow.Toplevel.Database.Tags,
+					                                                      MainWindow.Toplevel.GetToplevel(this));
+					selectedTag = createCom.Execute(TagCommands.TagType.Tag,null);
 				}else {
 					Log.Debug("FaceEditor OK : No Tag"+ peopleComboBoxEntry.ActiveText);
 					//TODO Add Alert How to

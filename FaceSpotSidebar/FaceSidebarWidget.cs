@@ -89,17 +89,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
 			if (Rectangle.Zero == view.Selection) 
 			{
-				string msg = Catalog.GetString ("No selection available");
-				string desc = Catalog.GetString ("This tool requires an active selection. Please select a region of the photo and try the operation again");
-
-				FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window,
-										DialogFlags.DestroyWithParent,
-										Gtk.MessageType.Error, ButtonsType.Ok,
-										msg,
-										desc);
-
-				md.Run ();
-				md.Destroy ();
+				AlertNoSelection ();
 				return;
 			} else {
 				//TODO add 1:1 constraint to selection
@@ -110,7 +100,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				Log.Debug ("Create Face");
 				//
 				FaceSpotDb.Instance.BeginTransaction();
-				Face face = FaceSpotDb.Instance.Faces.CreateFace (
+				Face face = FaceSpotDb.Instance.Faces.CreateFaceFromView (
 					(FSpot.Photo)SelectedItem, 
 					(uint)view.Selection.Left,
 					(uint)view.Selection.Top,
@@ -127,6 +117,16 @@ public class FaceSidebarWidget : ScrolledWindow {
 				}
 			}
 		}
+
+		private static void AlertNoSelection ()
+		{
+			string msg = Catalog.GetString ("No selection available");
+			string desc = Catalog.GetString ("This tool requires an active selection. Please select a region of the photo and try the operation again");
+			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
+			md.Run ();
+			md.Destroy ();
+		}
+
 		//TODO Ham : revise this code part
 		#region to revise
 		

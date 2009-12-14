@@ -51,7 +51,8 @@ namespace FaceSpot.Db
 		
 		public Photo photo;
 		
-		public Pixbuf pixbuf;
+		public Pixbuf iconPixbuf;
+		public bool iconWasCleared;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -61,7 +62,7 @@ namespace FaceSpot.Db
 		/// </summary>
 		public bool tagConfirmed;
 		
-		public Face (uint id,uint leftX,uint topY,uint width,Photo photo) 
+		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Pixbuf icon) 
 			: base (id)
 		{
 			this.faceID = id;
@@ -69,19 +70,11 @@ namespace FaceSpot.Db
 			this.topY = topY;
 			this.width = width;
 			this.photo = photo;
-			//TODO Possible Error
+			this.iconPixbuf = icon;
+			//FIXME Possible Error HERE
 			photo_md5 = photo.MD5Sum;
 			
-			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
-			Pixbuf input = view.Pixbuf;
-			Log.Debug("Face: Creating Pixbuf");
-			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation ((int)view.PixbufOrientation <= 4 ? input.Width : input.Height,
-											    (int)view.PixbufOrientation <= 4 ? input.Height : input.Width,
-											    view.Selection, view.PixbufOrientation);
-			pixbuf = new Pixbuf(input.Colorspace,input.HasAlpha,input.BitsPerSample,
-				                            selection.Width,selection.Height);
-			input.CopyArea (selection.X, selection.Y,
-					selection.Width, selection.Height, pixbuf, 0, 0);
+			
 		}
 		
 		//TODO Add Function for move/scale(1:1) Face
