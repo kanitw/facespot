@@ -169,17 +169,19 @@ public class FaceSidebarWidget : ScrolledWindow {
 				Remove(pleaseSelectPictureLabel);
 				Add(mainVBox);
 				
-				IBrowsableItem[] knownFaceItems = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
+				//IBrowsableItem[] knownFaceItems = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
+				Face[] knownFaces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 				
-				knownFaceList = new PhotoList(knownFaceItems);
-				knownFaceIconView = new FaceIconView(knownFaceList);
+				//knownFaceList = new PhotoList(knownFaceItems);
+				knownFaceIconView = new FaceIconView(knownFaces);
 				knownFaceScrolledWindow.AddWithViewport(knownFaceIconView);
 				knownFaceExpander.Expanded = true;
 				
-				IBrowsableItem[] unknownFaceItems = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
+				//IBrowsableItem[] unknownFaceItems = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
+				Face[] unknownFaces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 				
-				unknownFaceList = new PhotoList(unknownFaceItems);
-				unknownFaceIconView = new FaceIconView(unknownFaceList);
+				//unknownFaceList = new PhotoList(unknownFaceItems);
+				unknownFaceIconView = new FaceIconView(unknownFaces);
 				unknownFaceScrolledWindow.AddWithViewport(unknownFaceIconView);
 				unknownFaceExpander.Expanded = true;
 				ShowAll();

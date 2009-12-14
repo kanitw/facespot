@@ -103,7 +103,7 @@ namespace FaceSpot
 				
 			Gdk.Pixbuf pix = face.iconPixbuf;
 			//TODO Determine Resize Method
-			faceImage.Pixbuf = pix.ScaleSimple (100, 100, InterpType.Hyper);
+			faceImage.Pixbuf = pix.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType);
 			ok_button.Clicked += OkButtonClicked;
 			cancel_button.Clicked += CancelButtonClicked;
 			this.Dialog.Destroyed += DialoghandleDestroyed;

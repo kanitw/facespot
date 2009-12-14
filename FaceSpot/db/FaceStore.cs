@@ -12,7 +12,7 @@ namespace FaceSpot.Db
 	public class FaceStore : DbStore<Face>
 	{	//TODO Consider whether to override Emit Add, Change, Removed
 		
-		const string ALL_FIELD_NAME = "id, photo_id, tag_id, tag_confirm, left_x, top_y, width, photo_md5, time, icon ";
+		const string ALL_FIELD_NAME = "id, photo_id, photo_version_id, tag_id, tag_confirm, left_x, top_y, width, photo_md5, time, icon ";
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
 		{
@@ -24,6 +24,7 @@ namespace FaceSpot.Db
 				"CREATE TABLE faces (\n"+
 			    "	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
 			    "	photo_id INTEGER NOT NULL, \n"+
+				"	photo_version_id INTEGER NOT NULL, \n"+
 				" 	tag_id INTEGER NULL, \n" +
 				"   tag_confirm BOOLEAN NULL, \n"+
 			    "	left_x INTEGER NOT NULL, \n"+
@@ -38,6 +39,11 @@ namespace FaceSpot.Db
 			}
 			try{
 				Database.ExecuteNonQuery("CREATE INDEX idx_photo_id ON faces(photo_id)");
+			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
+				Log.Exception(ex);	
+			}
+			try{
+				Database.ExecuteNonQuery("CREATE INDEX idx_photo_version_id ON faces(photo_version_id)");
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
@@ -73,7 +79,10 @@ namespace FaceSpot.Db
 		private Face AddFaceFromReader (SqliteDataReader reader)
 		{
 			Face face;
-			Photo photo = Core.Database.Photos.Get ((uint)Convert.ToUInt32 (reader["photo_id"]));
+			Photo photo = Core.Database.Photos.Get (Convert.ToUInt32 (reader["photo_id"]));
+			Tag tag = Core.Database.Tags.GetTagById(Convert.ToInt32 (reader["tag_id"]));
+			if( tag ==null) 
+				Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
 			Pixbuf iconPixbuf = null;
 			if (reader["icon"] != null)
 				try {
@@ -81,7 +90,9 @@ namespace FaceSpot.Db
 				} catch (Exception ex) {
 					Log.Exception ("Unable to load icon for Face#" + Convert.ToUInt32 (reader["id"]), ex);
 				}
-			face = new Face (Convert.ToUInt32 (reader["id"]), Convert.ToUInt32 (reader["left_x"]), Convert.ToUInt32 (reader["top_Y"]), Convert.ToUInt32 (reader["width"]), photo, iconPixbuf,Convert.ToInt64(reader["time"]));
+			face = new Face (Convert.ToUInt32 (reader["id"]), Convert.ToUInt32 (reader["left_x"]), 
+			                 Convert.ToUInt32 (reader["top_Y"]), Convert.ToUInt32 (reader["width"]), 
+			                 photo,tag, iconPixbuf,Convert.ToInt64(reader["time"]));
 			AddToCache (face);
 			return face;
 		}
@@ -130,23 +141,25 @@ namespace FaceSpot.Db
 			input.CopyArea (selection.X, selection.Y,
 					selection.Width, selection.Height, iconPixbuf, 0, 0);
 			
-			return CreateFace(photo,leftX,topY,width,iconPixbuf);
+			return CreateFace(photo,leftX,topY,width,iconPixbuf,null);
 		}
-		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width, Pixbuf iconPixbuf){
+		
+		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width, Pixbuf iconPixbuf,Tag tag){
 			long unix_time = DbUtils.UnixTimeFromDateTime( photo.Time);
 			
 			Log.Debug("CreateFace : Db Exec Query");
 			//FIXME Check Whether MD5 Sum of Photo has been generated
 			DbCommand dbcom = new DbCommand (
-					"INSERT INTO faces (photo_id, left_x," +
+					"INSERT INTO faces (photo_id,photo_version_id, left_x," +
 					"top_y, width, photo_md5, time"+
 			        ",icon"+                         
 			        ")" +
-					"VALUES (:photo_id, :left_x," +
+					"VALUES (:photo_id,:photo_version_id, :left_x," +
 					":top_y, :width, :photo_md5, :time"+
 			        ", :icon"+
 			        ")",
 					":photo_id", photo.Id,
+			        ":photo_version_id",photo.DefaultVersionId,
 					":left_x", leftX,
 					":top_y", topY,
 					":width", width,
@@ -156,7 +169,7 @@ namespace FaceSpot.Db
 			        );
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
-			Face face = new Face (id, leftX, topY, width, photo,iconPixbuf,unix_time);
+			Face face = new Face (id, leftX, topY, width, photo,tag,iconPixbuf,unix_time);
 			Log.Debug("Finished createFace : Db Exec Query");
 			return face;
 		}
@@ -211,6 +224,7 @@ namespace FaceSpot.Db
 		//TODO Study "Commit" Flow - This action should be included with Commit??
 		public void AddTag (Face face,Tag tag, bool confirmed)
 		{
+			Log.Debug("Tag #"+tag.Id+" Added to"+face.Id);
 			face.tag = tag;
 			face.tagConfirmed = confirmed;
 			Database.ExecuteNonQuery(new DbCommand("UPDATE faces SET tag_id = :tag_id, tag_confirm = :tag_confirm WHERE id = :id",

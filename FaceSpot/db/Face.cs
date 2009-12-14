@@ -63,7 +63,7 @@ namespace FaceSpot.Db
 		public bool tagConfirmed;
 		private long unix_time;
 		
-		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Pixbuf icon,long unix_time) 
+		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Tag tag,Pixbuf icon,long unix_time) 
 			: base (id)
 		{
 			this.faceID = id;
@@ -103,7 +103,7 @@ namespace FaceSpot.Db
 		}
 		
 		public string Name {
-			get { return tag.Name ; }	
+			get { return tag==null ? null : tag.Name ; }	
 		}
 		public uint Rating {
 			get { return photo.Rating; }	
