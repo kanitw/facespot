@@ -71,6 +71,7 @@
     <Compile Include="ui\FacePreference.cs" />
     <Compile Include="ui\GladeDialog.cs" />
     <Compile Include="FaceSpot.cs" />
+    <Compile Include="ui\FaceIconView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -7,7 +7,7 @@ using FSpot.Utils;
 	
 namespace FaceSpot.Db
 {
-	public class Face : DbItem, IDisposable
+	public class Face : DbItem, IDisposable, IBrowsableItem
 		//TODO Decide whether should it implement IComparable
 	{
 		uint faceID;		
@@ -61,8 +61,9 @@ namespace FaceSpot.Db
 		/// 
 		/// </summary>
 		public bool tagConfirmed;
+		private long unix_time;
 		
-		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Pixbuf icon) 
+		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Pixbuf icon,long unix_time) 
 			: base (id)
 		{
 			this.faceID = id;
@@ -71,6 +72,7 @@ namespace FaceSpot.Db
 			this.width = width;
 			this.photo = photo;
 			this.iconPixbuf = icon;
+			this.unix_time = unix_time;
 			//FIXME Possible Error HERE
 			photo_md5 = photo.MD5Sum;
 			
@@ -89,5 +91,26 @@ namespace FaceSpot.Db
 		{
 			throw new NotImplementedException();	
 		}
+		#region Implementing IBrowsableitem
+		public Tag[] Tags { get { return new Tag[]{tag};}}
+		
+		public DateTime Time {
+			get { return DbUtils.DateTimeFromUnixTime(unix_time); }
+		}
+		
+		public string Description{
+			get { return  "Photo of "+ tag.Name + " in "+ photo.Name +"("+ photo.Description +")"; }
+		}
+		
+		public string Name {
+			get { return tag.Name ; }	
+		}
+		public uint Rating {
+			get { return photo.Rating; }	
+		}
+		public System.Uri DefaultVersionUri {
+			get { return photo.DefaultVersionUri; }
+		}
+		#endregion
 	}
 }

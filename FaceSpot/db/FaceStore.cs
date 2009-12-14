@@ -6,6 +6,7 @@ using FSpot;
 using FSpot.Widgets;
 using FSpot.Extensions;
 using Gdk;
+using System.Collections.Generic;
 namespace FaceSpot.Db
 {
 	public class FaceStore : DbStore<Face>
@@ -18,7 +19,6 @@ namespace FaceSpot.Db
 			if ( ! is_new && Database.TableExists("faces")) return;
 			Log.Debug("Facestore Db Init");
 			//Add Database Initialization
-			//Note : If you change query here - you need to change "all_field" too
 			try{
 			Database.ExecuteNonQuery(
 				"CREATE TABLE faces (\n"+
@@ -36,7 +36,6 @@ namespace FaceSpot.Db
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
-			
 			try{
 				Database.ExecuteNonQuery("CREATE INDEX idx_photo_id ON faces(photo_id)");
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
@@ -64,26 +63,56 @@ namespace FaceSpot.Db
 			);
 			if (reader.Read ())
 			{
-				Photo photo = Core.Database.Photos.Get((uint)Convert.ToUInt32(reader["photo_id"]));
-				Pixbuf iconPixbuf=null;
-				if( reader["icon"] !=null)
-					try{
-						face.iconPixbuf =  GetIconFromString(reader["icon"].ToString());
-					}catch (Exception ex){
-						Log.Exception("Unable to load icon for Face#"+face.Id,ex);
-					}
-				face = new Face(id,
-				                Convert.ToUInt32(reader["left_x"]),
-				                Convert.ToUInt32(reader["top_Y"]),
-				                Convert.ToUInt32(reader["width"]),
-				               	photo, iconPixbuf
-				                ) ;
-				
-				AddToCache(face);
+				face = AddFaceFromReader (reader);
 			}
 			reader.Close();
 			//TODO consider whether to use Unsafed Add (Compared to PhotoStore Class)
 			return face;
+		}
+
+		private Face AddFaceFromReader (SqliteDataReader reader)
+		{
+			Face face;
+			Photo photo = Core.Database.Photos.Get ((uint)Convert.ToUInt32 (reader["photo_id"]));
+			Pixbuf iconPixbuf = null;
+			if (reader["icon"] != null)
+				try {
+					iconPixbuf = GetIconFromString (reader["icon"].ToString ());
+				} catch (Exception ex) {
+					Log.Exception ("Unable to load icon for Face#" + Convert.ToUInt32 (reader["id"]), ex);
+				}
+			face = new Face (Convert.ToUInt32 (reader["id"]), Convert.ToUInt32 (reader["left_x"]), Convert.ToUInt32 (reader["top_Y"]), Convert.ToUInt32 (reader["width"]), photo, iconPixbuf,Convert.ToInt64(reader["time"]));
+			AddToCache (face);
+			return face;
+		}
+
+		public Face[] GetKnownFaceByPhoto(Photo photo){
+			return GetByPhoto(photo," AND NOT tag_id IS NULL");
+		}
+		
+		public Face[] GetNotKnownFaceByPhoto(Photo photo){
+			return GetByPhoto(photo," AND tag_id IS NULL");	
+		}
+		
+		public Face[] GetByPhoto(Photo photo, string addWhereClause){
+			List<Face> faces = new List<Face>();
+			SqliteDataReader reader = Database.Query (
+			new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE photo_id = :photo_id " + addWhereClause,
+				       "photo_id",photo.Id
+				      )
+			);
+			while(reader.Read()){
+				Face face = LookupInCache (Convert.ToUInt32 (reader["id"]));
+				if(face==null){
+					face = AddFaceFromReader(reader);
+				}
+				faces.Add(face);
+			}
+			reader.Close();
+			//TODO consider whether to use Unsafed Add (Compared to PhotoStore Class)
+			return faces.ToArray();
 		}
 				
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
@@ -127,7 +156,7 @@ namespace FaceSpot.Db
 			        );
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
-			Face face = new Face (id, leftX, topY, width, photo,iconPixbuf);
+			Face face = new Face (id, leftX, topY, width, photo,iconPixbuf,unix_time);
 			Log.Debug("Finished createFace : Db Exec Query");
 			return face;
 		}
@@ -201,7 +230,6 @@ namespace FaceSpot.Db
 		public void clearDatabase(){
 			Log.Debug("DROP TABLE faces");
 			Database.ExecuteNonQuery(new DbCommand("DROP TABLE faces"));
-			//TODO Remove all pictures
 		}
 		
 		//TODO Add more Query

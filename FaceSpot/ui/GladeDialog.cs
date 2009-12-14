@@ -41,7 +41,6 @@ namespace FaceSpot
 			get {
 				if (dialog == null)
 					dialog = (Gtk.Dialog) xml.GetWidget (dialog_name);
-				
 				return dialog;
 			}
 		}

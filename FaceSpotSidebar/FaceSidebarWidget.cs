@@ -30,7 +30,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		Expander knownFaceExpander, unknownFaceExpander;
 		HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
-		FSpot.Widgets.IconView knownFaceIconView,unknownFaceIconView;
+		FaceIconView knownFaceIconView,unknownFaceIconView;
 		PhotoList knownFaceList,unknownFaceList;
 			
 		public FaceSidebarPage Page;
@@ -166,40 +166,20 @@ public class FaceSidebarWidget : ScrolledWindow {
 				if( SelectedItem == null)return;
 				
 				FSpot.Photo photo = (FSpot.Photo) SelectedItem;
-				#region Wrong Code just for test UI
-				uint [] version_ids = photo.VersionIds;
-				IBrowsableItem [] items = new IBrowsableItem [version_ids.Length];
-		
-				int i = items.Length;
-				int selected_version_id = -1;
-				foreach (uint id in version_ids) {
-					i--;
-					FSpot.Utils.Log.Debug (string.Format ("Adding version {0} to items[{1}].", id, i));
-					items[i] = (photo.GetVersion (id));
-					if (id == photo.DefaultVersionId)
-						selected_version_id = i;
-				}
-				#endregion
-				
 				Remove(pleaseSelectPictureLabel);
 				Add(mainVBox);
-				//get knownFaceList
 				
-				//TODO Add knownFaceList Code Fetch
-				IBrowsableItem[] knownFaceItems = items;//new IBrowsableItem[0];
+				IBrowsableItem[] knownFaceItems = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 				
 				knownFaceList = new PhotoList(knownFaceItems);
-				knownFaceIconView = new FSpot.Widgets.IconView(knownFaceList);
+				knownFaceIconView = new FaceIconView(knownFaceList);
 				knownFaceScrolledWindow.AddWithViewport(knownFaceIconView);
 				knownFaceExpander.Expanded = true;
 				
-				//get unknownFaceList	
-				
-				//TODO Add unknownFaceList Code
-				IBrowsableItem[] unknownFaceItems = new IBrowsableItem[0];
+				IBrowsableItem[] unknownFaceItems = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 				
 				unknownFaceList = new PhotoList(unknownFaceItems);
-				unknownFaceIconView = new FSpot.Widgets.IconView(unknownFaceList);
+				unknownFaceIconView = new FaceIconView(unknownFaceList);
 				unknownFaceScrolledWindow.AddWithViewport(unknownFaceIconView);
 				unknownFaceExpander.Expanded = true;
 				ShowAll();
