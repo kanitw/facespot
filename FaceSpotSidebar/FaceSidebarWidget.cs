@@ -155,6 +155,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		
 		#endregion
 		
+		bool vboxRemoved = true;
 		/// <summary>
 		/// Show all faces on the sidebar and also draw faces frame on the screen
 		/// </summary>
@@ -167,7 +168,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 				
 				FSpot.Photo photo = (FSpot.Photo) SelectedItem;
 				Remove(pleaseSelectPictureLabel);
-				Add(mainVBox);
+				AddWithViewport (mainVBox);
+				vboxRemoved = true;
 				
 				//IBrowsableItem[] knownFaceItems = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 				Face[] knownFaces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
@@ -196,12 +198,19 @@ public class FaceSidebarWidget : ScrolledWindow {
 		/// </summary>
 		private void ClearPhotoFaces()
 		{
-			Remove(mainVBox);
+			Log.Debug("Remove VBox");
+			if(!vboxRemoved )
+				Remove(mainVBox);
 			Add(pleaseSelectPictureLabel);
-			foreach (Widget w in knownFaceScrolledWindow)
+			
+			foreach (Widget w in knownFaceScrolledWindow){
+				Log.Debug("Remove Widget "+ w.ToString());
 				knownFaceScrolledWindow.Remove(w);
-			foreach (Widget w in unknownFaceScrolledWindow)
+			}
+			foreach (Widget w in unknownFaceScrolledWindow){
+					Log.Debug("Remove Widget "+ w.ToString());
 				unknownFaceScrolledWindow.Remove(w);
+			}
 			ShowAll();
 		}
 	}
