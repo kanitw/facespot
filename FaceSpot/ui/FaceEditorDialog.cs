@@ -22,11 +22,17 @@ namespace FaceSpot
 		Button cancel_button;
 		[Widget]
 		Button ok_button;
+		
 		[Widget]
 		ComboBoxEntry peopleComboBoxEntry;
-		ArrayList categories;
+		EntryCompletion entryCompletion;
+		EntryCompletionMatchFunc entryCompletionMatchFunc;
+		
+		Face face;
+		
 		#region Category
 		Category people;
+		TreeStore peopleTreeStore;
 		Tag peopleTag;
 		bool transactionCleared = false;
 		Category People {
@@ -45,28 +51,38 @@ namespace FaceSpot
 		}
 		void PopulateCategoryComboBoxEntry ()
 		{
-			int history = 0 , i =0;
 			//categories
-			categories = new ArrayList(100);
 			Log.Debug("PeopleArrayListCreated");
-			categories.Add(People);
-			PopulatePeopleCategories(categories,People);
 			
-			//TreeStore peopleTreeStore = new TreeStore(typeof(Tag));
-			//peopleTreeStore.InsertWithValues(0,PeopleTag);
+			peopleTreeStore = new TreeStore(typeof(String),typeof(Tag));
+			TreeIter it;
+			peopleTreeStore.GetIterFirst(out it);
+			PopulatePeopleCategories(peopleTreeStore,PeopleTag,it,0);
 			
-			//peopleComboBoxEntry.Model = peopleTreeStore;
-			//peopleComboBoxEntry.TextColumn = 0;
-			peopleComboBoxEntry.AppendText("Smile");
+			peopleComboBoxEntry.Model = peopleTreeStore;
+			entryCompletion.Model = peopleTreeStore;
+			peopleComboBoxEntry.Entry.Completion = entryCompletion;
+			//peopleComboBoxEntry.TextColumn = 1;
+			
+			//peopleComboBox.Model = peopleTreeStore;
+			//peopleComboBoxEntry.TextColumn =0;
 		}
-		void PopulatePeopleCategories (ArrayList categories, Category parent)
+		int i=0;
+		
+		private string space(int level){
+			return level == 0 ? "" : space(level-1) + "  ";	
+		}
+		
+		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter it,int level)
 		{
-//			foreach (Tag tag in parent.Children) {
-//				if (tag is Category && tag != this.tag && !this.tag.IsAncestorOf (tag)) {
-//					categories.Add (tag);
-//					PopulatePeopleCategories (categories, tag as Category);
-//				}
-//			}
+			foreach (Tag tag in (parent as Category).Children) {
+				if(++i==100)break;
+				if (tag is Category) {
+					Log.Debug("Append "+i+" : "+tag.Name);
+					treeStore.AppendValues(space(level)+tag.Name,parent,tag);
+					PopulatePeopleCategories (treeStore,tag,it,level+1);
+				}
+			}
 		}
 		#endregion
 
@@ -74,6 +90,14 @@ namespace FaceSpot
 
 		public FaceEditorDialog (Face face) : base("FaceEditorDialog", "FaceSpot.ui.FaceBrowser.glade")
 		{
+			this.face =face;
+			entryCompletion = new EntryCompletion();
+			
+			//entryCompletion.MatchFunc = entryCompletionMatchFunc 
+			
+			
+			
+			
 			Gdk.Pixbuf pix = face.pixbuf;
 			//TODO Determine Resize Method
 			faceImage.Pixbuf = pix.ScaleSimple (100, 100, InterpType.Hyper);
@@ -87,12 +111,12 @@ namespace FaceSpot
 		void DialoghandleDestroyed (object sender, EventArgs e)
 		{
 			if(!transactionCleared)
-				FaceSpotDb.Instance.Database.RollbackTransaction ();	
+				FaceSpotDb.Instance.RollbackTransaction ();	
 		}
 
 		void CancelButtonClicked (object sender, EventArgs e)
 		{
-			FaceSpotDb.Instance.Database.RollbackTransaction ();
+			FaceSpotDb.Instance.RollbackTransaction ();
 			transactionCleared = true;
 			this.Dialog.Destroy ();
 			this.Dialog.Dispose ();
@@ -100,9 +124,21 @@ namespace FaceSpot
 
 		void OkButtonClicked (object sender, EventArgs e)
 		{
-			//TODO Add UPDATE TAG Code
-			
-			FaceSpotDb.Instance.Database.CommitTransaction ();
+			//TODO Add UPDATE TAG 
+			Log.Debug("OK : "+ peopleComboBoxEntry.ActiveText);
+			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName(peopleComboBoxEntry.ActiveText.Trim());
+			if(selectedTag != null){
+				FaceSpotDb.Instance.Faces.AddTag(face,selectedTag,true);
+			}else {
+				if(peopleComboBoxEntry.ActiveText.Trim().Length > 0){
+						
+				}else {
+					//Dialog noFaceDialog = new Dialog("No Face Dialog",this,DialogFlags.DestroyWithParent,
+					//                                 "cancel","ok");
+					//noFaceDialog.ShowAll();
+				}
+			}
+			FaceSpotDb.Instance.CommitTransaction ();
 			transactionCleared = true;
 			this.Dialog.Destroy ();
 			this.Dialog.Dispose ();

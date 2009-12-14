@@ -22,10 +22,10 @@ namespace FaceSpot
 		}
 		
 		private Gtk.Window browserWindow;
-		
-		[Glade.Widget] HPaned MainHPaned;
-		[Glade.Widget] VBox MainVBox;
-		[Glade.Widget] Statusbar StatusBar;
+		//unused
+		//[Glade.Widget] HPaned MainHPaned;
+		//[Glade.Widget] VBox MainVBox;
+		//[Glade.Widget] Statusbar StatusBar;
 		[Glade.Widget] MenuItem	 menuitem_preference;
 //		[Glade.Widget]
 //		[Glade.Widget]

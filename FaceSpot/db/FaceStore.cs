@@ -96,7 +96,7 @@ namespace FaceSpot.Db
 					":time", unix_time);
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
-			Face face = new Face (0, leftX, topY, width, photo);
+			Face face = new Face (id, leftX, topY, width, photo);
 			
 			
 			//TODO Finish this part of code
@@ -134,9 +134,14 @@ namespace FaceSpot.Db
 			Log.DebugTimerPrint (timer, "Commit took {0}");
  		}
 		
-		public uint AddTag (Tag tag)
+		public void AddTag (Face face,Tag tag, bool confirmed)
 		{
-			throw new System.NotImplementedException ();
+			face.tag = tag;
+			face.tagConfirmed = confirmed;
+			Database.ExecuteNonQuery(new DbCommand("UPDATE faces SET tag_id = :tag_id, tag_confirm = :tag_confirm WHERE id = :id",
+			                         "tag_id",tag.Id,
+			                         "tag_confirm",confirmed,
+			                         "id",face.Id));
 		}
 		
 		public override void Remove (Face item)

@@ -41,10 +41,22 @@ namespace FaceSpot.Db
 				face_store = value;
 			}
 		}
-		public QueuedSqliteDatabase Database {
+		QueuedSqliteDatabase Database {
 			get { return Core.Database.Database; }	
 		}
-
+		public void BeginTransaction(){
+			Database.BeginTransaction();
+			//TODO add code to manage picture files
+		}
+		public void RollbackTransaction(){
+			Database.RollbackTransaction();	
+			//TODO add code to manage picture files
+		}
+		public void CommitTransaction(){
+			Database.CommitTransaction();	
+			//TODO add code to manage picture files
+		}
+		
 		private FaceSpotDb ()
 		{
 			uint timer = Log.DebugTimerStart ();
