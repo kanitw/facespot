@@ -233,6 +233,11 @@ namespace FaceSpot.Db
 			                         "id",face.Id));
 		}
 		
+		public void Remove(Face[] faces){
+			foreach(Face face in faces)	
+				Remove(face);
+		}
+		
 		public override void Remove (Face item)
 		{
 			RemoveFromCache (item);

@@ -67,14 +67,15 @@ namespace FaceSpot
 				listStore.GetIter(out faceIter,facePath);
 				Face face = (Face) listStore.GetValue(faceIter,2);
 				
+				Log.Debug("Button Pressed on Face :"+face.Id);
+				
 				TreePath[] paths = this.SelectedItems;
-			 	List< Face> faces = new List<Face>(); // for group selection
+				List< Face> faces = new List<Face>(); // for group selection
 				
 				bool isInSelection = false;
 				foreach(TreePath path in paths){
 					if(path.Equals(facePath)){
 						isInSelection = true;
-						break;	
 					}
 					TreeIter iter;
 					listStore.GetIter(out iter,path);
@@ -92,7 +93,7 @@ namespace FaceSpot
 					fids += f.Id + " ";
 				}
 				
-				Log.Debug("Button Pressed on Face :"+fids);
+				Log.Debug("With+"+ faces.Count + " Selection :"+fids);
 				FacePopupMenu popup = new FacePopupMenu();
 				popup.Activate(args.Event,face,faces.ToArray());
 				

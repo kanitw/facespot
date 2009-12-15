@@ -151,6 +151,7 @@ namespace FaceSpot
 		{
 			MainWindow.Toplevel.PhotoView.View.Selection = Rectangle.Zero;
 			transactionCleared = true;
+			//MainWindow.Toplevel.UpdateQuery();
 			this.Dialog.Destroy ();
 			this.Dialog.Dispose ();
 		}
