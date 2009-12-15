@@ -3,22 +3,25 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/db/FaceStore.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/ui/FacePopupMenu.cs" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpot/db/FaceStore.cs" Line="149" Column="3" />
-      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/db/FaceStore.cs" Line="129" Column="46" />
       <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/GladeDialog.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="131" Column="32" />
+      <File FileName="FaceSpot/db/Face.cs" Line="77" Column="29" />
+      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="18" Column="3" />
+      <File FileName="FaceSpotService/FaceService.cs" Line="22" Column="4" />
+      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="163" Column="27" />
+      <File FileName="FaceSpot/FaceSpot.cs" Line="17" Column="68" />
+      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/FacePopupMenu.cs" Line="19" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="FaceSpot" expanded="True">
-            <Node name="db" expanded="True">
-              <Node name="FaceStore.cs" selected="True" />
-            </Node>
-            <Node name="ui" expanded="True" />
+            <Node name="db" expanded="True" />
+            <Node name="ui" expanded="True" selected="True" />
           </Node>
           <Node name="FaceSpotService" expanded="True">
             <Node name="References" expanded="True" />

@@ -6,8 +6,10 @@ using Mono.Posix;
 using FSpot;
 using FaceSpot.Db;
 using Gdk;
+using System.Collections.Generic;
 namespace FaceSpot
 {
+	//TODO Add support for deselection of another one
 	public class FaceIconView : Gtk.IconView
 	{
 		ListStore listStore;
@@ -20,7 +22,7 @@ namespace FaceSpot
 				Log.Debug("Append Face#"+(i++)+"  ");
 				if( face !=null)
 				{
-					string name = face.Name == null? "" : face.Name;
+					string name = face.Name == null? face.Id.ToString() : face.Name;
 					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple(100,100,FaceSpot.IconResizeInterpType) : null ;
 					if(pixbuf ==null) 
 						Log.Exception(new Exception("Allowed null Face Pixbuf to the faceiconview"));
@@ -32,8 +34,74 @@ namespace FaceSpot
 			this.Model =  listStore;
 			this.TextColumn = 0;
 			this.PixbufColumn =1;
+			this.ButtonPressEvent += HandleButtonPressEvent;
+			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
+			this.SelectionChanged += HandleSelectionChanged;
+			this.SelectionMode = SelectionMode.Multiple;
+//			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
+			//this.
+		}
+
+//		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)
+//		{
+//			Log.Debug("Button Released on Face Iconview");
+//			if(args.Event.Button == 3){
+//				FacePopupMenu popup = new FacePopupMenu();
+//				popup.Activate();
+//			}
+//		}
+
+		void HandleSelectionChanged (object sender, EventArgs args)
+		{
 			
 		}
+
+		void HandleButtonPressEvent (object o, ButtonPressEventArgs args)
+		{
+			if(args.Event.Button == 3){
+				
+				TreePath facePath;
+				CellRenderer faceCell;
+				TreeIter faceIter;
+				this.GetItemAtPos((int)args.Event.X,(int)args.Event.Y,out facePath,out faceCell);
+				listStore.GetIter(out faceIter,facePath);
+				Face face = (Face) listStore.GetValue(faceIter,2);
+				
+				TreePath[] paths = this.SelectedItems;
+			 	List< Face> faces = new List<Face>(); // for group selection
+				
+				bool isInSelection = false;
+				foreach(TreePath path in paths){
+					if(path.Equals(facePath)){
+						isInSelection = true;
+						break;	
+					}
+					TreeIter iter;
+					listStore.GetIter(out iter,path);
+					Face f = (Face) listStore.GetValue(iter,2);
+					faces.Add(f);
+				}
+				if(!isInSelection){
+					this.UnselectAll();
+					this.SelectPath(facePath);	
+					faces.Clear();
+					faces.Add(face);
+				}
+				String fids = "";
+				foreach(Face f in faces){
+					fids += f.Id + " ";
+				}
+				
+				Log.Debug("Button Pressed on Face :"+fids);
+				FacePopupMenu popup = new FacePopupMenu();
+				popup.Activate(args.Event,face,faces.ToArray());
+				
+				args.RetVal =true;
+			}
+		}
+		
+		//TODO if have time - Add Keyboard Support
+		//TODO Add Menu to Edit Menu Bar for this
 	}
 
 //	public class FaceIconView: FSpot.Widgets.IconView
