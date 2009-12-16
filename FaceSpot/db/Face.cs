@@ -7,7 +7,7 @@ using FSpot.Utils;
 	
 namespace FaceSpot.Db
 {
-	public class Face : DbItem, IDisposable, IBrowsableItem
+	public class Face : DbItem, IDisposable//, IBrowsableItem
 		//TODO Decide whether should it implement IComparable
 	{
 		uint faceID;		
@@ -45,6 +45,7 @@ namespace FaceSpot.Db
 		const int faceDefaultWidth = 100;
 		public Pixbuf faceImage;
 		
+		//TODO Decide Whether to use this
 		bool manuallyDetected, manuallyRecognized;
 		
 		string photo_md5;
@@ -71,46 +72,45 @@ namespace FaceSpot.Db
 			this.topY = topY;
 			this.width = width;
 			this.photo = photo;
+			this.tag = tag;
 			this.iconPixbuf = icon;
 			this.unix_time = unix_time;
 			//FIXME Possible Error HERE
 			photo_md5 = photo.MD5Sum;
-			
-			
 		}
 		
 		//TODO Add Function for move/scale(1:1) Face
 		
 		public void Dispose()
 		{
-			//TODO Add required child item dispose
-			
 			System.GC.SuppressFinalize(this);
 		}
 		public static PixbufCache getFaceImageFromPhoto(uint left,uint top,uint width, Photo photo)
 		{
+			//FiXME IMplement this if necessary
 			throw new NotImplementedException();	
 		}
 		#region Implementing IBrowsableitem
-		public Tag[] Tags { get { return new Tag[]{tag};}}
-		
-		public DateTime Time {
-			get { return DbUtils.DateTimeFromUnixTime(unix_time); }
-		}
-		
-		public string Description{
-			get { return  "Photo of "+ tag.Name + " in "+ photo.Name +"("+ photo.Description +")"; }
-		}
+//		public Tag[] Tags { get { return new Tag[]{tag};}}
+//		
+//		public DateTime Time {
+//			get { return DbUtils.DateTimeFromUnixTime(unix_time); }
+//		}
+//		
+//		public string Description{
+//			get { return  "Photo of "+ tag.Name + " in "+ photo.Name +"("+ photo.Description +")"; }
+//		}
+//		
+//		public uint Rating {
+//			get { return photo.Rating; }	
+//		}
+//		public System.Uri DefaultVersionUri {
+//			get { return photo.DefaultVersionUri; }
+//		}
+		#endregion
 		
 		public string Name {
 			get { return tag==null ? null : tag.Name ; }	
 		}
-		public uint Rating {
-			get { return photo.Rating; }	
-		}
-		public System.Uri DefaultVersionUri {
-			get { return photo.DefaultVersionUri; }
-		}
-		#endregion
 	}
 }

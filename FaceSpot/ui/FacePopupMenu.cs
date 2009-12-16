@@ -35,7 +35,7 @@ namespace FaceSpot
 
 		void EditActivated (object sender, EventArgs e)
 		{
-			
+			FaceEditorDialog dialog = new FaceEditorDialog (face,this.Toplevel,false);
 		}
 
 		void DeleteActivated (object sender, EventArgs e)
@@ -57,7 +57,6 @@ namespace FaceSpot
 				//TODO Decide whether UpdateQuery is the appropriate command
 				MainWindow.Toplevel.UpdateQuery ();
 				Log.DebugTimerPrint (timer, "HandleDeleteCommand took {0}");
-				
 			}
 		}
 	}

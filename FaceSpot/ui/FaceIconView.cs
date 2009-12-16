@@ -39,7 +39,6 @@ namespace FaceSpot
 			this.SelectionChanged += HandleSelectionChanged;
 			this.SelectionMode = SelectionMode.Multiple;
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
-			//this.
 		}
 
 //		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)
@@ -92,7 +91,6 @@ namespace FaceSpot
 				foreach(Face f in faces){
 					fids += f.Id + " ";
 				}
-				
 				Log.Debug("With+"+ faces.Count + " Selection :"+fids);
 				FacePopupMenu popup = new FacePopupMenu();
 				popup.Activate(args.Event,face,faces.ToArray());

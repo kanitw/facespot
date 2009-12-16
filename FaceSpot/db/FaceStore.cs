@@ -10,8 +10,7 @@ using System.Collections.Generic;
 namespace FaceSpot.Db
 {
 	public class FaceStore : DbStore<Face>
-	{	//TODO Consider whether to override Emit Add, Change, Removed
-		
+	{
 		const string ALL_FIELD_NAME = "id, photo_id, photo_version_id, tag_id, tag_confirm, left_x, top_y, width, photo_md5, time, icon ";
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
@@ -62,10 +61,9 @@ namespace FaceSpot.Db
 			if (face != null)
 				return face;
 			SqliteDataReader reader = Database.Query (
-			new DbCommand ("SELECT " + ALL_FIELD_NAME + 
-				      "FROM faces " + 
-				      "WHERE id = :id", "id", id
-				     )
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+					      "FROM faces " + 
+					      "WHERE id = :id", "id", id)
 			);
 			if (reader.Read ())
 			{
@@ -84,12 +82,13 @@ namespace FaceSpot.Db
 			if( tag ==null) 
 				Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
 			Pixbuf iconPixbuf = null;
-			if (reader["icon"] != null)
+			if (reader["icon"] != null){
 				try {
 					iconPixbuf = GetIconFromString (reader["icon"].ToString ());
 				} catch (Exception ex) {
 					Log.Exception ("Unable to load icon for Face#" + Convert.ToUInt32 (reader["id"]), ex);
 				}
+			}
 			face = new Face (Convert.ToUInt32 (reader["id"]), Convert.ToUInt32 (reader["left_x"]), 
 			                 Convert.ToUInt32 (reader["top_Y"]), Convert.ToUInt32 (reader["width"]), 
 			                 photo,tag, iconPixbuf,Convert.ToInt64(reader["time"]));
@@ -108,7 +107,7 @@ namespace FaceSpot.Db
 		public Face[] GetByPhoto(Photo photo, string addWhereClause){
 			List<Face> faces = new List<Face>();
 			SqliteDataReader reader = Database.Query (
-			new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
 				       "FROM faces " + 
 				       "WHERE photo_id = :photo_id " + addWhereClause,
 				       "photo_id",photo.Id
@@ -128,7 +127,7 @@ namespace FaceSpot.Db
 				
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
 		{
-			if(photo == null) Log.Exception(new Exception( "BUGG Null"));
+			if(photo == null) Log.Exception(new Exception( "BUG Null"));
 			//FIXME Face here are always create from view / selection
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
 			Pixbuf input = view.Pixbuf;
@@ -152,12 +151,10 @@ namespace FaceSpot.Db
 			DbCommand dbcom = new DbCommand (
 					"INSERT INTO faces (photo_id,photo_version_id, left_x," +
 					"top_y, width, photo_md5, time"+
-			        ",icon"+                         
-			        ")" +
+			        ",icon"+ ")" +
 					"VALUES (:photo_id,:photo_version_id, :left_x," +
 					":top_y, :width, :photo_md5, :time"+
-			        ", :icon"+
-			        ")",
+			        ", :icon"+ ")",
 					":photo_id", photo.Id,
 			        ":photo_version_id",photo.DefaultVersionId,
 					":left_x", leftX,
@@ -180,10 +177,8 @@ namespace FaceSpot.Db
 		
 		public void Commit (Face[] items){
 			uint timer = Log.DebugTimerStart ();
-			// TODO consider whether we need to change any more information
-			// Only use a transaction for multiple saves. Avoids recursive transactions.
- 			bool use_transactions = !Database.InTransaction && items.Length > 1;
-			if(use_transactions) Database.BeginTransaction();
+			Log.Debug("Face Commit Called");
+
 			foreach (Face face in items){
 				Database.ExecuteNonQuery(
 					new DbCommand("UPDATE faces SET photo_id = :photo_id"+
@@ -199,7 +194,7 @@ namespace FaceSpot.Db
 				        "icon", GetIconString(face.iconPixbuf),                    
 				        "id",face.Id));
 			}
-			if(use_transactions) Database.CommitTransaction();
+			
 			Log.DebugTimerPrint (timer, "Face Commit took {0}");
  		}
 		

@@ -112,7 +112,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 					(uint)view.Selection.Width);
 				Log.Debug ("New Dialog");
 				try{
-					FaceEditorDialog dialog = new FaceEditorDialog (face,this);
+					FaceEditorDialog dialog = new FaceEditorDialog (face,this,true);
 					Log.Debug ("Before Show All");
 					//FaceSpotDb.Instance.Database.CommitTransaction();
 					//dialog.sho
@@ -205,7 +205,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 		/// </summary>
 		private void ClearPhotoFaces()
 		{
-			
 			if(!vboxRemoved ){
 				//Remove(mainVBox); 
 				//mainVBox.Visible = false;

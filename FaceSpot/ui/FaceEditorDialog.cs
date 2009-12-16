@@ -14,8 +14,8 @@ namespace FaceSpot
 {
 	public class FaceEditorDialog : GladeDialog
 	{
-		[Widget]
-		HBox mainHBox;
+//		[Widget]
+//		HBox mainHBox;
 		[Widget]
 		Gtk.Image faceImage;
 		[Widget]
@@ -31,7 +31,6 @@ namespace FaceSpot
 		Face face;
 		
 		#region Category
-		Category people;
 		TreeStore peopleTreeStore;
 		Tag peopleTag;
 		bool transactionCleared = false;
@@ -90,13 +89,16 @@ namespace FaceSpot
 
 		protected string dialog_name = "FaceEditorDialog";
 
-		public FaceEditorDialog (Face face, Widget parent) : base("FaceEditorDialog", "FaceSpot.ui.FaceBrowser.glade")
+		bool newFace;
+		
+		public FaceEditorDialog (Face face, Widget parent, bool newFace) 
+			: base("FaceEditorDialog", "FaceSpot.ui.FaceBrowser.glade")
 		{
 			this.face =face;
+			this.newFace = newFace;
 			entryCompletion = new EntryCompletion();
 			
 			//entryCompletion.MatchFunc = entryCompletionMatchFunc 
-			
 			Dialog.Parent = parent;
 			Dialog.Modal  = true;
 			//Dialog.TransientFor = parent;
@@ -108,6 +110,13 @@ namespace FaceSpot
 			cancel_button.Clicked += CancelButtonClicked;
 			this.Dialog.Destroyed += DialoghandleDestroyed;
 			PopulateCategoryComboBoxEntry();
+			
+			if(face.tag != null){
+				Log.Debug("Tag"+face.tag.Name+" for this face yet");
+				peopleComboBoxEntry.Entry.Text = face.tag.Name;
+			}else 
+				Log.Debug("No Tag for this face yet"+face.Id);
+			
 			Dialog.ShowAll ();
 		}
 
@@ -119,33 +128,48 @@ namespace FaceSpot
 
 		void CancelButtonClicked (object sender, EventArgs e)
 		{
-			FaceSpotDb.Instance.RollbackTransaction ();
+			if(newFace)
+				FaceSpotDb.Instance.RollbackTransaction ();
 			ClearEditor();
 		}
 
 		void OkButtonClicked (object sender, EventArgs e)
 		{
-			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName(peopleComboBoxEntry.ActiveText.Trim());
-			if(selectedTag != null){
-				Log.Debug("FaceEditor OK : Found Tag"+ peopleComboBoxEntry.ActiveText);
-				FaceSpotDb.Instance.Faces.AddTag(face,selectedTag,true);
-			}else {
-				if(peopleComboBoxEntry.ActiveText.Trim().Length > 0){
-					Log.Debug("FaceEditor OK : New Tag Tag"+ peopleComboBoxEntry.ActiveText);
-					TagCommands.Create createCom = new TagCommands.Create(MainWindow.Toplevel.Database.Tags,
-					                                                      MainWindow.Toplevel.GetToplevel(this));
-					selectedTag = createCom.Execute(TagCommands.TagType.Tag,null);
-				}else {
-					Log.Debug("FaceEditor OK : No Tag"+ peopleComboBoxEntry.ActiveText);
-					//TODO Add Alert How to
-					//Dialog noFaceDialog = new Dialog("No Face Dialog",this,DialogFlags.DestroyWithParent,
-					//                                 "cancel","ok");
-					//noFaceDialog.ShowAll();
+			if(newFace)
+				HandleOkNewFace ();
+			else
+				HandleOkOldFace ();
+			ClearEditor ();
+		}
+		private void HandleOkOldFace ()
+		{
+			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName (peopleComboBoxEntry.ActiveText.Trim());
+			face.tag = selectedTag;
+			FaceSpotDb.Instance.Faces.Commit(face);
+		}
+		
+		private void HandleOkNewFace ()
+		{
+			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName (peopleComboBoxEntry.ActiveText.Trim ());
+			if (selectedTag != null) {
+				Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
+				//FaceSpotDb.Instance.Faces.AddTag (face, selectedTag, true);
+				face.tag = selectedTag;
+				FaceSpotDb.Instance.Faces.Commit(face);
+			} else {
+				if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
+					//FIX ME - fix bug around here
+					Log.Debug ("FaceEditor OK : New Tag Tag" + peopleComboBoxEntry.ActiveText);
+					TagCommands.Create createCom = new TagCommands.Create (
+						MainWindow.Toplevel.Database.Tags, MainWindow.Toplevel.GetToplevel (this));
+					selectedTag = createCom.Execute (TagCommands.TagType.Tag, null);
+				} else {
+					Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
 				}
 			}
 			FaceSpotDb.Instance.CommitTransaction ();
-			ClearEditor ();
 		}
+
 
 		private void ClearEditor ()
 		{

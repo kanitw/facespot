@@ -25,8 +25,8 @@ namespace FaceSpot.Db
 		
 		FaceStore face_store;
 		
-		bool empty;
-		string path;
+		//bool empty;
+		//string path;
 		
 		bool alreadyDisposed;
 

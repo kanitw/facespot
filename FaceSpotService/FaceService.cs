@@ -9,22 +9,15 @@ namespace FaceSpot
 {
 	public class FaceService : IService
 	{
-
-		public FaceService ()
-		{
-			
-		}
-		
+		public FaceService (){}
 		
 		public bool Start ()
 		{
-			Console.WriteLine ("Starting FaceService");
 			uint timer = Log.InformationTimerStart ("Starting FaceService");
 			string msg = Catalog.GetString ("Face Service Start");
 			string desc = Catalog.GetString ("Sample Alert Box");
 			
 			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
-			
 			md.Run ();
 			md.Destroy ();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
