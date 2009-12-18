@@ -11,9 +11,7 @@ namespace FaceSpot
 		
 		protected GladeDialog (){}
 
-		public GladeDialog (string widget_name) : this (widget_name, "f-spot.glade")
-		{
-		}
+		public GladeDialog (string widget_name) : this (widget_name, "f-spot.glade"){}
 
 		public GladeDialog (string widget_name, string resource_name)
 		{

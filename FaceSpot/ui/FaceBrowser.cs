@@ -32,8 +32,7 @@ namespace FaceSpot
 		
 		public void Run (object o, EventArgs e)
 		{
-			//TODO change Console to appropriate FSpot Debugger
-			Console.WriteLine ("Executing FaceSpotBrowser");
+			Log.Debug ("Executing FaceSpotBrowser");
 			Log.Trace ("FaceBrowser", "Executing FaceSpotBrowser");
 			initGladeXML();
 			

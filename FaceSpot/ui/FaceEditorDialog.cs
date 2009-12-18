@@ -160,7 +160,7 @@ namespace FaceSpot
 			} else {
 				if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
 					//FIX ME - fix bug around here
-					Log.Debug ("FaceEditor OK : New Tag Tag" + peopleComboBoxEntry.ActiveText);
+					Log.Debug ("FaceEditor OK : New Tag" + peopleComboBoxEntry.ActiveText);
 					TagCommands.Create createCom = new TagCommands.Create (
 						MainWindow.Toplevel.Database.Tags, MainWindow.Toplevel.GetToplevel (this));
 					selectedTag = createCom.Execute (TagCommands.TagType.Tag, null);

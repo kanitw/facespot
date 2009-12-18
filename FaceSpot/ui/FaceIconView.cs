@@ -27,6 +27,8 @@ namespace FaceSpot
 			
 			this.type = type;
 			
+			//this.ModifierStyle 
+			
 			this.Model =  listStore;
 			this.TextColumn = 0;
 			this.PixbufColumn =1;
@@ -57,9 +59,9 @@ namespace FaceSpot
 			int i=0;
 			listStore.Clear ();
 			foreach (Face face in faces) {
-				Log.Debug ("Append Face#" + (i++) + "  ");
+				//Log.Debug ("Append Face#" + (i++) + "  ");
 				if (face != null) {
-					string name = face.Name == null ? face.Id.ToString () : face.Name;
+					string name = face.Name == null ? "? : #"+face.Id.ToString () : face.Name;
 					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType) : null;
 					if (pixbuf == null)
 						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
