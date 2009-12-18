@@ -8,18 +8,15 @@ using FSpot.UI.Dialog;
 
 namespace FaceSpot
 {
-
-
-	public class FacePopupMenu : Menu
+	public class FaceIconViewPopupMenu : Menu
 	{
 		Face face; Face[] faces;
-		public FacePopupMenu () : base()
-		{
-		}
+		FaceIconView iconView;
+		public FaceIconViewPopupMenu () : base(){}
 		
-		public void Activate(Gdk.EventButton eb, Face face, Face[] faces)
+		public void Activate(Gdk.EventButton eb, Face face, Face[] faces,FaceIconView iconView)
 		{
-			this.face = face; this.faces= faces;
+			this.face = face; this.faces= faces; this.iconView = iconView;
 			GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			if(faces.Length == 1)
 				GtkUtil.MakeMenuItem(this,"Move",new EventHandler(MoveActivated),true);
@@ -30,11 +27,15 @@ namespace FaceSpot
 
 		void MoveActivated (object sender, EventArgs e)
 		{
-			
+			MainWindow.Toplevel.PhotoView.View.Selection = 
+				new Gdk.Rectangle((int)face.LeftX,(int)face.TopY,(int)face.Width,(int)face.Width);
+			iconView.SelectedFace = face;
+			FaceSidebarWidget.Instance.Mode = FaceSidebarWidget.FaceEditMode.Edit;
 		}
 
 		void EditActivated (object sender, EventArgs e)
 		{
+			iconView.SelectedFace = face;
 			FaceEditorDialog dialog = new FaceEditorDialog (face,this.Toplevel,false);
 		}
 

@@ -11,13 +11,15 @@ using FaceSpot.Db;
 namespace FaceSpot
 {
 
+	
+	
 public class FaceSidebarWidget : ScrolledWindow {
-		enum FaceEditMode {
+		static FaceSidebarWidget instance;
+		FaceEditMode mode = FaceEditMode.Add;
+		public enum FaceEditMode {
 			Add,
 			Edit
 		}
-		FaceEditMode mode = FaceEditMode.Add;
-		
 		Delay updateDelay;
 		
 		VBox mainVBox;//,faceVBox;
@@ -33,10 +35,13 @@ public class FaceSidebarWidget : ScrolledWindow {
 		FaceIconView knownFaceIconView,unknownFaceIconView;
 		PhotoList knownFaceList,unknownFaceList;
 			
-		public FaceSidebarPage Page;
+		public SidebarPage Page;
 		const string SelectImageMarkup = "<span weight=\"bold\">" +"Please Select an Image" + "</span>";
+		string manualAddFaceString = Catalog.GetString("Manually Add New Face");
+		string moveFaceString = Catalog.GetString("Move Selected Face");
 		public FaceSidebarWidget ()
 		{
+			instance = this;
 			mainVBox = new VBox();
 			//mainVBox.Spacing = 6;
 			//faceVBox = new VBox();
@@ -68,12 +73,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 			
 			mainVBox.PackStart(faceVPane,true,true,0);
 			
-			
-			
 			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
 			mainVBox.PackEnd(detectFaceButton,false,false,0);
 			
-			addFaceButton = new Button(Catalog.GetString("Manually Add New Face"));
+			addFaceButton = new Button(manualAddFaceString);
 			mainVBox.PackEnd(addFaceButton,false,false,0);
 			addFaceButton.Clicked += AddFaceButtonClicked;
 			
@@ -90,38 +93,68 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		void AddFaceButtonClicked (object sender, EventArgs e)
 		{
-			Log.Debug ("Add Face Button Clicked");
-			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
-			if (Rectangle.Zero == view.Selection) 
+			Log.Debug ("Add/Edit Face Button Clicked");
+			if(mode == FaceEditMode.Add){
+				AddFace ();
+			}
+			else if (mode == FaceEditMode.Edit)
 			{
+				EditFace();
+				UpdateFaceIconView();
+				
+			}
+		}
+		
+		public void UpdateFaceIconView(){
+			knownFaceIconView.UpdateFaces();
+			unknownFaceIconView.UpdateFaces();
+		}
+		
+		private void EditFace () {
+			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
+			if (Rectangle.Zero == view.Selection) {
+				//TODO Add some alert
+				AlertNoMove();
+			}else {
+				view.SelectionXyRatio = 1;
+				Face face = knownFaceIconView.SelectedFace;
+				if(face==null) face = unknownFaceIconView.SelectedFace;
+				if(face!=null){
+					face.iconPixbuf = FaceSpotDb.Instance.Faces.GetFacePixbufFromView();
+					FaceSpotDb.Instance.Faces.Commit(face);
+					AlertMove();
+				}else 
+					Log.Exception(new Exception("Bug at EditFace"));
+				
+			}
+			Mode = FaceEditMode.Add;
+		}
+
+		private void AddFace ()
+		{
+			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
+			if (Rectangle.Zero == view.Selection) {
 				AlertNoSelection ();
 				return;
 			} else {
-				//TODO add 1:1 constraint to selection
-				if( view.Selection.Height != view.Selection.Width){
-					view.SelectionXyRatio = 1;
-					view.SelectionXyRatio = 0;
-				}
+//				if (view.Selection.Height != view.Selection.Width) {
+//					view.SelectionXyRatio = 1;
+//					//view.SelectionXyRatio = 0;
+//				}
+				view.SelectionXyRatio = 1;
 				Log.Debug ("Create Face");
-				//
-				FaceSpotDb.Instance.BeginTransaction();
-				Face face = FaceSpotDb.Instance.Faces.CreateFaceFromView (
-					(FSpot.Photo)SelectedItem, 
-					(uint)view.Selection.Left,
-					(uint)view.Selection.Top,
-					(uint)view.Selection.Width);
+				FaceSpotDb.Instance.BeginTransaction ();
+				Face face = FaceSpotDb.Instance.Faces.CreateFaceFromView ((FSpot.Photo)SelectedItem, (uint)view.Selection.Left, (uint)view.Selection.Top, (uint)view.Selection.Width);
 				Log.Debug ("New Dialog");
-				try{
-					FaceEditorDialog dialog = new FaceEditorDialog (face,this,true);
+				try {
+					FaceEditorDialog dialog = new FaceEditorDialog (face, this, true);
 					Log.Debug ("Before Show All");
-					//FaceSpotDb.Instance.Database.CommitTransaction();
-					//dialog.sho
-					//dialog.Dialog.ShowAll ();
-				} catch (Exception ex){
-					Log.Exception(ex);	
+				} catch (Exception ex) {
+					Log.Exception (ex);
 				}
 			}
 		}
+
 
 		private static void AlertNoSelection ()
 		{
@@ -131,7 +164,22 @@ public class FaceSidebarWidget : ScrolledWindow {
 			md.Run ();
 			md.Destroy ();
 		}
-
+		private static void AlertMove()
+		{
+			string msg = Catalog.GetString ("Face Moved");
+			string desc = Catalog.GetString ("The selected Face's position has been moved.");
+			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
+			md.Run ();
+			md.Destroy ();
+		}
+		private static void AlertNoMove()
+		{
+			string msg = Catalog.GetString ("Face Not Moved");
+			string desc = Catalog.GetString ("Because you select nothing");
+			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
+			md.Run ();
+			md.Destroy ();
+		}
 		//TODO Ham : revise this code part
 		#region to revise
 		
@@ -150,8 +198,9 @@ public class FaceSidebarWidget : ScrolledWindow {
 				}
 			}
 		}
+
 		
-		internal void HandleSelectionChanged (IBrowsableCollection collection) {
+		public void HandleSelectionChanged (IBrowsableCollection collection) {
 			if (collection != null && collection.Count == 1)
 				SelectedItem = collection [0];
 			else
@@ -159,7 +208,29 @@ public class FaceSidebarWidget : ScrolledWindow {
 		}
 		
 		#endregion
-		
+
+		public static FaceSidebarWidget Instance {
+					get {
+						return instance;
+					}
+				}
+
+		public FaceEditMode Mode {
+					get {
+						return mode;
+					}
+					set {
+						mode = value;
+						switch(mode){
+							case FaceEditMode.Add:
+								addFaceButton.Label = manualAddFaceString;
+								break;
+							case FaceEditMode.Edit:
+								addFaceButton.Label = moveFaceString;
+								break;
+						}
+					}
+				}		
 		bool vboxRemoved = true;
 		private void ShowPhotoFaces()
 		{
@@ -182,21 +253,45 @@ public class FaceSidebarWidget : ScrolledWindow {
 				Face[] knownFaces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 				
 				//knownFaceList = new PhotoList(knownFaceItems);
-				knownFaceIconView = new FaceIconView(knownFaces);
+				knownFaceIconView = new FaceIconView(knownFaces,FaceIconView.Type.KnownFace);
 				knownFaceScrolledWindow.AddWithViewport(knownFaceIconView);
 				knownFaceExpander.Expanded = true;
+				knownFaceIconView.SelectionChanged += KnownFaceIconViewSelectionChanged;
 				
 				//IBrowsableItem[] unknownFaceItems = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 				Face[] unknownFaces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 				
 				//unknownFaceList = new PhotoList(unknownFaceItems);
-				unknownFaceIconView = new FaceIconView(unknownFaces);
+				unknownFaceIconView = new FaceIconView(unknownFaces,FaceIconView.Type.UnknownFace);
 				unknownFaceScrolledWindow.AddWithViewport(unknownFaceIconView);
 				unknownFaceExpander.Expanded = true;
+				unknownFaceIconView.SelectionChanged += UnknownFaceIconViewSelectionChanged;
 				ShowAll();
 			}
 			catch (Exception e){
 				FSpot.Utils.Log.Exception (e);
+			}
+		}
+
+		void UnknownFaceIconViewSelectionChanged (object sender, EventArgs e)
+		{
+			if(unknownFaceIconView.SelectedFaces.Count > 0){
+				knownFaceIconView.UnselectAll();
+			}
+			if(Mode == FaceEditMode.Edit){
+				Mode = FaceEditMode.Add;
+				MainWindow.Toplevel.PhotoView.View.Selection = Rectangle.Zero;
+			}
+		}
+
+		void KnownFaceIconViewSelectionChanged (object sender, EventArgs e)
+		{
+			if(knownFaceIconView.SelectedFaces.Count > 0){
+				unknownFaceIconView.UnselectAll();	
+			}
+			if(Mode == FaceEditMode.Edit){
+				Mode = FaceEditMode.Add;	
+				MainWindow.Toplevel.PhotoView.View.Selection = Rectangle.Zero;
 			}
 		}
 		

@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FaceSidebar.cs" />
-    <Compile Include="FaceSidebarWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FaceSidebar.addin.xml" />

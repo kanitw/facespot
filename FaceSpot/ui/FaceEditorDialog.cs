@@ -87,7 +87,7 @@ namespace FaceSpot
 		}
 		#endregion
 
-		protected string dialog_name = "FaceEditorDialog";
+		protected new string dialog_name = "FaceEditorDialog";
 
 		bool newFace;
 		
@@ -139,6 +139,7 @@ namespace FaceSpot
 				HandleOkNewFace ();
 			else
 				HandleOkOldFace ();
+			FaceSidebarWidget.Instance.UpdateFaceIconView();
 			ClearEditor ();
 		}
 		private void HandleOkOldFace ()
@@ -170,7 +171,6 @@ namespace FaceSpot
 			FaceSpotDb.Instance.CommitTransaction ();
 		}
 
-
 		private void ClearEditor ()
 		{
 			MainWindow.Toplevel.PhotoView.View.Selection = Rectangle.Zero;
@@ -178,8 +178,6 @@ namespace FaceSpot
 			//MainWindow.Toplevel.UpdateQuery();
 			this.Dialog.Destroy ();
 			this.Dialog.Dispose ();
-		}
-
-		
+		}	
 	}
 }

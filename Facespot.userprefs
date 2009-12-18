@@ -3,36 +3,27 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/db/Face.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/ui/FaceEditorDialog.cs" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpot/db/FaceStore.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/db/FaceStore.cs" Line="92" Column="17" />
       <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/db/Face.cs" Line="48" Column="36" />
-      <File FileName="FaceSpotService/FaceService.cs" Line="22" Column="4" />
-      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/FaceSpot.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="25" Column="60" />
+      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="107" Column="4" />
+      <File FileName="FaceSpot/db/Face.cs" Line="66" Column="3" />
+      <File FileName="FaceSpotSidebar/FaceSidebarWidget.cs" Line="115" Column="70" />
+      <File FileName="FaceSpot/FaceSpot.cs" Line="5" Column="2" />
       <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FacePopupMenu.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FaceWidget.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/FacePopupMenu.cs" Line="38" Column="43" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="FaceSpot" expanded="True">
-            <Node name="db" expanded="True">
-              <Node name="Face.cs" selected="True" />
-            </Node>
+            <Node name="db" expanded="True" />
             <Node name="ui" expanded="True" />
           </Node>
-          <Node name="FaceSpotService" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
-          <Node name="FaceSpotSidebar" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
+          <Node name="FaceSpotService" expanded="True" />
+          <Node name="FaceSpotSidebar" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

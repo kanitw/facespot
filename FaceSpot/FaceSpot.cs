@@ -8,6 +8,7 @@ namespace FaceSpot
 	/// </summary>
 	public class FaceSpot
 	{
+		//public static FaceSidebarWidget faceSidebarWidget;
 		
 		public const int THUMBNAIL_SIZE = 100;
 			

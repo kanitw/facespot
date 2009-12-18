@@ -12,24 +12,20 @@ namespace FaceSpot
 	//TODO Add support for deselection of another one
 	public class FaceIconView : Gtk.IconView
 	{
+		public enum Type{
+			KnownFace,
+			UnknownFace
+		}
+		Type type;
 		ListStore listStore;
 		
-		public FaceIconView(Face[] faces) : base()
+		public FaceIconView(Face[] faces,Type type) : base()
 		{
 			listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
-			int i=0;
-			foreach( Face face in faces){
-				Log.Debug("Append Face#"+(i++)+"  ");
-				if( face !=null)
-				{
-					string name = face.Name == null? face.Id.ToString() : face.Name;
-					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple(100,100,FaceSpot.IconResizeInterpType) : null ;
-					if(pixbuf ==null) 
-						Log.Exception(new Exception("Allowed null Face Pixbuf to the faceiconview"));
-					listStore.AppendValues(name,pixbuf,face);
-				}else 
-					Log.Exception(new Exception("Allowed null Face input to the faceiconview"));
-			}
+			
+			SetListStoreFaces (faces);
+			
+			this.type = type;
 			
 			this.Model =  listStore;
 			this.TextColumn = 0;
@@ -38,9 +34,40 @@ namespace FaceSpot
 			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
 			this.SelectionChanged += HandleSelectionChanged;
 			this.SelectionMode = SelectionMode.Multiple;
+			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
 		}
+		
+		public void UpdateFaces(){
+			Face[] faces = null;
+			FSpot.Photo photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
+			switch (type){
+				case Type.KnownFace:
+					faces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
+					break;
+				case Type.UnknownFace:
+					faces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
+					break;
+			}
+			SetListStoreFaces(faces);
+		}
 
+		void SetListStoreFaces (Face[] faces)
+		{
+			int i=0;
+			listStore.Clear ();
+			foreach (Face face in faces) {
+				Log.Debug ("Append Face#" + (i++) + "  ");
+				if (face != null) {
+					string name = face.Name == null ? face.Id.ToString () : face.Name;
+					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType) : null;
+					if (pixbuf == null)
+						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
+					listStore.AppendValues (name, pixbuf, face);
+				} else
+					Log.Exception (new Exception ("Allowed null Face input to the faceiconview"));
+			}
+		}
 //		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)
 //		{
 //			Log.Debug("Button Released on Face Iconview");
@@ -54,7 +81,43 @@ namespace FaceSpot
 		{
 			
 		}
-
+		
+		public Face SelectedFace{
+			get {
+				List<Face> selectedFaces = SelectedFaces;
+				return selectedFaces.Count == 1 ? selectedFaces[0] : null;
+			}
+			set {
+				TreeIter iter;
+				listStore.GetIterFromString(out iter,value.Name);
+				this.SelectPath(listStore.GetPath(iter));
+			}
+		}
+		
+		public List<Face> SelectedFaces{
+			get {
+				TreePath[] paths = this.SelectedItems;
+				List< Face> selectedFaces = new List<Face>(); // for group selection
+				
+				foreach(TreePath path in paths){
+					TreeIter iter;
+					listStore.GetIter(out iter,path);
+					Face f = (Face) listStore.GetValue(iter,2);
+					selectedFaces.Add(f);
+				}
+				return selectedFaces;
+			}
+			set{
+				List<Face> faceList = value;
+				this.UnselectAll();
+				foreach( Face f in faceList){
+					TreeIter iter;
+					listStore.GetIterFromString(out iter,f.Name);
+					this.SelectPath(listStore.GetPath(iter));
+				}
+			}
+		}
+		
 		void HandleButtonPressEvent (object o, ButtonPressEventArgs args)
 		{
 			if(args.Event.Button == 3){
@@ -64,36 +127,32 @@ namespace FaceSpot
 				TreeIter faceIter;
 				this.GetItemAtPos((int)args.Event.X,(int)args.Event.Y,out facePath,out faceCell);
 				listStore.GetIter(out faceIter,facePath);
-				Face face = (Face) listStore.GetValue(faceIter,2);
+				Face selectedFace = (Face) listStore.GetValue(faceIter,2);
 				
-				Log.Debug("Button Pressed on Face :"+face.Id);
-				
-				TreePath[] paths = this.SelectedItems;
-				List< Face> faces = new List<Face>(); // for group selection
+				Log.Debug("Button Pressed on Face :"+selectedFace.Id);
 				
 				bool isInSelection = false;
-				foreach(TreePath path in paths){
-					if(path.Equals(facePath)){
-						isInSelection = true;
-					}
-					TreeIter iter;
-					listStore.GetIter(out iter,path);
-					Face f = (Face) listStore.GetValue(iter,2);
-					faces.Add(f);
+				
+				List<Face> selectedFaces = SelectedFaces;
+				foreach(Face f in selectedFaces){
+					if(f.Equals(selectedFace)){
+							isInSelection = true;
+						}
 				}
+				
 				if(!isInSelection){
 					this.UnselectAll();
 					this.SelectPath(facePath);	
-					faces.Clear();
-					faces.Add(face);
+					selectedFaces.Clear();
+					selectedFaces.Add(selectedFace);
 				}
 				String fids = "";
-				foreach(Face f in faces){
+				foreach(Face f in selectedFaces){
 					fids += f.Id + " ";
 				}
-				Log.Debug("With+"+ faces.Count + " Selection :"+fids);
-				FacePopupMenu popup = new FacePopupMenu();
-				popup.Activate(args.Event,face,faces.ToArray());
+				Log.Debug("With+"+ selectedFaces.Count + " Selection :"+fids);
+				FaceIconViewPopupMenu popup = new FaceIconViewPopupMenu();
+				popup.Activate(args.Event,selectedFace,selectedFaces.ToArray(),this);
 				
 				args.RetVal =true;
 			}

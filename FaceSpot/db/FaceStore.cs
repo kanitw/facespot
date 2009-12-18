@@ -128,20 +128,21 @@ namespace FaceSpot.Db
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
 		{
 			if(photo == null) Log.Exception(new Exception( "BUG Null"));
-			//FIXME Face here are always create from view / selection
+			Log.Debug("Face: Creating Pixbuf From View");
+			Pixbuf pixbuf = GetFacePixbufFromView ();
+			return CreateFace(photo,leftX,topY,width,pixbuf,null);
+		}
+
+		public Pixbuf GetFacePixbufFromView ()
+		{
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
 			Pixbuf input = view.Pixbuf;
-			Log.Debug("Face: Creating Pixbuf From View");
-			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation ((int)view.PixbufOrientation <= 4 ? input.Width : input.Height,
-											    (int)view.PixbufOrientation <= 4 ? input.Height : input.Width,
-											    view.Selection, view.PixbufOrientation);
-			Pixbuf iconPixbuf = new Pixbuf(input.Colorspace,input.HasAlpha,input.BitsPerSample,
-				                            selection.Width,selection.Height);
-			input.CopyArea (selection.X, selection.Y,
-					selection.Width, selection.Height, iconPixbuf, 0, 0);
-			
-			return CreateFace(photo,leftX,topY,width,iconPixbuf,null);
+			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation ((int)view.PixbufOrientation <= 4 ? input.Width : input.Height, (int)view.PixbufOrientation <= 4 ? input.Height : input.Width, view.Selection, view.PixbufOrientation);
+			Pixbuf iconPixbuf = new Pixbuf (input.Colorspace, input.HasAlpha, input.BitsPerSample, selection.Width, selection.Height);
+			input.CopyArea (selection.X, selection.Y, selection.Width, selection.Height, iconPixbuf, 0, 0);
+			return iconPixbuf;
 		}
+
 		
 		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width, Pixbuf iconPixbuf,Tag tag){
 			long unix_time = DbUtils.UnixTimeFromDateTime( photo.Time);
@@ -185,7 +186,7 @@ namespace FaceSpot.Db
 					", tag_id = :tag_id, tag_confirm = :tag_confirm, left_x = :left_x, top_y = :top_y,"+
 					"width = :width , photo_md5 = :photo_md5,  icon = :icon  WHERE id= :id",
 						"photo_id", face.photo.Id,
-						"tag_id",face.tag.Id,
+						"tag_id",face.tag !=null ? (Object) face.tag.Id : null,
 						"tag_confirm", face.tagConfirmed,
 						"left_x",face.LeftX,
 						"top_y",face.TopY,
