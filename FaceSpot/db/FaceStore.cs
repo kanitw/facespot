@@ -69,14 +69,26 @@ namespace FaceSpot.Db
 			);
 			if (reader.Read ())
 			{
-				face = AddFaceFromReader (reader);
+				face = AddFaceFromReaderToCache (reader);
 			}
 			reader.Close();
 			//TODO consider whether to use Unsafed Add (Compared to PhotoStore Class)
 			return face;
 		}
-
-		private Face AddFaceFromReader (SqliteDataReader reader)
+		private Face[] AddFacesFromReaderToCache (SqliteDataReader reader)
+		{
+			List<Face> faces = new List<Face> ();
+			while (reader.Read ()) {
+				Face face = LookupInCache (Convert.ToUInt32 (reader["id"]));
+				if (face == null) {
+					face = AddFaceFromReaderToCache (reader);
+				}
+				faces.Add (face);
+			}
+			reader.Close ();
+			return faces.ToArray ();
+		}
+		private Face AddFaceFromReaderToCache (SqliteDataReader reader)
 		{
 			Face face;
 			Photo photo = Core.Database.Photos.Get (Convert.ToUInt32 (reader["photo_id"]));
@@ -86,8 +98,6 @@ namespace FaceSpot.Db
 			}finally {}
 			if( tag ==null) 
 				Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
-			
-			
 			
 			Pixbuf iconPixbuf = null;
 			if (reader["icon"] != null){
@@ -107,16 +117,15 @@ namespace FaceSpot.Db
 			return face;
 		}
 
-		public Face[] GetKnownFaceByPhoto(Photo photo){
+		public Face[] GetKnownFacesByPhoto(Photo photo){
 			return GetByPhoto(photo,"AND tag_confirm = 1 AND NOT tag_id IS NULL ");
 		}
 		
-		public Face[] GetNotKnownFaceByPhoto(Photo photo){
+		public Face[] GetNotKnownFacesByPhoto(Photo photo){
 			return GetByPhoto(photo," AND ( tag_id IS NULL OR tag_confirm = 0 )");	
 		}
 		
 		public Face[] GetByPhoto(Photo photo, string addWhereClause){
-			List<Face> faces = new List<Face>();
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
 				       "FROM faces " + 
@@ -124,16 +133,26 @@ namespace FaceSpot.Db
 				       "photo_id",photo.Id
 				      )
 			);
-			while(reader.Read()){
-				Face face = LookupInCache (Convert.ToUInt32 (reader["id"]));
-				if(face==null){
-					face = AddFaceFromReader(reader);
-				}
-				faces.Add(face);
-			}
-			reader.Close();
-			//TODO consider whether to use Unsafed Add (Compared to PhotoStore Class)
-			return faces.ToArray();
+			return AddFacesFromReaderToCache (reader);
+		}
+		
+		public Face[] GetConfirmedFaceByTag(Tag tag){
+			return GetByTag(tag,"AND tag_confirm = 1");	
+		}
+		
+		public Face[] GetNotConfirmedFaceByTag(Tag tag){
+			return GetByTag(tag,"AND tag_confirm = 0");	
+		}
+		
+		public Face[] GetByTag(Tag tag,string addWhereClause){
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE tag_id = :tag_id " + addWhereClause,
+				       "tag_id",tag.Id
+				      )
+			);
+			return AddFaceFromReaderToCache(reader);
 		}
 				
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)

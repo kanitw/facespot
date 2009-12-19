@@ -23,10 +23,11 @@ namespace FaceSpot
 		}
 		
 		private Gtk.Window browserWindow;
-		[Widget] Button SuggestionConfirmButton,SuggestionDeclineButton;
-		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow
-			,UnknownFacePhotoScrolledWindow
-			,KnownFaceScrolledwindow;
+		[Widget] Button SuggestionConfirmButton;
+		[Widget] Button SuggestionDeclineButton;
+		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow;
+		[Widget] ScrolledWindow UnknownFacePhotoScrolledWindow;
+		[Widget] ScrolledWindow KnownFaceScrolledwindow;
 		
 		//Image yesImage,noImage;
 		FaceIconView knownFaceIconView, unknownFaceIconView;

@@ -26,14 +26,14 @@ public class FaceSidebarWidget : ScrolledWindow {
 		VPaned faceVPane;
 		Button addFaceButton;
 		Button detectFaceButton;
-		Label headerLabel;
+	
 		Label pleaseSelectPictureLabel;
 		
 		Expander knownFaceExpander, unknownFaceExpander;
 		HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
 		FaceIconView knownFaceIconView,unknownFaceIconView;
-		PhotoList knownFaceList,unknownFaceList;
+		//PhotoList knownFaceList,unknownFaceList;
 			
 		public SidebarPage Page;
 		const string SelectImageMarkup = "<span weight=\"bold\">" +"Please Select an Image" + "</span>";

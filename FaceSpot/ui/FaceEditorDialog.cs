@@ -53,7 +53,6 @@ namespace FaceSpot
 			//peopleComboBox.Model = peopleTreeStore;
 			//peopleComboBoxEntry.TextColumn =0;
 		}
-		int i=0;
 		
 		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter parentIter,int level)
 		{

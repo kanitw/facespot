@@ -23,8 +23,16 @@ namespace FaceSpot
 		
 		public FaceIconView(Type type) : base()
 		{
-			listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
-			
+			switch (type){
+				case Type.KnownFaceSidebar:
+				case Type.UnknownFaceSidebar :
+					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
+					break;
+				case Type.KnownFaceBrowser:
+				case Type.UnknownFaceBrowser:
+					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(Pixbuf));
+					break;
+			}
 			this.type = type;
 			
 			//this.ModifierStyle 
@@ -32,6 +40,7 @@ namespace FaceSpot
 			this.Model =  listStore;
 			this.TextColumn = 0;
 			this.PixbufColumn =1;
+			//this.
 			this.ButtonPressEvent += HandleButtonPressEvent;
 			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
 			this.SelectionChanged += HandleSelectionChanged;
@@ -59,6 +68,8 @@ namespace FaceSpot
 				case Type.UnknownFaceSidebar:
 					faces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 					break;
+				case Type.KnownFaceBrowser:
+					
 			}
 			SetListStoreFaces(faces);
 		}
@@ -71,7 +82,7 @@ namespace FaceSpot
 				//Log.Debug ("Append Face#" + (i++) + "  ");
 				if (face != null) {
 					string name = face.Name == null ? "? : #"+face.Id.ToString () : face.Name;
-					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType) : null;
+					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 					if (pixbuf == null)
 						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
 					listStore.AppendValues (name, pixbuf, face);
