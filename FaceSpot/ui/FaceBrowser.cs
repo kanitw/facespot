@@ -24,8 +24,11 @@ namespace FaceSpot
 		
 		private Gtk.Window browserWindow;
 		[Widget] Button SuggestionConfirmButton,SuggestionDeclineButton;
-		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow;
-		Image yesImage,noImage;
+		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow
+			,UnknownFacePhotoScrolledWindow
+			,KnownFaceScrolledwindow;
+		
+		//Image yesImage,noImage;
 		
 		
 		public void Run (object o, EventArgs e)
@@ -37,8 +40,8 @@ namespace FaceSpot
 			//builder.Autoconnect(this)
 			//menuitem_preference.Activated += Menuitem_preferenceActivated;
 			browserWindow = (Gtk.Window) xml.GetWidget(dialog_name);
-			yesImage = new Image("Yes",IconSize.Button);
-			noImage = new Image("No",IconSize.Button);
+//			yesImage = new Image("Yes",IconSize.Button);
+//			noImage = new Image("No",IconSize.Button);
 //			SuggestionConfirmButton.Image = yesImage;
 //			SuggestionDeclineButton.Image = noImage;
 //			SuggestionConfirmButton.ImagePosition = PositionType.Left;
@@ -46,6 +49,8 @@ namespace FaceSpot
 			SuggestionConfirmButton.UseStock = true;
 			SuggestionDeclineButton.Label = "No";
 			SuggestionDeclineButton.UseStock = true;
+			
+			KnownFaceScrolledwindow.Add(new PeopleTreeView());
 			browserWindow.ShowAll();
 			
 		}

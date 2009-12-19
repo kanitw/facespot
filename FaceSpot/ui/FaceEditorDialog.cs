@@ -31,34 +31,19 @@ namespace FaceSpot
 		Face face;
 		
 		#region Category
-		TreeStore peopleTreeStore;
-		Tag peopleTag;
 		bool transactionCleared = false;
-		Category People {
-			get { return PeopleTag.Category; }
-		}
-		Tag PeopleTag {
-			get {
-				if (peopleTag == null) {
-					peopleTag = MainWindow.Toplevel.Database.Tags.Get (3);
-					if (!peopleTag.Name.Equals ("People")) {
-						peopleTag = MainWindow.Toplevel.Database.Tags.GetTagByName ("People");
-					}
-				}
-				return peopleTag;
-			}
-		}
+		 TreeStore peopleTreeStore;
 		void PopulateCategoryComboBoxEntry ()
 		{
 			//categories
 			Log.Debug("PeopleArrayListCreated");
 			
 			peopleTreeStore = new TreeStore(typeof(String),typeof(Tag));
-			TreeIter it;
-			peopleTreeStore.GetIterFirst(out it);
-			PopulatePeopleCategories(peopleTreeStore,PeopleTag,it,0);
+			//TreeIter iter = peopleTreeStore.AppendValues(People.Tag.Name,People.Tag);
+			PopulatePeopleCategories(peopleTreeStore,People.Tag,TreeIter.Zero,0);
 			
 			peopleComboBoxEntry.Model = peopleTreeStore;
+			//peopleComboBoxEntry.
 			//FIXME Fix entryCompletion Bug!!
 			
 			entryCompletion.Model = peopleTreeStore;
@@ -70,18 +55,16 @@ namespace FaceSpot
 		}
 		int i=0;
 		
-		private string space(int level){
-			return level == 0 ? "" : space(level-1) + "  ";	
-		}
-		
-		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter it,int level)
+		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter parentIter,int level)
 		{
 			foreach (Tag tag in (parent as Category).Children) {
-				if(++i==100)break;
 				if (tag is Category) {
-					Log.Debug("Append "+i+" : "+tag.Name);
-					treeStore.AppendValues(space(level)+tag.Name,parent,tag);
-					PopulatePeopleCategories (treeStore,tag,it,level+1);
+					//Log.Debug("Append "+i+" : "+tag.Name);
+					TreeIter iter = 
+						(parentIter.Equals(TreeIter.Zero) ?
+						treeStore.AppendValues(tag.Name,parent,tag):
+							treeStore.AppendValues(parentIter,tag.Name,parent,tag)) ;
+					PopulatePeopleCategories (treeStore,tag,iter,level+1);
 				}
 			}
 		}
