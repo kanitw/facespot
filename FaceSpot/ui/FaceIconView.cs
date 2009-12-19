@@ -122,10 +122,15 @@ namespace FaceSpot
 				
 				TreePath facePath;
 				CellRenderer faceCell;
+				Face selectedFace = null;
 				TreeIter faceIter;
 				this.GetItemAtPos((int)args.Event.X,(int)args.Event.Y,out facePath,out faceCell);
+				if(facePath==null) return;
+	
 				listStore.GetIter(out faceIter,facePath);
-				Face selectedFace = (Face) listStore.GetValue(faceIter,2);
+				try{
+					selectedFace = (Face) listStore.GetValue(faceIter,2);
+				}finally{}
 				
 				Log.Debug("Button Pressed on Face :"+selectedFace.Id);
 				
