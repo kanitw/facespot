@@ -58,6 +58,7 @@
       <Package>f-spot</Package>
     </Reference>
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gtk-dotnet, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -72,13 +73,13 @@
     <Compile Include="ui\GladeDialog.cs" />
     <Compile Include="FaceSpot.cs" />
     <Compile Include="ui\FaceIconView.cs" />
-    <Compile Include="ui\FacePopupMenu.cs" />
+    <Compile Include="ui\FaceIconViewPopupMenu.cs" />
     <Compile Include="ui\FaceSidebarWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <EmbeddedResource Include="FaceSpot.addin.xml" />
-    <EmbeddedResource Include="ui\FaceBrowser.glade" />
+    <EmbeddedResource Include="ui\FaceSpot.glade" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="db\" />

@@ -46,7 +46,7 @@ namespace FaceSpot.Db
 		public Pixbuf faceImage;
 		
 		//TODO Decide Whether to use this
-		bool manuallyDetected, manuallyRecognized;
+		public bool autoDetected, autoRecognized;
 		
 		string photo_md5;
 		

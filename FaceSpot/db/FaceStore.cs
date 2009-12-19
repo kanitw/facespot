@@ -78,7 +78,10 @@ namespace FaceSpot.Db
 		{
 			Face face;
 			Photo photo = Core.Database.Photos.Get (Convert.ToUInt32 (reader["photo_id"]));
-			Tag tag = Core.Database.Tags.GetTagById(Convert.ToInt32 (reader["tag_id"]));
+			Tag tag = null;
+			try { 
+				tag = Core.Database.Tags.GetTagById(Convert.ToInt32 (reader["tag_id"]));
+			}finally {}
 			if( tag ==null) 
 				Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
 			Pixbuf iconPixbuf = null;
@@ -97,11 +100,11 @@ namespace FaceSpot.Db
 		}
 
 		public Face[] GetKnownFaceByPhoto(Photo photo){
-			return GetByPhoto(photo," AND NOT tag_id IS NULL");
+			return GetByPhoto(photo,"AND tag_confirm = 1 AND NOT tag_id IS NULL ");
 		}
 		
 		public Face[] GetNotKnownFaceByPhoto(Photo photo){
-			return GetByPhoto(photo," AND tag_id IS NULL");	
+			return GetByPhoto(photo," AND ( tag_id IS NULL OR tag_confirm = 0 )");	
 		}
 		
 		public Face[] GetByPhoto(Photo photo, string addWhereClause){

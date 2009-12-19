@@ -20,7 +20,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			Add,
 			Edit
 		}
-		Delay updateDelay;
+	//	Delay updateDelay;
 		
 		VBox mainVBox;//,faceVBox;
 		VPaned faceVPane;
@@ -46,6 +46,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			//mainVBox.Spacing = 6;
 			//faceVBox = new VBox();
 			faceVPane = new VPaned();
+			//faceVPane.
 			
 			pleaseSelectPictureLabel = new Label ();
 			pleaseSelectPictureLabel.Markup = SelectImageMarkup;
@@ -56,10 +57,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 			
 			//faceVBox.PackStart(knownFaceExpander,true,true,0);
 			//faceVPane.Add(knownFaceExpander);
-			faceVPane.Pack1(knownFaceExpander,true,true);
 			knownFaceScrolledWindow = new ScrolledWindow();
 			knownFaceExpander.Add(knownFaceScrolledWindow);
-			
+			faceVPane.Pack1(knownFaceExpander,true,true);
+			//knownFaceExpander.HeightRequest = 30;
 //			faceHandleBox = new HandleBox();
 //			faceHandleBox.HandlePosition = PositionType.Top;
 //			faceVBox.PackStart(faceHandleBox,false,false,0);
@@ -67,10 +68,11 @@ public class FaceSidebarWidget : ScrolledWindow {
 			unknownFaceExpander = new Expander("Who's also in this photo");
 			//faceVBox.PackStart(unknownFaceExpander,true,true,0);
 			//faceVPane.Add(unknownFaceExpander);
-			faceVPane.Pack2(unknownFaceExpander,true,true);
+			
 			unknownFaceScrolledWindow = new ScrolledWindow();
 			unknownFaceExpander.Add(unknownFaceScrolledWindow);
-			
+			faceVPane.Pack2(unknownFaceExpander,true,true);
+			//unknownFaceExpander.HeightRequest = 30;
 			mainVBox.PackStart(faceVPane,true,true,0);
 			
 			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
@@ -81,7 +83,12 @@ public class FaceSidebarWidget : ScrolledWindow {
 			addFaceButton.Clicked += AddFaceButtonClicked;
 			
 			knownFaceScrolledWindow.Visible = false;
-				unknownFaceScrolledWindow.Visible = false;
+			unknownFaceScrolledWindow.Visible = false;
+			
+			knownFaceExpander.ResizeMode = ResizeMode.Parent;
+			unknownFaceExpander.ResizeMode = ResizeMode.Parent;
+			Log.Debug("HeightR");
+			
 			
 			ShadowType = ShadowType.None;
 			BorderWidth = 0;
@@ -147,7 +154,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 				Face face = FaceSpotDb.Instance.Faces.CreateFaceFromView ((FSpot.Photo)SelectedItem, (uint)view.Selection.Left, (uint)view.Selection.Top, (uint)view.Selection.Width);
 				Log.Debug ("New Dialog");
 				try {
-					FaceEditorDialog dialog = new FaceEditorDialog (face, this, true);
+					//FaceEditorDialog dialog =
+						new FaceEditorDialog (face, this, true);
 					Log.Debug ("Before Show All");
 				} catch (Exception ex) {
 					Log.Exception (ex);

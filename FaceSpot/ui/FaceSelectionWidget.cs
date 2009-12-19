@@ -11,7 +11,6 @@ namespace FaceSpot
 
 		public PeopleSelectionWidget () 
 			: base (new TreeStore (typeof(uint), typeof(string)))
-		{
-		}
+		{}
 	}
 }

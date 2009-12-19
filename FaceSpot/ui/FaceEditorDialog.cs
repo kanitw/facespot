@@ -26,7 +26,7 @@ namespace FaceSpot
 		[Widget]
 		ComboBoxEntry peopleComboBoxEntry;
 		EntryCompletion entryCompletion;
-		EntryCompletionMatchFunc entryCompletionMatchFunc;
+		//EntryCompletionMatchFunc entryCompletionMatchFunc;
 		
 		Face face;
 		
@@ -92,7 +92,7 @@ namespace FaceSpot
 		bool newFace;
 		
 		public FaceEditorDialog (Face face, Widget parent, bool newFace) 
-			: base("FaceEditorDialog", "FaceSpot.ui.FaceBrowser.glade")
+			: base("FaceEditorDialog", "FaceSpot.ui.FaceSpot.glade")
 		{
 			this.face =face;
 			this.newFace = newFace;
@@ -112,7 +112,7 @@ namespace FaceSpot
 			PopulateCategoryComboBoxEntry();
 			
 			if(face.tag != null){
-				Log.Debug("Tag"+face.tag.Name+" for this face yet");
+				Log.Debug("Tag "+face.tag.Name+" for this face yet");
 				peopleComboBoxEntry.Entry.Text = face.tag.Name;
 			}else 
 				Log.Debug("No Tag for this face yet"+face.Id);
@@ -146,6 +146,7 @@ namespace FaceSpot
 		{
 			Tag selectedTag = MainWindow.Toplevel.Database.Tags.GetTagByName (peopleComboBoxEntry.ActiveText.Trim());
 			face.tag = selectedTag;
+			face.tagConfirmed = selectedTag != null;
 			FaceSpotDb.Instance.Faces.Commit(face);
 		}
 		
@@ -156,6 +157,7 @@ namespace FaceSpot
 				Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
 				//FaceSpotDb.Instance.Faces.AddTag (face, selectedTag, true);
 				face.tag = selectedTag;
+				face.tagConfirmed = selectedTag != null;
 				FaceSpotDb.Instance.Faces.Commit(face);
 			} else {
 				if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {

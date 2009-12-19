@@ -21,7 +21,7 @@ namespace FaceSpot
 			if(faces.Length == 1)
 				GtkUtil.MakeMenuItem(this,"Move",new EventHandler(MoveActivated),true);
 			GtkUtil.MakeMenuItem(this,"Delete",new EventHandler(DeleteActivated),true);
-			
+			//Add Confirm Popup Menu
 			this.Popup(null,null,null,eb.Button,Gtk.Global.CurrentEventTime);
 		}
 
@@ -36,7 +36,8 @@ namespace FaceSpot
 		void EditActivated (object sender, EventArgs e)
 		{
 			iconView.SelectedFace = face;
-			FaceEditorDialog dialog = new FaceEditorDialog (face,this.Toplevel,false);
+			//FaceEditorDialog dialog = 
+				new FaceEditorDialog (face,this.Toplevel,false);
 		}
 
 		void DeleteActivated (object sender, EventArgs e)

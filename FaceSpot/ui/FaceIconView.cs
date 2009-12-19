@@ -28,7 +28,7 @@ namespace FaceSpot
 			this.type = type;
 			
 			//this.ModifierStyle 
-			
+			//this.Style = 
 			this.Model =  listStore;
 			this.TextColumn = 0;
 			this.PixbufColumn =1;
@@ -56,7 +56,6 @@ namespace FaceSpot
 
 		void SetListStoreFaces (Face[] faces)
 		{
-			int i=0;
 			listStore.Clear ();
 			foreach (Face face in faces) {
 				//Log.Debug ("Append Face#" + (i++) + "  ");
@@ -79,10 +78,7 @@ namespace FaceSpot
 //			}
 //		}
 
-		void HandleSelectionChanged (object sender, EventArgs args)
-		{
-			
-		}
+		void HandleSelectionChanged (object sender, EventArgs args) {}
 		
 		public Face SelectedFace{
 			get {
