@@ -63,13 +63,13 @@ namespace FaceSpot
 			FSpot.Photo photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
 			switch (type){
 				case Type.KnownFaceSidebar:
-					faces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
+					faces = FaceSpotDb.Instance.Faces.GetKnownFacesByPhoto(photo);
 					break;
 				case Type.UnknownFaceSidebar:
-					faces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
+					faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo);
 					break;
 				case Type.KnownFaceBrowser:
-					
+					break;
 			}
 			SetListStoreFaces(faces);
 		}

@@ -152,7 +152,7 @@ namespace FaceSpot.Db
 				       "tag_id",tag.Id
 				      )
 			);
-			return AddFaceFromReaderToCache(reader);
+			return AddFacesFromReaderToCache(reader);
 		}
 				
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
