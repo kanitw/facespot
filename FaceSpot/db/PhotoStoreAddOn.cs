@@ -18,18 +18,18 @@ namespace FaceSpot
 			this.Database = database;
 			try{
 				Database.ExecuteNonQuery(
-					new DbCommand("ALTER TABLE photo_versions ADD auto_detected BOOLEAN NOT NULL DEFAULT 0")
+					new DbCommand("ALTER TABLE photo_versions ADD is_auto_detected BOOLEAN NOT NULL DEFAULT 0")
 			   	);
 			}
 			catch(Exception ex){
-				
+				Log.Debug("Try Alter Table Failed");
 				Log.Exception(ex);	
 			}
 		}
 		
 		public bool IsDetected(PhotoVersion version){
 			SqliteDataReader reader = Database.Query (
-				new DbCommand ("SELECT auto_detected FROM photo_versions " + 
+				new DbCommand ("SELECT is_auto_detected FROM photo_versions " + 
 					      "WHERE photo_id = :photo_id, version_id = :version_id",
 						  "photo_id", version.Photo.Id,
 			              "version_id",version.VersionId)
@@ -44,13 +44,13 @@ namespace FaceSpot
 			//return false;
 		}
 		
-		public void SetDetected(PhotoVersion version,bool val){
+		public void SetIsDetected(PhotoVersion version,bool val){
 			
 			try {
 	        	Database.ExecuteNonQuery(
-    				new DbCommand("UPDATE photo_version SET auto_detected = :auto_detected" +
+    				new DbCommand("UPDATE photo_version SET is_auto_detected = :is_auto_detected" +
     			    	"WHERE photo_id = :photo_id AND version_id = :version_id",
-				        "auto_detected",val,
+				        "is_auto_detected",val,
     			        "photo_id",version.Photo.Id,
     			        "version_id",version.VersionId));
 	        } catch (Exception ex){

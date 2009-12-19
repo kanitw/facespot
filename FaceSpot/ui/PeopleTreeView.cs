@@ -28,7 +28,7 @@ namespace FaceSpot
 			Selection.Mode = SelectionMode.Single;
 			HeadersVisible = false;
 			
-			peopleTreeStore = new TreeStore(typeof(uint),typeof(string));
+			peopleTreeStore = new TreeStore(typeof(uint),typeof(string),typeof(Tag));
 			this.Model = peopleTreeStore;
 			
 			TagStore.ItemsAdded += TagStoreItemsAdded;
@@ -48,6 +48,7 @@ namespace FaceSpot
 			AppendColumn(complete_column);
 			
 			RefreshPeopleTreeStore ();
+			
 			//TODO If have time - add people search.
 		}
 
@@ -65,8 +66,8 @@ namespace FaceSpot
 			foreach (Tag tag in (parent as Category).Children) {
 				if (tag is Category) {
 					TreeIter iter = parent_iter.Equals(TreeIter.Zero) ?
-						treeStore.AppendValues(tag.Id,tag.Name) : 
-						treeStore.AppendValues(parent_iter, tag.Id,tag.Name);
+						treeStore.AppendValues(tag.Id,tag.Name,tag) : 
+						treeStore.AppendValues(parent_iter, tag.Id,tag.Name,tag);
 					PopulatePeopleCategories (treeStore,tag,iter);
 				}
 			}
@@ -83,7 +84,6 @@ namespace FaceSpot
 			GLib.Value value = new GLib.Value ();
 			Model.GetValue (iter, IdColumn, ref value);
 			uint tag_id = (uint) value;
-	
 			Tag tag = TagStore.Get (tag_id) as Tag;
 			(renderer as CellRendererText).Text = tag.Name;
 		}		

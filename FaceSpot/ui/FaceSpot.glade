@@ -170,7 +170,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkScrolledWindow" id="KnownFaceScrolledwindow">
+                  <widget class="GtkScrolledWindow" id="KnownFaceScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">automatic</property>

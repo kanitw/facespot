@@ -5,6 +5,7 @@ using FaceSpot.Db;
 using FSpot.Utils;
 using Mono.Unix;
 using FSpot.UI.Dialog;
+using FaceSpot;
 
 namespace FaceSpot
 {
@@ -18,7 +19,10 @@ namespace FaceSpot
 		{
 			this.face = face; this.faces= faces; this.iconView = iconView;
 			GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
-			if(faces.Length == 1)
+			if(faces.Length == 1 && 
+			   (iconView.type == FaceIconView.Type.KnownFaceSidebar
+			   || iconView.type == FaceIconView.Type.UnknownFaceSidebar)
+			   )
 				GtkUtil.MakeMenuItem(this,"Move",new EventHandler(MoveActivated),true);
 			GtkUtil.MakeMenuItem(this,"Delete",new EventHandler(DeleteActivated),true);
 			//Add Confirm Popup Menu

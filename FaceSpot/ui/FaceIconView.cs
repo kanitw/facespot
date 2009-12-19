@@ -18,7 +18,11 @@ namespace FaceSpot
 			KnownFaceBrowser,
 			UnknownFaceBrowser
 		}
-		Type type;
+		public Type type{
+			get	{return _type;}
+		}
+			
+		Type _type;
 		ListStore listStore;
 		
 		public FaceIconView(Type type) : base()
@@ -33,7 +37,7 @@ namespace FaceSpot
 					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(Pixbuf));
 					break;
 			}
-			this.type = type;
+			this._type = type;
 			
 			//this.ModifierStyle 
 			//this.Style = 
@@ -69,6 +73,10 @@ namespace FaceSpot
 					faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo);
 					break;
 				case Type.KnownFaceBrowser:
+					faces = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(Tag);
+					break;
+				case Type.UnknownFaceBrowser:
+					faces = FaceSpotDb.Instance.Faces.GetNotConfirmedFaceByTag(Tag);
 					break;
 			}
 			SetListStoreFaces(faces);
@@ -143,6 +151,7 @@ namespace FaceSpot
 			}
 			set {
 				tag = value;
+				UpdateFaces();
 			}
 		}
 		

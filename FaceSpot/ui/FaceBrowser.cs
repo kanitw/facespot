@@ -27,20 +27,21 @@ namespace FaceSpot
 		[Widget] Button SuggestionDeclineButton;
 		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow;
 		[Widget] ScrolledWindow UnknownFacePhotoScrolledWindow;
-		[Widget] ScrolledWindow KnownFaceScrolledwindow;
+		[Widget] ScrolledWindow KnownFaceScrolledWindow;
 		
 		//Image yesImage,noImage;
 		FaceIconView knownFaceIconView, unknownFaceIconView;
-		
+		PeopleTreeView peopleTreeView;
 		public void Run (object o, EventArgs e)
 		{
 			Log.Debug ("Executing FaceSpotBrowser");
-			Log.Trace ("FaceBrowser", "Executing FaceSpotBrowser");
 			initGladeXML();
+			browserWindow = (Gtk.Window) xml.GetWidget(dialog_name);
+			browserWindow.Title = "F-Spot : FaceSpot FaceBrowser";
 			//builder = new GtkBeans.Builder("FaceSpot.ui.FaceSpot.ui");
 			//builder.Autoconnect(this)
 			//menuitem_preference.Activated += Menuitem_preferenceActivated;
-			browserWindow = (Gtk.Window) xml.GetWidget(dialog_name);
+			
 //			yesImage = new Image("Yes",IconSize.Button);
 //			noImage = new Image("No",IconSize.Button);
 //			SuggestionConfirmButton.Image = yesImage;
@@ -51,7 +52,9 @@ namespace FaceSpot
 			SuggestionDeclineButton.Label = "No";
 			SuggestionDeclineButton.UseStock = true;
 			
-			KnownFaceScrolledwindow.Add(new PeopleTreeView());
+			peopleTreeView = new PeopleTreeView();
+			KnownFaceScrolledWindow.Add(peopleTreeView);
+			peopleTreeView.Selection.Changed += PeopleTreeViewSelectionChanged;
 			
 			knownFaceIconView = new FaceIconView(FaceIconView.Type.KnownFaceBrowser,null);
 			KnownFacePhotoScrolledWindow.Add(knownFaceIconView);
@@ -60,7 +63,17 @@ namespace FaceSpot
 			UnknownFacePhotoScrolledWindow.Add(unknownFaceIconView);
 			
 			browserWindow.ShowAll();
-			
+		}
+
+		void PeopleTreeViewSelectionChanged (object sender, EventArgs e)
+		{
+			TreeIter iter;
+			peopleTreeView.Selection.GetSelected(out iter);
+			Tag tag = (Tag) peopleTreeView.Model.GetValue(iter,2);
+			if(tag!=null){
+				knownFaceIconView.Tag = tag;
+				unknownFaceIconView.Tag = tag;
+			}
 		}
 
 		void Menuitem_preferenceActivated (object sender, EventArgs e)

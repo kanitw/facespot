@@ -145,6 +145,7 @@ namespace FaceSpot.Db
 		}
 		
 		public Face[] GetByTag(Tag tag,string addWhereClause){
+			if(tag == null) return new Face[0]{};
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
 				       "FROM faces " + 
