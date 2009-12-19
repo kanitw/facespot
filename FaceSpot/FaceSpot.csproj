@@ -77,6 +77,7 @@
     <Compile Include="ui\FaceSidebarWidget.cs" />
     <Compile Include="ui\PeopleTreeView.cs" />
     <Compile Include="ui\People.cs" />
+    <Compile Include="db\PhotoStoreAddOn.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

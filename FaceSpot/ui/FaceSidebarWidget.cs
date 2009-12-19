@@ -209,6 +209,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		
 		public void HandleSelectionChanged (IBrowsableCollection collection) {
+			Log.Debug("Face Sidebar Handle Selection Change");
 			if (collection != null && collection.Count == 1)
 				SelectedItem = collection [0];
 			else
@@ -247,7 +248,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				ClearPhotoFaces();
 				if( SelectedItem == null)return;
 				
-				FSpot.Photo photo = (FSpot.Photo) SelectedItem;
+				//FSpot.Photo photo = (FSpot.Photo) SelectedItem;
 				if(vboxRemoved){
 					//AddWithViewport (mainVBox); 
 					//mainVBox.Visible = true;
@@ -258,19 +259,17 @@ public class FaceSidebarWidget : ScrolledWindow {
 				}
 				
 				//IBrowsableItem[] knownFaceItems = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
-				Face[] knownFaces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 				
 				//knownFaceList = new PhotoList(knownFaceItems);
-				knownFaceIconView = new FaceIconView(knownFaces,FaceIconView.Type.KnownFace);
+				knownFaceIconView = new FaceIconView(FaceIconView.Type.KnownFaceSidebar);
 				knownFaceScrolledWindow.AddWithViewport(knownFaceIconView);
 				knownFaceExpander.Expanded = true;
 				knownFaceIconView.SelectionChanged += KnownFaceIconViewSelectionChanged;
 				
 				//IBrowsableItem[] unknownFaceItems = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
-				Face[] unknownFaces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 				
 				//unknownFaceList = new PhotoList(unknownFaceItems);
-				unknownFaceIconView = new FaceIconView(unknownFaces,FaceIconView.Type.UnknownFace);
+				unknownFaceIconView = new FaceIconView(FaceIconView.Type.UnknownFaceSidebar);
 				unknownFaceScrolledWindow.AddWithViewport(unknownFaceIconView);
 				unknownFaceExpander.Expanded = true;
 				unknownFaceIconView.SelectionChanged += UnknownFaceIconViewSelectionChanged;
@@ -322,7 +321,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				knownFaceScrolledWindow.Remove(w);
 			}
 			foreach (Widget w in unknownFaceScrolledWindow){
-					//Log.Debug("Remove Widget "+ w.ToString());
+				//Log.Debug("Remove Widget "+ w.ToString());
 				unknownFaceScrolledWindow.Remove(w);
 			}
 			ShowAll();

@@ -13,17 +13,17 @@ namespace FaceSpot
 	public class FaceIconView : Gtk.IconView
 	{
 		public enum Type{
-			KnownFace,
-			UnknownFace
+			KnownFaceSidebar,
+			UnknownFaceSidebar,
+			KnownFaceBrowser,
+			UnknownFaceBrowser
 		}
 		Type type;
 		ListStore listStore;
 		
-		public FaceIconView(Face[] faces,Type type) : base()
+		public FaceIconView(Type type) : base()
 		{
 			listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
-			
-			SetListStoreFaces (faces);
 			
 			this.type = type;
 			
@@ -36,18 +36,27 @@ namespace FaceSpot
 			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
 			this.SelectionChanged += HandleSelectionChanged;
 			this.SelectionMode = SelectionMode.Multiple;
+			
+			UpdateFaces();
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
+		}
+		
+		Tag tag;
+		
+		public FaceIconView(Type type,Tag tag) : this(type)
+		{
+			this.tag = tag;
 		}
 		
 		public void UpdateFaces(){
 			Face[] faces = null;
 			FSpot.Photo photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
 			switch (type){
-				case Type.KnownFace:
+				case Type.KnownFaceSidebar:
 					faces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
 					break;
-				case Type.UnknownFace:
+				case Type.UnknownFaceSidebar:
 					faces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
 					break;
 			}
@@ -57,6 +66,7 @@ namespace FaceSpot
 		void SetListStoreFaces (Face[] faces)
 		{
 			listStore.Clear ();
+			if(faces == null) return;
 			foreach (Face face in faces) {
 				//Log.Debug ("Append Face#" + (i++) + "  ");
 				if (face != null) {
@@ -113,6 +123,15 @@ namespace FaceSpot
 					listStore.GetIterFromString(out iter,f.Name);
 					this.SelectPath(listStore.GetPath(iter));
 				}
+			}
+		}
+
+		public Tag Tag {
+			get {
+				return tag;
+			}
+			set {
+				tag = value;
 			}
 		}
 		

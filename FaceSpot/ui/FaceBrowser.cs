@@ -29,7 +29,7 @@ namespace FaceSpot
 			,KnownFaceScrolledwindow;
 		
 		//Image yesImage,noImage;
-		
+		FaceIconView knownFaceIconView, unknownFaceIconView;
 		
 		public void Run (object o, EventArgs e)
 		{
@@ -51,6 +51,13 @@ namespace FaceSpot
 			SuggestionDeclineButton.UseStock = true;
 			
 			KnownFaceScrolledwindow.Add(new PeopleTreeView());
+			
+			knownFaceIconView = new FaceIconView(FaceIconView.Type.KnownFaceBrowser,null);
+			KnownFacePhotoScrolledWindow.Add(knownFaceIconView);
+			
+			unknownFaceIconView = new FaceIconView(FaceIconView.Type.UnknownFaceBrowser,null);
+			UnknownFacePhotoScrolledWindow.Add(unknownFaceIconView);
+			
 			browserWindow.ShowAll();
 			
 		}

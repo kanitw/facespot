@@ -24,7 +24,7 @@ namespace FaceSpot.Db
 		}
 		
 		FaceStore face_store;
-		
+		PhotoStoreAddOn photo_store_addon;
 		//bool empty;
 		//string path;
 		
@@ -32,14 +32,12 @@ namespace FaceSpot.Db
 
 		public FaceStore Faces {
 			get {
-//				if (face_store == null) {
-//					
-//				}
 				return face_store;
 			}
-			set {
-				face_store = value;
-			}
+		}
+		public PhotoStoreAddOn PhotosAddOn
+		{
+			get { return photo_store_addon; }	
 		}
 		QueuedSqliteDatabase Database {
 			get { return Core.Database.Database; }	
@@ -63,7 +61,7 @@ namespace FaceSpot.Db
 			Database.BeginTransaction ();
 			//FIXME Decide whether to use true/false value
 			face_store = new FaceStore (Database, false);
-			
+			photo_store_addon = new PhotoStoreAddOn(Database);
 			Database.CommitTransaction ();
 			Log.DebugTimerPrint (timer, "FaceSpot Db Initialization took {0}");
 		}
