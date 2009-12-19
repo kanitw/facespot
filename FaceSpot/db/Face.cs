@@ -64,7 +64,8 @@ namespace FaceSpot.Db
 		public bool tagConfirmed;
 		private long unix_time;
 		
-		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Tag tag,Pixbuf icon,long unix_time) 
+		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,
+		             Tag tag,bool tagConfirmed, bool autoDetected, bool autoRecognized, Pixbuf icon,long unix_time) 
 			: base (id)
 		{
 			this.faceID = id;
@@ -73,6 +74,9 @@ namespace FaceSpot.Db
 			this.width = width;
 			this.photo = photo;
 			this.tag = tag;
+			this.tagConfirmed = tagConfirmed;
+			this.autoDetected = autoDetected;
+			this.autoRecognized = autoRecognized;
 			this.iconPixbuf = icon;
 			this.unix_time = unix_time;
 			//FIXME Possible Error HERE

@@ -11,7 +11,7 @@ namespace FaceSpot.Db
 {
 	public class FaceStore : DbStore<Face>
 	{
-		const string ALL_FIELD_NAME = "id, photo_id, photo_version_id, tag_id, tag_confirm, left_x, top_y, width, photo_md5, time, icon ";
+		const string ALL_FIELD_NAME = "id, photo_id, photo_version_id, tag_id, tag_confirm, auto_detected, auto_recognized, left_x, top_y, width, photo_md5, time, icon ";
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
 		{
@@ -25,7 +25,9 @@ namespace FaceSpot.Db
 			    "	photo_id INTEGER NOT NULL, \n"+
 				"	photo_version_id INTEGER NOT NULL, \n"+
 				" 	tag_id INTEGER NULL, \n" +
-				"   tag_confirm BOOLEAN NULL, \n"+
+				"   tag_confirm BOOLEAN NOT NULL, \n"+
+				"   auto_detected BOOLEAN NOT NULL, \n"+
+				"   auto_recognized BOOLEAN NOT NULL, \n"+
 			    "	left_x INTEGER NOT NULL, \n"+
 			    "	top_y INTEGER NOT NULL, \n"+
 			    "	width INTEGER NOT NULL, \n"+
@@ -84,6 +86,9 @@ namespace FaceSpot.Db
 			}finally {}
 			if( tag ==null) 
 				Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
+			
+			
+			
 			Pixbuf iconPixbuf = null;
 			if (reader["icon"] != null){
 				try {
@@ -94,7 +99,10 @@ namespace FaceSpot.Db
 			}
 			face = new Face (Convert.ToUInt32 (reader["id"]), Convert.ToUInt32 (reader["left_x"]), 
 			                 Convert.ToUInt32 (reader["top_Y"]), Convert.ToUInt32 (reader["width"]), 
-			                 photo,tag, iconPixbuf,Convert.ToInt64(reader["time"]));
+			                 photo,tag,Convert.ToBoolean(reader["tag_confirm"]),
+			                 Convert.ToBoolean(reader["auto_detected"]),
+			                 Convert.ToBoolean(reader["auto_recognized"]),
+			                 iconPixbuf,Convert.ToInt64(reader["time"]));
 			AddToCache (face);
 			return face;
 		}
@@ -133,7 +141,7 @@ namespace FaceSpot.Db
 			if(photo == null) Log.Exception(new Exception( "BUG Null"));
 			Log.Debug("Face: Creating Pixbuf From View");
 			Pixbuf pixbuf = GetFacePixbufFromView ();
-			return CreateFace(photo,leftX,topY,width,pixbuf,null);
+			return CreateFace(photo,leftX,topY,width,pixbuf,null,false,false,false);
 		}
 
 		public Pixbuf GetFacePixbufFromView ()
@@ -145,32 +153,35 @@ namespace FaceSpot.Db
 			input.CopyArea (selection.X, selection.Y, selection.Width, selection.Height, iconPixbuf, 0, 0);
 			return iconPixbuf;
 		}
-
-		
-		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width, Pixbuf iconPixbuf,Tag tag){
+		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width, Pixbuf iconPixbuf,Tag tag
+		                        ,bool tagConfirmed,bool autoDetected,bool autoRecognized){
 			long unix_time = DbUtils.UnixTimeFromDateTime( photo.Time);
 			
 			Log.Debug("CreateFace : Db Exec Query");
 			//FIXME Check Whether MD5 Sum of Photo has been generated
 			DbCommand dbcom = new DbCommand (
 					"INSERT INTO faces (photo_id,photo_version_id, left_x," +
-					"top_y, width, photo_md5, time"+
-			        ",icon"+ ")" +
+					"top_y, width, tag_id, tag_confirm, auto_detected, auto_recognized,"+
+			        "photo_md5, time"+ ",icon"+ ")" +
 					"VALUES (:photo_id,:photo_version_id, :left_x," +
-					":top_y, :width, :photo_md5, :time"+
-			        ", :icon"+ ")",
+					":top_y, :width, :tag_id, :tag_confirm, :auto_detected, :auto_recognized,"
+					+":photo_md5, :time, :icon"+ ")",
 					":photo_id", photo.Id,
 			        ":photo_version_id",photo.DefaultVersionId,
 					":left_x", leftX,
 					":top_y", topY,
 					":width", width,
+			        ":tag_id", (( tag == null ) ? null :  (Object)tag.Id ),
+			        ":tag_confirm", tagConfirmed,
+			       	":auto_detected",autoDetected,
+			       	":auto_recognized",autoRecognized,
 					":photo_md5", "aaa",//photo.MD5Sum,
 					":time", unix_time
 			        ,":icon",GetIconString(iconPixbuf)
 			        );
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
-			Face face = new Face (id, leftX, topY, width, photo,tag,iconPixbuf,unix_time);
+			Face face = new Face (id, leftX, topY, width, photo,tag,tagConfirmed,autoDetected,autoRecognized,iconPixbuf,unix_time);
 			Log.Debug("Finished createFace : Db Exec Query");
 			return face;
 		}
@@ -186,11 +197,15 @@ namespace FaceSpot.Db
 			foreach (Face face in items){
 				Database.ExecuteNonQuery(
 					new DbCommand("UPDATE faces SET photo_id = :photo_id"+
-					", tag_id = :tag_id, tag_confirm = :tag_confirm, left_x = :left_x, top_y = :top_y,"+
+					", tag_id = :tag_id, tag_confirm = :tag_confirm,"+
+					"auto_detected = :auto_detected, auto_recognized = :auto_recognized, "+				                                       
+				    "left_x = :left_x, top_y = :top_y,"+
 					"width = :width , photo_md5 = :photo_md5,  icon = :icon  WHERE id= :id",
 						"photo_id", face.photo.Id,
 						"tag_id",face.tag !=null ? (Object) face.tag.Id : null,
 						"tag_confirm", face.tagConfirmed,
+				        "auto_detected",face.autoDetected,
+				        "auto_recognized",face.autoRecognized,
 						"left_x",face.LeftX,
 						"top_y",face.TopY,
 						"width",face.Width,
@@ -219,17 +234,6 @@ namespace FaceSpot.Db
 				Log.Exception(	ex);
 				return null;
 			}
-		}
-		//TODO Study "Commit" Flow - This action should be included with Commit??
-		public void AddTag (Face face,Tag tag, bool confirmed)
-		{
-			Log.Debug("Tag #"+tag.Id+" Added to"+face.Id);
-			face.tag = tag;
-			face.tagConfirmed = confirmed;
-			Database.ExecuteNonQuery(new DbCommand("UPDATE faces SET tag_id = :tag_id, tag_confirm = :tag_confirm WHERE id = :id",
-			                         "tag_id",tag.Id,
-			                         "tag_confirm",confirmed,
-			                         "id",face.Id));
 		}
 		
 		public void Remove(Face[] faces){
