@@ -16,14 +16,19 @@ namespace FaceSpot
 		{
 			//Log.Debug("Try to Alter PhotoVersion");
 			this.Database = database;
+			
 			try{
-				Database.ExecuteNonQuery(
-					new DbCommand("ALTER TABLE photo_versions ADD is_auto_detected BOOLEAN NOT NULL DEFAULT 0")
-			   	);
+				//SqliteDataReader reader = 
+					Database.Query (
+				new DbCommand ("SELECT is_auto_detected FROM photo_versions "));
+				
 			}
 			catch(Exception ex){
 				Log.Debug("Try Alter Table Failed");
 				Log.Exception(ex);	
+				Database.ExecuteNonQuery(
+					new DbCommand("ALTER TABLE photo_versions ADD is_auto_detected BOOLEAN NOT NULL DEFAULT 0")
+			   	);
 			}
 		}
 		

@@ -26,12 +26,16 @@ namespace FaceSpot
 		[Widget] Button SuggestionConfirmButton;
 		[Widget] Button SuggestionDeclineButton;
 		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow;
-		[Widget] ScrolledWindow UnknownFacePhotoScrolledWindow;
+		[Widget] ScrolledWindow SuggestedFacePhotoScrolledWindow;
+		[Widget] ScrolledWindow UnknownFaceScrolledWindow;
 		[Widget] ScrolledWindow KnownFaceScrolledWindow;
+		
+		[Widget] Notebook MainNotebook;
 		
 		//Image yesImage,noImage;
 		FaceIconView knownFaceIconView, unknownFaceIconView;
 		PeopleTreeView peopleTreeView;
+		
 		public void Run (object o, EventArgs e)
 		{
 			Log.Debug ("Executing FaceSpotBrowser");
@@ -60,7 +64,7 @@ namespace FaceSpot
 			KnownFacePhotoScrolledWindow.Add(knownFaceIconView);
 			
 			unknownFaceIconView = new FaceIconView(FaceIconView.Type.UnknownFaceBrowser,null);
-			UnknownFacePhotoScrolledWindow.Add(unknownFaceIconView);
+			SuggestedFacePhotoScrolledWindow.Add(unknownFaceIconView);
 			
 			browserWindow.ShowAll();
 		}
@@ -71,6 +75,7 @@ namespace FaceSpot
 			peopleTreeView.Selection.GetSelected(out iter);
 			Tag tag = (Tag) peopleTreeView.Model.GetValue(iter,2);
 			if(tag!=null){
+				
 				knownFaceIconView.Tag = tag;
 				unknownFaceIconView.Tag = tag;
 			}

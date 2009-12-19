@@ -155,7 +155,13 @@ namespace FaceSpot.Db
 			);
 			return AddFacesFromReaderToCache(reader);
 		}
-				
+		public Face[] GetUntaggedFace(){
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE tag_id IS NULL"));
+			return AddFacesFromReaderToCache(reader);
+		}		
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
 		{
 			if(photo == null) Log.Exception(new Exception( "BUG Null"));
