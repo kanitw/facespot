@@ -239,12 +239,11 @@
                                       <placeholder/>
                                     </child>
                                     <child>
-                                      <widget class="GtkButton" id="button1">
-                                        <property name="label">gtk-close</property>
+                                      <widget class="GtkButton" id="SuggestionConfirmButton">
+                                        <property name="label" translatable="yes">Yes</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <property name="use_stock">True</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -253,7 +252,17 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <placeholder/>
+                                      <widget class="GtkButton" id="SuggestionDeclineButton">
+                                        <property name="label" translatable="yes">No</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">2</property>
+                                      </packing>
                                     </child>
                                   </widget>
                                   <packing>

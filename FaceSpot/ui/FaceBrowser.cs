@@ -23,15 +23,10 @@ namespace FaceSpot
 		}
 		
 		private Gtk.Window browserWindow;
-		//unused
-		//[Glade.Widget] HPaned MainHPaned;
-		//[Glade.Widget] VBox MainVBox;
-		//[Glade.Widget] Statusbar StatusBar;
-		//[Glade.Widget] MenuItem	 menuitem_preference;
-//		[Glade.Widget]
-//		[Glade.Widget]
-		//[Widget] Button button1;
-		Builder builder;
+		[Widget] Button SuggestionConfirmButton,SuggestionDeclineButton;
+		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow;
+		Image yesImage,noImage;
+		
 		
 		public void Run (object o, EventArgs e)
 		{
@@ -42,10 +37,17 @@ namespace FaceSpot
 			//builder.Autoconnect(this)
 			//menuitem_preference.Activated += Menuitem_preferenceActivated;
 			browserWindow = (Gtk.Window) xml.GetWidget(dialog_name);
-			//TestDialog dialog = new TestDialog ();  
-			//dialog.ShowDialog ();
-			//
+			yesImage = new Image("Yes",IconSize.Button);
+			noImage = new Image("No",IconSize.Button);
+//			SuggestionConfirmButton.Image = yesImage;
+//			SuggestionDeclineButton.Image = noImage;
+//			SuggestionConfirmButton.ImagePosition = PositionType.Left;
+			SuggestionConfirmButton.Label = "Yes";
+			SuggestionConfirmButton.UseStock = true;
+			SuggestionDeclineButton.Label = "No";
+			SuggestionDeclineButton.UseStock = true;
 			browserWindow.ShowAll();
+			
 		}
 
 		void Menuitem_preferenceActivated (object sender, EventArgs e)
