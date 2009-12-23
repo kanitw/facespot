@@ -16,6 +16,7 @@ namespace FaceSpot
 			KnownFaceSidebar,
 			UnknownFaceSidebar,
 			KnownFaceBrowser,
+			SuggestedFaceBrowser,
 			UnknownFaceBrowser
 		}
 		public Type type{
@@ -33,6 +34,7 @@ namespace FaceSpot
 					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
 					break;
 				case Type.KnownFaceBrowser:
+				case Type.SuggestedFaceBrowser:
 				case Type.UnknownFaceBrowser:
 					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(Pixbuf));
 					break;
@@ -75,9 +77,12 @@ namespace FaceSpot
 				case Type.KnownFaceBrowser:
 					faces = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(Tag);
 					break;
-				case Type.UnknownFaceBrowser:
+				case Type.SuggestedFaceBrowser:
 					faces = FaceSpotDb.Instance.Faces.GetNotConfirmedFaceByTag(Tag);
 					break;
+				case Type.UnknownFaceBrowser:
+					faces = FaceSpotDb.Instance.Faces.GetUntaggedFace();
+					break;	
 			}
 			SetListStoreFaces(faces);
 		}

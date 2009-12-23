@@ -215,6 +215,17 @@ namespace FaceSpot.Db
  		{
 			Commit(new Face[]{item});
 		}
+		public void ConfirmTag(Face face)
+		{
+			face.tagConfirmed = true;
+			Commit(face);
+		}
+		public void DeclineTag(Face face)
+		{
+			face.tagConfirmed = false;
+			face.tag = null;
+			Commit(face);
+		}
 		
 		public void Commit (Face[] items){
 			uint timer = Log.DebugTimerStart ();
@@ -239,7 +250,7 @@ namespace FaceSpot.Db
 				        "icon", GetIconString(face.iconPixbuf),                    
 				        "id",face.Id));
 			}
-			
+			EmitChanged(items, new DbItemEventArgs<Face>(items));
 			Log.DebugTimerPrint (timer, "Face Commit took {0}");
  		}
 		

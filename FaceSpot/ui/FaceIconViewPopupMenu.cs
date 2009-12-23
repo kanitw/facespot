@@ -18,6 +18,11 @@ namespace FaceSpot
 		public void Activate(Gdk.EventButton eb, Face face, Face[] faces,FaceIconView iconView)
 		{
 			this.face = face; this.faces= faces; this.iconView = iconView;
+			if(faces.Length == 1 && iconView.type == FaceIconView.Type.SuggestedFaceBrowser){
+				GtkUtil.MakeMenuItem(this,"Confirm Person",new EventHandler(ConfirmActivated),true);
+				GtkUtil.MakeMenuItem(this,"Decline Person",new EventHandler(DeclineActivated),true);
+			}
+			
 			GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			if(faces.Length == 1 && 
 			   (iconView.type == FaceIconView.Type.KnownFaceSidebar
@@ -28,7 +33,17 @@ namespace FaceSpot
 			//Add Confirm Popup Menu
 			this.Popup(null,null,null,eb.Button,Gtk.Global.CurrentEventTime);
 		}
-
+		void ConfirmActivated (object sender, EventArgs e)
+		{
+			FaceSpotDb.Instance.Faces.ConfirmTag(face);
+			//MainWindow.Toplevel.UpdateQuery ();
+		}
+		void DeclineActivated (object sender, EventArgs e)
+		{
+			FaceSpotDb.Instance.Faces.DeclineTag(face);
+			//MainWindow.Toplevel.UpdateQuery ();
+		}
+		
 		void MoveActivated (object sender, EventArgs e)
 		{
 			MainWindow.Toplevel.PhotoView.View.Selection = 
