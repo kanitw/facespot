@@ -18,9 +18,10 @@ namespace FaceSpot
 		public void Activate(Gdk.EventButton eb, Face face, Face[] faces,FaceIconView iconView)
 		{
 			this.face = face; this.faces= faces; this.iconView = iconView;
-			if(faces.Length == 1 && iconView.type == FaceIconView.Type.SuggestedFaceBrowser){
-				GtkUtil.MakeMenuItem(this,"Confirm Person",new EventHandler(ConfirmActivated),true);
-				GtkUtil.MakeMenuItem(this,"Decline Person",new EventHandler(DeclineActivated),true);
+			if(iconView.type == FaceIconView.Type.SuggestedFaceBrowser){
+				GtkUtil.MakeMenuItem(this,"Confirm Person",new EventHandler(ConfirmActivated),faces.Length>0);
+				GtkUtil.MakeMenuItem(this,"Decline Person",new EventHandler(DeclineActivated),faces.Length>0);
+				GtkUtil.MakeMenuSeparator(this);
 			}
 			
 			GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
@@ -28,20 +29,22 @@ namespace FaceSpot
 			   (iconView.type == FaceIconView.Type.KnownFaceSidebar
 			   || iconView.type == FaceIconView.Type.UnknownFaceSidebar)
 			   )
-				GtkUtil.MakeMenuItem(this,"Move",new EventHandler(MoveActivated),true);
-			GtkUtil.MakeMenuItem(this,"Delete",new EventHandler(DeleteActivated),true);
+				GtkUtil.MakeMenuItem(this,"Move Face",new EventHandler(MoveActivated),true);
+			GtkUtil.MakeMenuItem(this,
+			                     Catalog.GetPluralString("Delete Face","Delete Faces",faces.Length),
+			                     new EventHandler(DeleteActivated),true);
 			//Add Confirm Popup Menu
 			this.Popup(null,null,null,eb.Button,Gtk.Global.CurrentEventTime);
 		}
 		void ConfirmActivated (object sender, EventArgs e)
 		{
-			FaceSpotDb.Instance.Faces.ConfirmTag(face);
-			//MainWindow.Toplevel.UpdateQuery ();
+			foreach(Face f in faces)
+				FaceSpotDb.Instance.Faces.ConfirmTag(f);
 		}
 		void DeclineActivated (object sender, EventArgs e)
 		{
-			FaceSpotDb.Instance.Faces.DeclineTag(face);
-			//MainWindow.Toplevel.UpdateQuery ();
+			foreach(Face f in faces)
+				FaceSpotDb.Instance.Faces.DeclineTag(f);
 		}
 		
 		void MoveActivated (object sender, EventArgs e)

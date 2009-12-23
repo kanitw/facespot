@@ -63,6 +63,7 @@ namespace FaceSpot
 			
 			peopleTreeView = new PeopleTreeView();
 			KnownFaceScrolledWindow.Add(peopleTreeView);
+//			peopleTreeView.Selec
 			peopleTreeView.Selection.Changed += PeopleTreeViewSelectionChanged;
 			
 			knownFaceIconView = new FaceIconView(FaceIconView.Type.KnownFaceBrowser,null);
@@ -99,7 +100,13 @@ namespace FaceSpot
 		{
 			if(suggestFaceIconView.SelectedItems.Length > 0)
 			{
+				SuggestionConfirmButton.Sensitive = true;
+				SuggestionDeclineButton.Sensitive = true;
 				knownFaceIconView.UnselectAll();
+				
+			}else {
+				SuggestionConfirmButton.Sensitive = false;
+				SuggestionDeclineButton.Sensitive = false;
 			}
 		}
 
@@ -114,6 +121,7 @@ namespace FaceSpot
 		{
 			MainNotebook.Page = UnknownFacePage;
 			unknownFaceIconView.UpdateFaces();
+			peopleTreeView.Selection.UnselectAll();
 		}
 
 		void PeopleTreeViewSelectionChanged (object sender, EventArgs e)
