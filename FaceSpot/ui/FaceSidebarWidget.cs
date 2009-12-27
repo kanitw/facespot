@@ -290,10 +290,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 		void UnknownFaceIconViewSelectionChanged (object sender, EventArgs e)
 		{
 			Log.Debug("Unknown Face Icon Selection Changed");
+			FaceOverlay.Instance.ShowOverlayFaces();
 			if(unknownFaceIconView.SelectedFaces.Count > 0){
 				knownFaceIconView.UnselectAll();
-				MainWindow.Toplevel.PhotoView.View.QueueDraw();
-				FaceOverlay.Instance.ShowOverlayFaces();
+				//MainWindow.Toplevel.PhotoView.View.
 			}
 			if(Mode == FaceEditMode.Edit){
 				Mode = FaceEditMode.Add;
@@ -304,10 +304,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 		void KnownFaceIconViewSelectionChanged (object sender, EventArgs e)
 		{
 			Log.Debug("known Face Icon Selection Changed");
+			FaceOverlay.Instance.ShowOverlayFaces();
 			if(knownFaceIconView.SelectedFaces.Count > 0){
 				unknownFaceIconView.UnselectAll();
-				MainWindow.Toplevel.PhotoView.View.QueueDraw();
-				FaceOverlay.Instance.ShowOverlayFaces();
+				//MainWindow.Toplevel.PhotoView.View.Realize();
 			}
 			if(Mode == FaceEditMode.Edit){
 				Mode = FaceEditMode.Add;	
@@ -321,8 +321,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 		private void ClearPhotoFaces()
 		{
 			if(!vboxRemoved ){
-				//Remove(mainVBox); 
-				//mainVBox.Visible = false;
 				Log.Debug("Remove VBox");
 				knownFaceScrolledWindow.Visible = false;
 				unknownFaceScrolledWindow.Visible = false;
@@ -339,7 +337,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			}
 			ShowAll();
 			
-			FaceOverlay.Instance.ClearOverlayFaces();
+			//FaceOverlay.Instance.ClearOverlayFaces();
 		}
 	}
 }

@@ -14,7 +14,7 @@ namespace FaceSpot
 	/// - Face Selection
 	/// - Browser Zoom / Move
 	/// </summary>
-	public class FaceOverlay : Widget
+	public class FaceOverlay : DrawingArea //Widget
 	{
 		static FaceOverlay instance;
 
@@ -29,6 +29,7 @@ namespace FaceSpot
 				if (!added) {
 					try {
 						MainWindow.Toplevel.Window.Add(instance);
+						//MainWindow.Toplevel.PhotoView.View.Add(instance);
 						added = true;
 					} catch (Exception ex) {
 						Log.Exception (ex);
@@ -38,20 +39,22 @@ namespace FaceSpot
 			}
 		}
 
-
+		Cairo.Context ctx;
 		private FaceOverlay () : base()
 		{
-			MainWindow.Toplevel.Window.ExposeEvent += MainWindowToplevelPhotoViewViewExposeEvent;
-		//	MainWindow.Toplevel.PhotoView.View.ExposeEvent += MainWindowToplevelPhotoViewViewExposeEvent;
+			//ctx = CairoHelper.Create ( MainWindow.Toplevel.PhotoView.View.GdkWindow);
+			//MainWindow.Toplevel.Window.ExposeEvent += MainWindowToplevelPhotoViewViewExposeEvent;
+			//MainWindow.Toplevel.PhotoView.View.ExposeEvent += MainWindowToplevelPhotoViewViewExposeEvent;
 		}
 
 		void MainWindowToplevelPhotoViewViewExposeEvent (object o, ExposeEventArgs args)
 		{
-			DrawFaceRectangles();
+			ShowOverlayFaces ();
 		}
 		bool show = true;
 		public void ClearOverlayFaces ()
 		{
+			Log.Debug("Clear Overlay Face");
 			show = false;	
 		}
 		public void ShowOverlayFaces ()
@@ -65,16 +68,16 @@ namespace FaceSpot
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose args)
 		{
-			DrawFaceRectangles();
+			ShowOverlayFaces ();
 			return true;
 		}
 		
 		private void DrawFaceRectangles(){
-			Log.Debug("FaceOverlay Expose!!"+show);
 			if (show && MainWindow.Toplevel.ViewMode == MainWindow.ModeType.PhotoView) {
 				
 				using (Cairo.Context ctx = CairoHelper.Create ( MainWindow.Toplevel.PhotoView.View.GdkWindow)) {
-					//ctx.
+				//using (Cairo.Context ctx = CairoHelper.Create ( this.GdkWindow)) {
+					//ctx.ResetClip();
 					foreach (Face face in FaceSidebarWidget.Instance.knownFaceIconView.faces)
 					{
 						//FaceSidebarWidget.Instance.knownFaceIconView
@@ -85,6 +88,7 @@ namespace FaceSpot
 						bool selected = FaceSidebarWidget.Instance.unknownFaceIconView.SelectedFace == face;
 						FillRectangle(face.Selection,ctx, false,selected );
 					}
+					//CairoUtils.CreateSurface
 				}
 			}
 		}
@@ -95,8 +99,7 @@ namespace FaceSpot
 					ctx.SetSourceRGBA (0, 0,0.7, 0.3);
 				else 
 					ctx.SetSourceRGBA (0.7, 0,0, 1.3);
-				
-				
+			
 				ctx.LineWidth = selected ? 8.2 : 0.8 ;
 				Rectangle r = ImageCoordsToWindow (rect);
 				Log.Debug("Fill Rectangle"+rect.ToString()+ "  >>>  "+r.ToString()  + "  ["+XOffset +","+YOffset+"]" );
