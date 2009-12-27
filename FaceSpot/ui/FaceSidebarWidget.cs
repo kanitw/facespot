@@ -16,6 +16,9 @@ namespace FaceSpot
 public class FaceSidebarWidget : ScrolledWindow {
 		static FaceSidebarWidget instance;
 		FaceEditMode mode = FaceEditMode.Add;
+		
+		public bool selected;
+		
 		public enum FaceEditMode {
 			Add,
 			Edit
@@ -32,7 +35,9 @@ public class FaceSidebarWidget : ScrolledWindow {
 		Expander knownFaceExpander, unknownFaceExpander;
 		HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
-		FaceIconView knownFaceIconView,unknownFaceIconView;
+		public FaceIconView knownFaceIconView,unknownFaceIconView;
+		
+		
 		//PhotoList knownFaceList,unknownFaceList;
 			
 		public SidebarPage Page;
@@ -42,11 +47,11 @@ public class FaceSidebarWidget : ScrolledWindow {
 		public FaceSidebarWidget ()
 		{
 			instance = this;
+			
 			mainVBox = new VBox();
 			//mainVBox.Spacing = 6;
 			//faceVBox = new VBox();
 			faceVPane = new VPaned();
-			//faceVPane.
 			
 			pleaseSelectPictureLabel = new Label ();
 			pleaseSelectPictureLabel.Markup = SelectImageMarkup;
@@ -274,6 +279,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 				unknownFaceExpander.Expanded = true;
 				unknownFaceIconView.SelectionChanged += UnknownFaceIconViewSelectionChanged;
 				ShowAll();
+				
+				FaceOverlay.Instance.ShowOverlayFaces();
 			}
 			catch (Exception e){
 				FSpot.Utils.Log.Exception (e);
@@ -282,8 +289,11 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		void UnknownFaceIconViewSelectionChanged (object sender, EventArgs e)
 		{
+			Log.Debug("Unknown Face Icon Selection Changed");
 			if(unknownFaceIconView.SelectedFaces.Count > 0){
 				knownFaceIconView.UnselectAll();
+				MainWindow.Toplevel.PhotoView.View.QueueDraw();
+				FaceOverlay.Instance.ShowOverlayFaces();
 			}
 			if(Mode == FaceEditMode.Edit){
 				Mode = FaceEditMode.Add;
@@ -293,8 +303,11 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		void KnownFaceIconViewSelectionChanged (object sender, EventArgs e)
 		{
+			Log.Debug("known Face Icon Selection Changed");
 			if(knownFaceIconView.SelectedFaces.Count > 0){
-				unknownFaceIconView.UnselectAll();	
+				unknownFaceIconView.UnselectAll();
+				MainWindow.Toplevel.PhotoView.View.QueueDraw();
+				FaceOverlay.Instance.ShowOverlayFaces();
 			}
 			if(Mode == FaceEditMode.Edit){
 				Mode = FaceEditMode.Add;	
@@ -325,6 +338,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 				unknownFaceScrolledWindow.Remove(w);
 			}
 			ShowAll();
+			
+			FaceOverlay.Instance.ClearOverlayFaces();
 		}
 	}
 }

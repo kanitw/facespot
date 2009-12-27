@@ -16,5 +16,6 @@ namespace FaceSpot
 		/// <summary> Resize Method for all icon's simple resize
 		/// </summary>
 		public const Gdk.InterpType IconResizeInterpType = Gdk.InterpType.Hyper;
+		
 	}
 }

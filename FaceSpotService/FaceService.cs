@@ -32,4 +32,6 @@ namespace FaceSpot
 		}
 		
 	}
+	
+	//public lass
 }

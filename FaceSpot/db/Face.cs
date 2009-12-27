@@ -40,6 +40,9 @@ namespace FaceSpot.Db
 				width = value;
 			}
 		}
+		
+		public 
+		
 		#endregion
 		//TODO design how to add thumbnails
 		const int faceDefaultWidth = 100;
@@ -112,6 +115,10 @@ namespace FaceSpot.Db
 //			get { return photo.DefaultVersionUri; }
 //		}
 		#endregion
+		
+		public Rectangle Selection{
+			get{return new Rectangle((int)LeftX,(int)TopY,(int)Width,(int)Width); }
+		}
 		
 		public string Name {
 			get { return tag==null ? null : tag.Name ; }	

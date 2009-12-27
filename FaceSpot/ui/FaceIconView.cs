@@ -25,6 +25,7 @@ namespace FaceSpot
 			
 		Type _type;
 		ListStore listStore;
+		public Face[] faces;
 		
 		public FaceIconView(Type type) : base()
 		{
@@ -90,6 +91,7 @@ namespace FaceSpot
 		void SetListStoreFaces (Face[] faces)
 		{
 			listStore.Clear ();
+			this.faces = faces;
 			if(faces == null) return;
 			foreach (Face face in faces) {
 				//Log.Debug ("Append Face#" + (i++) + "  ");

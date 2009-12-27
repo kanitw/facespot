@@ -49,8 +49,8 @@ namespace FaceSpot
 		
 		void MoveActivated (object sender, EventArgs e)
 		{
-			MainWindow.Toplevel.PhotoView.View.Selection = 
-				new Gdk.Rectangle((int)face.LeftX,(int)face.TopY,(int)face.Width,(int)face.Width);
+			MainWindow.Toplevel.PhotoView.View.Selection = face.Selection;
+				
 			iconView.SelectedFace = face;
 			FaceSidebarWidget.Instance.Mode = FaceSidebarWidget.FaceEditMode.Edit;
 		}

@@ -56,14 +56,17 @@ namespace FaceSpot
 //			SuggestionConfirmButton.Image = yesImage;
 //			SuggestionDeclineButton.Image = noImage;
 //			SuggestionConfirmButton.ImagePosition = PositionType.Left;
+			
+			SuggestionConfirmButton.Sensitive = false;
 			SuggestionConfirmButton.Label = "Yes";
-			SuggestionConfirmButton.UseStock = true;
+			SuggestionConfirmButton.Clicked += SuggestionConfirmButtonClicked;
+			
+			SuggestionDeclineButton.Sensitive = false;
 			SuggestionDeclineButton.Label = "No";
-			SuggestionDeclineButton.UseStock = true;
+			SuggestionDeclineButton.Clicked += SuggestionDeclineButtonClicked;
 			
 			peopleTreeView = new PeopleTreeView();
 			KnownFaceScrolledWindow.Add(peopleTreeView);
-//			peopleTreeView.Selec
 			peopleTreeView.Selection.Changed += PeopleTreeViewSelectionChanged;
 			
 			knownFaceIconView = new FaceIconView(FaceIconView.Type.KnownFaceBrowser,null);
@@ -84,6 +87,21 @@ namespace FaceSpot
 			
 			browserWindow.ShowAll();
 		}
+
+		void SuggestionDeclineButtonClicked (object sender, EventArgs e)
+		{
+			Face[] fs = suggestFaceIconView.SelectedFaces.ToArray();
+			foreach (Face f in fs)
+				FaceSpotDb.Instance.Faces.DeclineTag(f);
+		}
+
+		void SuggestionConfirmButtonClicked (object sender, EventArgs e)
+		{
+			Face[] fs = suggestFaceIconView.SelectedFaces.ToArray();
+			foreach (Face f in fs)
+				FaceSpotDb.Instance.Faces.ConfirmTag(f);
+		}
+
 
 		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
 		{
