@@ -44,15 +44,12 @@ namespace FaceSpot.Db
 		}
 		public void BeginTransaction(){
 			Database.BeginTransaction();
-			//TODO add code to manage picture files
 		}
 		public void RollbackTransaction(){
 			Database.RollbackTransaction();	
-			//TODO add code to manage picture files
 		}
 		public void CommitTransaction(){
 			Database.CommitTransaction();	
-			//TODO add code to manage picture files
 		}
 		
 		private FaceSpotDb ()

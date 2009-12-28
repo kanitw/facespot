@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using FaceSpot.Db;
 using FSpot;
 using FSpot.Utils;
+using Banshee.Kernel;
 namespace FaceSpot
 {
+	//TODO Add FaceSpot Preference
 	public class FaceScheduler
 	{
 		private static FaceScheduler instance;
@@ -20,11 +22,21 @@ namespace FaceSpot
 		}
 		
 		private FaceScheduler ()
-		{}
+		{
+			Scheduler.JobFinished += SchedulerJobFinished;	
+			//Scheduler.JobStarted += SchedulerJobStarted;
+		}
+
+
+		void SchedulerJobFinished (IJob job)
+		{
+			Execute();
+		}
 		
 		public void Execute(){
-			//TODO Add check whether queue is empty
-			QueueUncheckedPhoto();	
+			if(Scheduler.ScheduledJobsCount == 0){
+				QueueUncheckedPhoto();	
+			}
 		}
 		
 		public void QueueUncheckedPhoto()
@@ -34,10 +46,7 @@ namespace FaceSpot
 			{
 				Log.Debug("DetectionJob .Create "+photo.Id);
 				DetectionJob job = DetectionJob.Create(photo);
-				
 			}
-			
-			
 		}
 	}
 }
