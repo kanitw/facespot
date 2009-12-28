@@ -13,7 +13,8 @@ namespace FaceSpot
 	public class FaceSidebarPage : SidebarPage{
 		//bool selected = false;
 		bool firsttime = true;
-		public FaceSidebarPage () : base(new FaceSidebarWidget(),
+		public FaceSidebarPage () : base(//FaceSidwebarWidget.Instance,
+		                                 new FaceSidebarWidget(),
 		                                 Catalog.GetString("Face"),
 		                                 "gtk-index") 
 		{

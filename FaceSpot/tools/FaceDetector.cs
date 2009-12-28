@@ -14,8 +14,6 @@ using Gdk;
 
 namespace FaceSpot
 {
-
-
 	public class FaceDetector
 	{
 

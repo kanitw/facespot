@@ -60,7 +60,7 @@ namespace FaceSpot
 		}
 		void ShowImageActivated (object sender, EventArgs e)
 		{
-			Photo photo = iconView.SelectedFace.photo;
+			//Just Hide Photo photo = iconView.SelectedFace.photo;
 			//TODO Finish this Function
 		}
 		void MoveActivated (object sender, EventArgs e)

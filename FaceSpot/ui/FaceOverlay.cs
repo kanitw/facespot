@@ -53,6 +53,7 @@ namespace FaceSpot
 		private FaceOverlay () : base("FaceOverlay")
 		{
 			Decorated = false;
+			Visible = false;
 			Opacity = 0.0;
 			//ModifyBg(StateType.
 			Gtk.Window win = (Gtk.Window) View.Toplevel;
