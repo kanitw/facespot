@@ -216,7 +216,7 @@ namespace FaceSpot
 					faceImage = image.Copy(rect);
 					faceImage = faceImage.Resize(cropped_width, cropped_width);
 					
-					faceImagePosList.Add(new FaceImagePos(faceImage, (uint)f.rect.Left, (uint)f.rect.Top));
+					faceImagePosList.Add(new FaceImagePos(faceImage, (uint)f.rect.Left, (uint)f.rect.Top, (uint)f.rect.Width));
 					//faceList.Add(faceImage);
 					//recList.Add(f.rect);
 				}				
@@ -231,11 +231,12 @@ namespace FaceSpot
 		public Pixbuf pixbuf;
 		public uint leftX;
 		public uint topY;
-				
-		public FacePixbufPos(Pixbuf pixbuf, uint leftX, uint topY){			
+		public uint width;		
+		public FacePixbufPos(Pixbuf pixbuf, uint leftX, uint topY,uint width){			
 			this.pixbuf = pixbuf;
 			this.leftX = leftX;
 			this.topY = topY;
+			this.width = width;
 		}
 	}
 	
@@ -243,15 +244,16 @@ namespace FaceSpot
 		public Emgu.CV.Image<Bgr, byte> image;
 		public uint leftX;
 		public uint topY;
-		
-		public FaceImagePos(Emgu.CV.Image<Bgr, byte> image, uint leftX, uint topY){			
+		public uint width;
+		public FaceImagePos(Emgu.CV.Image<Bgr, byte> image, uint leftX, uint topY,uint width){			
 			this.image = image;
 			this.leftX = leftX;
 			this.topY = topY;
+			this.width = width;
 		}
 		
 		public FacePixbufPos toFacePixbufPos(){
-			return new FacePixbufPos(FaceDetector.ConvertCVImageToPixbuf(image), leftX, topY);
+			return new FacePixbufPos(FaceDetector.ConvertCVImageToPixbuf(image), leftX, topY, width);
 		}
 	}
 }
