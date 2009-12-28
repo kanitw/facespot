@@ -33,7 +33,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		Label pleaseSelectPictureLabel;
 		
 		Expander knownFaceExpander, unknownFaceExpander;
-		HandleBox faceHandleBox;
+		//HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
 		public FaceIconView knownFaceIconView,unknownFaceIconView;
 		

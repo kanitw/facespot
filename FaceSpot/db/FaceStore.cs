@@ -251,8 +251,19 @@ namespace FaceSpot.Db
 		public Pixbuf GetFacePixbufFromView ()
 		{
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
-			Pixbuf input = view.Pixbuf;
-			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation ((int)view.PixbufOrientation <= 4 ? input.Width : input.Height, (int)view.PixbufOrientation <= 4 ? input.Height : input.Width, view.Selection, view.PixbufOrientation);
+			if(MainWindow.Toplevel.SelectedPhotos().Length == 0) return null;
+			Photo photo = MainWindow.Toplevel.SelectedPhotos()[0];
+			Pixbuf input
+				//= view.Pixbuf
+					;
+			using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
+				input = img.Load ();
+			}
+			
+			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation (
+				(int)view.PixbufOrientation <= 4 ? input.Width : input.Height, 
+			    (int)view.PixbufOrientation <= 4 ? input.Height : input.Width, 
+			    view.Selection, view.PixbufOrientation);
 			Pixbuf iconPixbuf = new Pixbuf (input.Colorspace, input.HasAlpha, input.BitsPerSample, selection.Width, selection.Height);
 			input.CopyArea (selection.X, selection.Y, selection.Width, selection.Height, iconPixbuf, 0, 0);
 			return iconPixbuf;
