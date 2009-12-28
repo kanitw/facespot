@@ -6,6 +6,7 @@ using FSpot.Utils;
 using Mono.Unix;
 using FSpot.UI.Dialog;
 using FaceSpot;
+using FSpot;
 
 namespace FaceSpot
 {
@@ -30,10 +31,13 @@ namespace FaceSpot
 				GtkUtil.MakeMenuSeparator(this);
 			}
 			
-			if(SelectedFaces.Length == 1 && 
-			   (iconView.type == FaceIconView.Type.KnownFaceSidebar
-			   || iconView.type == FaceIconView.Type.UnknownFaceSidebar)
-			   )
+			if(SelectedFaces.Length == 1 && iconView.IsBrowserType)
+			{
+				GtkUtil.MakeMenuItem(this,"Show In Main Window",new EventHandler(ShowImageActivated),SelectedFaces.Length>0);
+				GtkUtil.MakeMenuSeparator(this);	
+			}
+			   
+			if(SelectedFaces.Length == 1 && iconView.IsSideBarType)
 				GtkUtil.MakeMenuItem(this,"Move Face",new EventHandler(MoveActivated),true);
 			
 			if(SelectedFaces.Length == 1)
@@ -54,7 +58,11 @@ namespace FaceSpot
 			foreach(Face f in SelectedFaces)
 				FaceSpotDb.Instance.Faces.DeclineTag(f);
 		}
-		
+		void ShowImageActivated (object sender, EventArgs e)
+		{
+			//Just Hide Photo photo = iconView.SelectedFace.photo;
+			//TODO Finish this Function
+		}
 		void MoveActivated (object sender, EventArgs e)
 		{
 			MainWindow.Toplevel.PhotoView.View.Selection = iconView.SelectedFace.Selection;

@@ -226,10 +226,15 @@ public class FaceSidebarWidget : ScrolledWindow {
 		#endregion
 
 		public static FaceSidebarWidget Instance {
-					get {
-						return instance;
-					}
-				}
+			get {
+//				if(instance == null)
+//				{
+//					instance = new FaceSidebarWidget();
+//				}
+//				Log.Debug("Created FaceSidebarWidget Instance"+ (instance ==null) );
+				return instance;
+			}
+		}
 
 		public FaceEditMode Mode {
 					get {

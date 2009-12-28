@@ -9,7 +9,7 @@ using Gdk;
 using System.Collections.Generic;
 namespace FaceSpot
 {
-	//TODO Add support for deselection of another one
+	//TODO Add support for Multiple Version Photo
 	public class FaceIconView : Gtk.IconView
 	{
 		public enum Type{
@@ -19,6 +19,19 @@ namespace FaceSpot
 			SuggestedFaceBrowser,
 			UnknownFaceBrowser
 		}
+		
+		public bool IsBrowserType{
+			get {return type == Type.KnownFaceBrowser ||
+				type== Type.UnknownFaceBrowser ||
+				type == Type.SuggestedFaceBrowser;}
+		}
+		public bool IsSideBarType {
+			get {
+				return type == Type.KnownFaceSidebar || 
+				 type==	Type.UnknownFaceSidebar;
+			}
+		}
+		
 		public Type type{
 			get	{return _type;}
 		}
@@ -67,25 +80,34 @@ namespace FaceSpot
 		
 		public void UpdateFaces(){
 			Face[] faces = null;
-			FSpot.Photo photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
-			switch (type){
-				case Type.KnownFaceSidebar:
-					faces = FaceSpotDb.Instance.Faces.GetKnownFacesByPhoto(photo);
-					break;
-				case Type.UnknownFaceSidebar:
-					faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo);
-					break;
-				case Type.KnownFaceBrowser:
-					faces = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(Tag);
-					break;
-				case Type.SuggestedFaceBrowser:
-					faces = FaceSpotDb.Instance.Faces.GetNotConfirmedFaceByTag(Tag);
-					break;
-				case Type.UnknownFaceBrowser:
-					faces = FaceSpotDb.Instance.Faces.GetUntaggedFace();
-					break;	
+			Log.Debug("Update Faces");
+			FSpot.Photo photo = null;
+			if(FaceSidebarWidget.Instance != null)
+			photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
+			Log.Debug("Get Faces");
+			try {
+				switch (type){
+					case Type.KnownFaceSidebar:
+						faces = FaceSpotDb.Instance.Faces.GetKnownFacesByPhoto(photo);
+						break;
+					case Type.UnknownFaceSidebar:
+						faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo);
+						break;
+					case Type.KnownFaceBrowser:
+						faces = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(Tag);
+						break;
+					case Type.SuggestedFaceBrowser:
+						faces = FaceSpotDb.Instance.Faces.GetNotConfirmedFaceByTag(Tag);
+						break;
+					case Type.UnknownFaceBrowser:
+						faces = FaceSpotDb.Instance.Faces.GetUntaggedFace();
+						break;	
+				}
+			} catch(Exception ex) {
+				Log.Exception(ex);
 			}
-			SetListStoreFaces(faces);
+			if(faces!=null)
+				SetListStoreFaces(faces);
 		}
 
 		void SetListStoreFaces (Face[] faces)

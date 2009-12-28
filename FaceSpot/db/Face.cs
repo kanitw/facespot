@@ -90,11 +90,7 @@ namespace FaceSpot.Db
 		{
 			System.GC.SuppressFinalize(this);
 		}
-//		public static PixbufCache getFaceImageFromPhoto(uint left,uint top,uint width, Photo photo)
-//		{
-//			//FiXME IMplement this if necessary
-//			throw new NotImplementedException();	
-//		}
+
 		#region Implementing IBrowsableitem
 //		public Tag[] Tags { get { return new Tag[]{tag};}}
 //		

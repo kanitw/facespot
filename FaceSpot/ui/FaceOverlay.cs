@@ -4,9 +4,12 @@ using Gdk;
 using FSpot.Utils;
 using FaceSpot.Db;
 using Gtk;
+using FSpot.Widgets;
+using FSpot;
 
 namespace FaceSpot
 {
+	
 	/// <summary>
 	/// Rectangle Face Overlay For Facespot
 	/// 3 Actions
@@ -14,7 +17,7 @@ namespace FaceSpot
 	/// - Face Selection
 	/// - Browser Zoom / Move
 	/// </summary>
-	public class FaceOverlay : DrawingArea //Widget
+	public class FaceOverlay : Gtk.Window //Widget
 	{
 		static FaceOverlay instance;
 
@@ -38,13 +41,99 @@ namespace FaceSpot
 				return instance;
 			}
 		}
-
+		
+		private PhotoImageView View{
+			get {
+				return 	MainWindow.Toplevel.PhotoView.View;
+			}
+		}
+		
 		//Cairo.Context ctx;
-		private FaceOverlay () : base()
+		Point old_winpos;
+		private FaceOverlay () : base("FaceOverlay")
 		{
+			Decorated = false;
+			Visible = false;
+			Opacity = 0.0;
+			//ModifyBg(StateType.
+			Gtk.Window win = (Gtk.Window) View.Toplevel;
+			win.GetPosition(out old_winpos.X,out old_winpos.Y);
+			this.Move(old_winpos.X,old_winpos.Y);
+			
+			win.ConfigureEvent += WinConfigureEvent;
+			
+			TransientFor = win;
+			DestroyWithParent = true;
+			SkipPagerHint = true;
+			SkipTaskbarHint = true;
+			
+			View.Item.Changed += ViewItemChanged;
+			View.ZoomChanged += ViewZoomChanged;
+			View.ExposeEvent += ViewExposeEvent;
+			View.Hidden += ViewHidden;
+			View.Shown += ViewShown;
+			//TODO Add MouseOver Event
+			
+			AddEvents( (int) (Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.ButtonPressMask
+			                  | Gdk.EventMask.PointerMotionMask ));
+			ButtonPressEvent += HandleButtonPressEvent;
+			ButtonReleaseEvent += HandleButtonReleaseEvent;
+			MotionNotifyEvent += HandleMotionNotifyEvent;
 			//ctx = CairoHelper.Create ( MainWindow.Toplevel.PhotoView.View.GdkWindow);
-			//MainWindow.Toplevel.Window.ExposeEvent += MainWindowToplevelPhotoViewViewExposeEvent;
+			//MainWindow.Toplevel.Window.ExposeEvent += MainWindowToplevelWindowExposeEvent;
 			//MainWindow.Toplevel.PhotoView.View.ExposeEvent += MainWindowToplevelPhotoViewViewExposeEvent;
+		}
+
+		void HandleMotionNotifyEvent (object o, MotionNotifyEventArgs args)
+		{
+			//Log.Debug("HandleMotionNotifyEvent FaceOverlay ");
+		}
+
+		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)
+		{
+			Log.Debug(" HandleButtonReleaseEvent FaceOverlay");
+		}
+
+		void HandleButtonPressEvent (object o, ButtonPressEventArgs args)
+		{
+			Log.Debug("HandleButtonPressEvent FaceOverlay");
+		}
+
+		void ViewShown (object sender, EventArgs e)
+		{
+			this.Show();
+		}
+
+		void ViewHidden (object sender, EventArgs e)
+		{
+			this.Hide();
+		}
+
+		void ViewZoomChanged (object sender, EventArgs e)
+		{
+			
+		}
+
+		void ViewExposeEvent (object o, ExposeEventArgs args)
+		{
+			
+			Log.Debug("FaceOverlay Allocation Changed");
+			this.Allocation = View.Allocation;
+		}
+
+		void ViewItemChanged (object sender, BrowsablePointerChangedEventArgs e)
+		{
+			
+		}
+		
+		void WinConfigureEvent (object o, ConfigureEventArgs args)
+		{
+			//TODO Finished This
+		}
+
+		void MainWindowToplevelWindowExposeEvent (object o, ExposeEventArgs args)
+		{
+			ShowOverlayFaces ();
 		}
 
 		void MainWindowToplevelPhotoViewViewExposeEvent (object o, ExposeEventArgs args)
@@ -73,9 +162,12 @@ namespace FaceSpot
 		}
 		
 		private void DrawFaceRectangles(){
+		//	Layout(
+			this.Show();
 			if (show && MainWindow.Toplevel.ViewMode == MainWindow.ModeType.PhotoView) {
-				
-				using (Cairo.Context ctx = CairoHelper.Create ( MainWindow.Toplevel.PhotoView.View.GdkWindow)) {
+				//MainWindow.Toplevel.PhotoView.View.GdkWindow.Clear();
+				//MainWindow.Toplevel.PhotoView.View.O
+				using (Cairo.Context ctx = CairoHelper.Create ( GdkWindow)) {
 				//using (Cairo.Context ctx = CairoHelper.Create ( this.GdkWindow)) {
 					//ctx.ResetClip();
 					foreach (Face face in FaceSidebarWidget.Instance.knownFaceIconView.faces)
