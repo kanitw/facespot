@@ -227,35 +227,31 @@ namespace FaceSpot
 		}
 	}
 	
-	public class FacePixbufPos{
-		public Photo photo;
+	public class FacePixbufPos{		
 		public Pixbuf pixbuf;
 		public uint leftX;
 		public uint topY;
 				
-		public FacePixbufPos(Photo photo, Pixbuf pixbuf, uint leftX, uint topY){
-			this.photo = photo;
+		public FacePixbufPos(Pixbuf pixbuf, uint leftX, uint topY){			
 			this.pixbuf = pixbuf;
 			this.leftX = leftX;
 			this.topY = topY;
 		}
 	}
 	
-	public class FaceImagePos{
-		public Photo photo;
+	public class FaceImagePos{		
 		public Emgu.CV.Image<Bgr, byte> image;
 		public uint leftX;
 		public uint topY;
 		
-		public FaceImagePos(Photo photo, Emgu.CV.Image<Bgr, byte> image, uint leftX, uint topY){
-			this.photo = photo;
+		public FaceImagePos(Emgu.CV.Image<Bgr, byte> image, uint leftX, uint topY){			
 			this.image = image;
 			this.leftX = leftX;
 			this.topY = topY;
 		}
 		
 		public FacePixbufPos toFacePixbufPos(){
-			return new FacePixbufPos(photo, FaceDetector.ConvertCVImageToPixbuf(image), leftX, topY);
+			return new FacePixbufPos(FaceDetector.ConvertCVImageToPixbuf(image), leftX, topY);
 		}
 	}
 }
