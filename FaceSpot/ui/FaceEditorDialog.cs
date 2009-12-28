@@ -52,12 +52,14 @@ namespace FaceSpot
 		}
 		void InitializeEntryCompletion ()
 		{
+			entryCompletion = new EntryCompletion();
+			
+			peopleComboBoxEntry.Entry.Completion = entryCompletion;
 			entryCompletion.Model = peopleTreeStore;
 			entryCompletion.TextColumn = 0;
 			//entryCompletion.PopupCompletion = true;
 			entryCompletion.InlineCompletion = true;
-			entryCompletion = new EntryCompletion();
-			peopleComboBoxEntry.Entry.Completion = entryCompletion;
+			
 		}
 		Tag SelectedTag{
 			get {  return MainWindow.Toplevel.Database.Tags.GetTagByName (
@@ -101,7 +103,6 @@ namespace FaceSpot
 		{
 			this.face =face;
 			this.newFace = newFace;
-			//entryCompletion.MatchFunc = entryCompletionMatchFunc 
 			Dialog.Parent = parent;
 			Dialog.Modal  = true;
 			//Dialog.TransientFor = parent;
