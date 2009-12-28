@@ -9,7 +9,7 @@ using Gdk;
 using System.Collections.Generic;
 namespace FaceSpot.Db
 {
-	//FIXME Handle Photo Deleted, Edited , PhotoVersion Deleted, PhotoVersion Edited
+	//FIXME Handle Edited , PhotoVersion Deleted, PhotoVersion Edited
 	
 	public class FaceStore : DbStore<Face>
 	{
@@ -251,15 +251,16 @@ namespace FaceSpot.Db
 		public Pixbuf GetFacePixbufFromView ()
 		{
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
+			
+			Pixbuf input = view.Pixbuf;
+			//HACK Load Image Directly from uri (Because sometimes the shown image
+			//is rotated
 			if(MainWindow.Toplevel.SelectedPhotos().Length == 0) return null;
 			Photo photo = MainWindow.Toplevel.SelectedPhotos()[0];
-			Pixbuf input
-				//= view.Pixbuf
-					;
 			using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
 				input = img.Load ();
 			}
-			
+			//HACK Copy Code from Crop Editor
 			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation (
 				(int)view.PixbufOrientation <= 4 ? input.Width : input.Height, 
 			    (int)view.PixbufOrientation <= 4 ? input.Height : input.Width, 

@@ -5,26 +5,26 @@
   </MonoDevelop.Ide.DebuggingService>
   <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/ui/FaceOverlay.cs" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpot/db/FaceStore.cs" Line="253" Column="57" />
-      <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="96" Column="4" />
-      <File FileName="FaceSpot/FaceSpot.cs" Line="5" Column="2" />
-      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="31" Column="18" />
-      <File FileName="FaceSpot/ui/FaceSidebarWidget.cs" Line="287" Column="5" />
-      <File FileName="FaceSpot/ui/FaceIconViewPopupMenu.cs" Line="44" Column="42" />
-      <File FileName="FaceSpot/db/Face.cs" Line="87" Column="3" />
-      <File FileName="FaceSpot/ui/PeopleTreeView.cs" Line="67" Column="22" />
-      <File FileName="FaceSpotService/FaceService.cs" Line="8" Column="19" />
-      <File FileName="FaceSpot/ui/FaceOverlay.cs" Line="5" Column="2" />
+      <File FileName="FaceSpot/db/FaceStore.cs" Line="240" Column="37" />
+      <File FileName="FaceSpot/ui/FaceIconViewPopupMenu.cs" Line="28" Column="24" />
+      <File FileName="FaceSpot/ui/FaceOverlay.cs" Line="60" Column="41" />
+      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="57" Column="31" />
+      <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="156" Column="22" />
+      <File FileName="FaceSpot/ui/PeopleTreeView.cs" Line="104" Column="6" />
+      <File FileName="FaceSpot/ui/FaceSidebarWidget.cs" Line="219" Column="5" />
+      <File FileName="FaceSpot/db/Face.cs" Line="93" Column="1" />
+      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="83" Column="65" />
+      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="59" Column="4" />
+      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="46" Column="12" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
+        <State expanded="True" selected="True">
           <Node name="FaceSpot" expanded="True">
             <Node name="References" expanded="True" />
             <Node name="db" expanded="True" />
-            <Node name="ui" expanded="True">
-              <Node name="FaceOverlay.cs" selected="True" />
-            </Node>
+            <Node name="job" expanded="True" />
+            <Node name="ui" expanded="True" />
           </Node>
           <Node name="FaceSpotService" expanded="True" />
           <Node name="FaceSpotSidebar" expanded="True" />

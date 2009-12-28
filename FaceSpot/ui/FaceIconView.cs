@@ -9,7 +9,7 @@ using Gdk;
 using System.Collections.Generic;
 namespace FaceSpot
 {
-	//TODO Add support for deselection of another one
+	//TODO Add support for Multiple Version Photo
 	public class FaceIconView : Gtk.IconView
 	{
 		public enum Type{
@@ -19,6 +19,19 @@ namespace FaceSpot
 			SuggestedFaceBrowser,
 			UnknownFaceBrowser
 		}
+		
+		public bool IsBrowserType{
+			get {return type == Type.KnownFaceBrowser ||
+				type== Type.UnknownFaceBrowser ||
+				type == Type.SuggestedFaceBrowser;}
+		}
+		public bool IsSideBarType {
+			get {
+				return type == Type.KnownFaceSidebar || 
+				 type==	Type.UnknownFaceSidebar;
+			}
+		}
+		
 		public Type type{
 			get	{return _type;}
 		}
