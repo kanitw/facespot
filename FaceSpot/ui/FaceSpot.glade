@@ -11,7 +11,7 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <widget class="GtkMenuBar" id="menubar">
+          <widget class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
             <child>
               <widget class="GtkMenuItem" id="menuitem2">
@@ -149,6 +149,7 @@
         </child>
         <child>
           <widget class="GtkHPaned" id="MainHPaned">
+            <property name="width_request">700</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
@@ -157,11 +158,12 @@
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <widget class="GtkButton" id="UnknownFace">
-                    <property name="label" translatable="yes">button</property>
+                  <widget class="GtkButton" id="UnknownFaceButton">
+                    <property name="label" translatable="yes">Unknown Faces</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="relief">half</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -169,9 +171,14 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTreeView" id="PeopleTreeView">
+                  <widget class="GtkScrolledWindow" id="KnownFaceScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </widget>
                   <packing>
                     <property name="position">1</property>
@@ -184,10 +191,11 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkNotebook" id="notebook2">
+              <widget class="GtkNotebook" id="MainNotebook">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="show_tabs">False</property>
+                <property name="tab_border">0</property>
                 <child>
                   <widget class="GtkVPaned" id="KnownFaceVPaned">
                     <property name="visible">True</property>
@@ -204,72 +212,89 @@
                         </child>
                       </widget>
                       <packing>
-                        <property name="resize">False</property>
+                        <property name="resize">True</property>
                         <property name="shrink">True</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkScrolledWindow" id="KnownFacePhotoSuggestionScrolledWindows">
+                      <widget class="GtkVBox" id="vbox2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <widget class="GtkVBox" id="vbox2">
+                          <widget class="GtkHBox" id="hbox1">
+                            <property name="height_request">20</property>
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
                             <child>
-                              <widget class="GtkHBox" id="hbox1">
-                                <property name="height_request">20</property>
+                              <widget class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
-                                <child>
-                                  <widget class="GtkLabel" id="label7">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0.05000000074505806</property>
-                                    <property name="label" translatable="yes">Choose Each Picture To Confirm Whether....</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkHButtonBox" id="hbuttonbox1">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkButton" id="button1">
-                                        <property name="label">gtk-close</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="use_stock">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="xalign">0.05000000074505806</property>
+                                <property name="label" translatable="yes">Choose Each Picture To Confirm Whether....</property>
                               </widget>
                               <packing>
-                                <property name="expand">False</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <placeholder/>
                             </child>
+                            <child>
+                              <widget class="GtkHButtonBox" id="hbuttonbox1">
+                                <property name="visible">True</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <widget class="GtkButton" id="SuggestionConfirmButton">
+                                    <property name="label" translatable="yes">Yes</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkButton" id="SuggestionDeclineButton">
+                                    <property name="label" translatable="yes">No</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkScrolledWindow" id="SuggestedFacePhotoScrolledWindow">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </widget>
                       <packing>
@@ -280,26 +305,40 @@
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="UnknownFacePageLabel">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">page 1</property>
-                  </widget>
+                  <placeholder/>
                   <packing>
-                    <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="KnownFacePageLabel">
+                  <widget class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">page 2</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <widget class="GtkScrolledWindow" id="UnknownFaceScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="position">1</property>
-                    <property name="tab_fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                  <packing>
                     <property name="type">tab</property>
                   </packing>
                 </child>

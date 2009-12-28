@@ -52,23 +52,23 @@
     <Reference Include="FSpot.JobScheduler, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
-    <Reference Include="FSpot.Query, Version=0.0.0.0, Culture=neutral">
-      <Package>f-spot</Package>
-    </Reference>
-    <Reference Include="FSpot.Utils, Version=0.0.0.0, Culture=neutral">
-      <Package>f-spot</Package>
-    </Reference>
+    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="FSpot.Widgets, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
-    <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\emgucv\bin\Emgu.CV.dll</HintPath>
+    <Reference Include="Cms, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
     </Reference>
-    <Reference Include="Emgu.Util, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\emgucv\bin\Emgu.Util.dll</HintPath>
+    <Reference Include="Mono.Data.SqliteClient" />
+    <Reference Include="FSpot.Query, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
     </Reference>
+    <Reference Include="FSpot.JobScheduler, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gtk-dotnet, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="Mono.Cairo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -85,8 +85,17 @@
     <Compile Include="ui\FaceIconView.cs" />
     <Compile Include="ui\FaceIconViewPopupMenu.cs" />
     <Compile Include="ui\FaceSidebarWidget.cs" />
+    <Compile Include="ui\PeopleTreeView.cs" />
     <Compile Include="tools\FaceDetector.cs" />
     <Compile Include="tools\JTest.cs" />
+    <Compile Include="ui\FaceOverlay.cs" />
+    <Compile Include="job\FaceScheduler.cs" />
+    <Compile Include="job\DetectionJob.cs" />
+    <Compile Include="job\RecognitionJob.cs" />
+    <Compile Include="db\FaceJobStore.cs" />
+    <Compile Include="job\FaceJob.cs" />
+    <Compile Include="ui\FaceOverlay.cs" />
+    <Compile Include="job\FaceScheduler.cs" />  
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -143,5 +152,6 @@
     <Folder Include="tools\" />
     <Folder Include="lib\" />
     <Folder Include="tools\haarcascade\" />
+    <Folder Include="job\" />
   </ItemGroup>
 </Project>

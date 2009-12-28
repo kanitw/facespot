@@ -1,17 +1,25 @@
 
 using System;
+<<<<<<< HEAD:FaceSpotService/FaceService.cs
 using System.Drawing;
 using System.Threading;
 
+=======
+using System.Threading;
+>>>>>>> 5048b9a93fbb3fd5c002baed0f2480e79e5ac65e:FaceSpotService/FaceService.cs
 using FSpot.Extensions;
 using FSpot.Utils;
 using FSpot;
 using Gtk;
 using Mono.Unix;
+<<<<<<< HEAD:FaceSpotService/FaceService.cs
 
 using Emgu;
 using Emgu.CV.Structure;
 
+=======
+using FaceSpot;
+>>>>>>> 5048b9a93fbb3fd5c002baed0f2480e79e5ac65e:FaceSpotService/FaceService.cs
 namespace FaceSpot
 {
 	public class FaceService : IService
@@ -27,6 +35,7 @@ namespace FaceSpot
 			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
 			md.Run ();
 			md.Destroy ();
+			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
 			
 			TestDetect(timer);
@@ -119,4 +128,6 @@ namespace FaceSpot
 			loadedPix.Save("buffer.jpg","jpeg");
 		}
 	}
+	
+	//public lass
 }

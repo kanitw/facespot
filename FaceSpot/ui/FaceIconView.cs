@@ -13,43 +13,77 @@ namespace FaceSpot
 	public class FaceIconView : Gtk.IconView
 	{
 		public enum Type{
-			KnownFace,
-			UnknownFace
+			KnownFaceSidebar,
+			UnknownFaceSidebar,
+			KnownFaceBrowser,
+			SuggestedFaceBrowser,
+			UnknownFaceBrowser
 		}
-		Type type;
+		public Type type{
+			get	{return _type;}
+		}
+			
+		Type _type;
 		ListStore listStore;
+		public Face[] faces;
 		
-		public FaceIconView(Face[] faces,Type type) : base()
+		public FaceIconView(Type type) : base()
 		{
-			listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
-			
-			SetListStoreFaces (faces);
-			
-			this.type = type;
+			switch (type){
+				case Type.KnownFaceSidebar:
+				case Type.UnknownFaceSidebar :
+					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
+					break;
+				case Type.KnownFaceBrowser:
+				case Type.SuggestedFaceBrowser:
+				case Type.UnknownFaceBrowser:
+					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(Pixbuf));
+					break;
+			}
+			this._type = type;
 			
 			//this.ModifierStyle 
 			//this.Style = 
 			this.Model =  listStore;
 			this.TextColumn = 0;
 			this.PixbufColumn =1;
+			//this.
 			this.ButtonPressEvent += HandleButtonPressEvent;
 			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
 			this.SelectionChanged += HandleSelectionChanged;
 			this.SelectionMode = SelectionMode.Multiple;
+			
+			UpdateFaces();
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
+		}
+		
+		Tag tag;
+		
+		public FaceIconView(Type type,Tag tag) : this(type)
+		{
+			this.tag = tag;
 		}
 		
 		public void UpdateFaces(){
 			Face[] faces = null;
 			FSpot.Photo photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
 			switch (type){
-				case Type.KnownFace:
-					faces = FaceSpotDb.Instance.Faces.GetKnownFaceByPhoto(photo);
+				case Type.KnownFaceSidebar:
+					faces = FaceSpotDb.Instance.Faces.GetKnownFacesByPhoto(photo);
 					break;
-				case Type.UnknownFace:
-					faces = FaceSpotDb.Instance.Faces.GetNotKnownFaceByPhoto(photo);
+				case Type.UnknownFaceSidebar:
+					faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo);
 					break;
+				case Type.KnownFaceBrowser:
+					faces = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(Tag);
+					break;
+				case Type.SuggestedFaceBrowser:
+					faces = FaceSpotDb.Instance.Faces.GetNotConfirmedFaceByTag(Tag);
+					break;
+				case Type.UnknownFaceBrowser:
+					faces = FaceSpotDb.Instance.Faces.GetUntaggedFace();
+					break;	
 			}
 			SetListStoreFaces(faces);
 		}
@@ -57,11 +91,13 @@ namespace FaceSpot
 		void SetListStoreFaces (Face[] faces)
 		{
 			listStore.Clear ();
+			this.faces = faces;
+			if(faces == null) return;
 			foreach (Face face in faces) {
 				//Log.Debug ("Append Face#" + (i++) + "  ");
 				if (face != null) {
 					string name = face.Name == null ? "? : #"+face.Id.ToString () : face.Name;
-					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType) : null;
+					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 					if (pixbuf == null)
 						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
 					listStore.AppendValues (name, pixbuf, face);
@@ -115,6 +151,16 @@ namespace FaceSpot
 				}
 			}
 		}
+
+		public Tag Tag {
+			get {
+				return tag;
+			}
+			set {
+				tag = value;
+				UpdateFaces();
+			}
+		}
 		
 		void HandleButtonPressEvent (object o, ButtonPressEventArgs args)
 		{
@@ -122,10 +168,15 @@ namespace FaceSpot
 				
 				TreePath facePath;
 				CellRenderer faceCell;
+				Face selectedFace = null;
 				TreeIter faceIter;
 				this.GetItemAtPos((int)args.Event.X,(int)args.Event.Y,out facePath,out faceCell);
+				if(facePath==null) return;
+	
 				listStore.GetIter(out faceIter,facePath);
-				Face selectedFace = (Face) listStore.GetValue(faceIter,2);
+				try{
+					selectedFace = (Face) listStore.GetValue(faceIter,2);
+				}finally{}
 				
 				Log.Debug("Button Pressed on Face :"+selectedFace.Id);
 				

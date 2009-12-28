@@ -11,9 +11,9 @@ using FSpot.Widgets;
 namespace FaceSpot
 {
 	public class FaceSidebarPage : SidebarPage{
-		bool selected = false;
+		//bool selected = false;
 		bool firsttime = true;
-		public FaceSidebarPage () : base(new FaceSidebarWidget (),
+		public FaceSidebarPage () : base(new FaceSidebarWidget(),
 		                                 Catalog.GetString("Face"),
 		                                 "gtk-index") 
 		{
@@ -35,16 +35,20 @@ namespace FaceSpot
 			Sidebar sidebar= MainWindow.Toplevel.Sidebar;
 			if ( sidebar.Notebook.CurrentPageWidget ==  this.SidebarWidget )
 			{
-				selected = true;
+				(SidebarWidget as FaceSidebarWidget).selected = true;
+				
 				//FIXME First time that you open this It'll not force user to use 1:1 ratio
-				if(firsttime) firsttime = false;
+				
+				if(firsttime){ 
+					firsttime = false;
+				}
 				else {
 					Log.Debug("FaceSidebar Selected : Set Ratio 1:1");	
 					MainWindow.Toplevel.PhotoView.View.SelectionXyRatio = 1.0;
 				}
 				
-			}else if( selected){
-				selected = false;	
+			}else if( (SidebarWidget as FaceSidebarWidget).selected){
+				(SidebarWidget as FaceSidebarWidget).selected = false;	
 				
 				if(firsttime ) firsttime = false;
 				else {

@@ -40,6 +40,9 @@ namespace FaceSpot.Db
 				width = value;
 			}
 		}
+		
+		public 
+		
 		#endregion
 		//TODO design how to add thumbnails
 		const int faceDefaultWidth = 100;
@@ -64,7 +67,8 @@ namespace FaceSpot.Db
 		public bool tagConfirmed;
 		private long unix_time;
 		
-		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,Tag tag,Pixbuf icon,long unix_time) 
+		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,
+		             Tag tag,bool tagConfirmed, bool autoDetected, bool autoRecognized, Pixbuf icon,long unix_time) 
 			: base (id)
 		{
 			this.faceID = id;
@@ -73,6 +77,9 @@ namespace FaceSpot.Db
 			this.width = width;
 			this.photo = photo;
 			this.tag = tag;
+			this.tagConfirmed = tagConfirmed;
+			this.autoDetected = autoDetected;
+			this.autoRecognized = autoRecognized;
 			this.iconPixbuf = icon;
 			this.unix_time = unix_time;
 			//FIXME Possible Error HERE
@@ -108,6 +115,10 @@ namespace FaceSpot.Db
 //			get { return photo.DefaultVersionUri; }
 //		}
 		#endregion
+		
+		public Rectangle Selection{
+			get{return new Rectangle((int)LeftX,(int)TopY,(int)Width,(int)Width); }
+		}
 		
 		public string Name {
 			get { return tag==null ? null : tag.Name ; }	
