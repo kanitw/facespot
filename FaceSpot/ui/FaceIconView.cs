@@ -67,8 +67,15 @@ namespace FaceSpot
 			this.SelectionMode = SelectionMode.Multiple;
 			
 			UpdateFaces();
+			
+			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
+		}
+
+		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
+		{
+			UpdateFaces();
 		}
 		
 		Tag tag;

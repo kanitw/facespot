@@ -43,9 +43,8 @@ namespace FaceSpot
 			//categories
 			Log.Debug("PeopleArrayListCreated");
 			
-			peopleTreeStore = new TreeStore(typeof(String),typeof(Tag));
+			peopleTreeStore = new PeopleTreeStore();
 			//TreeIter iter = peopleTreeStore.AppendValues(People.Tag.Name,People.Tag);
-			PopulatePeopleCategories(peopleTreeStore,People.Tag,TreeIter.Zero,0);
 			peopleComboBoxEntry.Model = peopleTreeStore;
 			
 			peopleComboBoxEntry.Changed += PeopleComboBoxEntryChanged;
@@ -78,19 +77,7 @@ namespace FaceSpot
 			//entryCompletion.Complete();
 		}
 		
-		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter parentIter,int level)
-		{
-			foreach (Tag tag in (parent as Category).Children) {
-				if (tag is Category) {
-					Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
-					TreeIter iter = 
-						(parentIter.Equals(TreeIter.Zero) ?
-						treeStore.AppendValues(tag.Name,/*parent,*/tag):
-							treeStore.AppendValues(parentIter,tag.Name,/*parent,*/tag)) ;
-					PopulatePeopleCategories (treeStore,tag,iter,level+1);
-				}
-			}
-		}
+		
 		#endregion
 
 		protected new string dialog_name = "FaceEditorDialog";
@@ -145,7 +132,7 @@ namespace FaceSpot
 				HandleOkNewFace ();
 			else
 				HandleOkOldFace ();
-			FaceSidebarWidget.Instance.UpdateFaceIconView();
+			//FaceSidebarWidget.Instance.UpdateFaceIconView();
 			ClearEditor ();
 		}
 		private void HandleOkOldFace ()

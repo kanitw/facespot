@@ -155,6 +155,7 @@ namespace FaceSpot
 
 		void Menuitem_preferenceActivated (object sender, EventArgs e)
 		{
+
 		}
 	}
 //	

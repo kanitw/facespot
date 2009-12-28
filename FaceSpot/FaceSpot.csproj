@@ -74,15 +74,7 @@
     </Reference>
     <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\emgucv\bin\Emgu.CV.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.Util, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\emgucv\bin\Emgu.Util.dll</HintPath>
-    </Reference>
-    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\emgucv\bin\zlib.net.dll</HintPath>
+      <HintPath>..\..\Emgu.CV.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +104,7 @@
     <Compile Include="db\PhotoStoreAddOn.cs" />
     <Compile Include="ui\People.cs" />
     <Compile Include="job\FaceScheduler.cs" />
+    <Compile Include="ui\PeopleTreeStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

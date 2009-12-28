@@ -47,7 +47,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\emgucv\bin\Emgu.CV.dll</HintPath>
+      <HintPath>..\..\Emgu.CV.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

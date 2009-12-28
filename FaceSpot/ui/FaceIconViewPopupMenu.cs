@@ -13,7 +13,7 @@ namespace FaceSpot
 	public class FaceIconViewPopupMenu : Menu
 	{
 		//Face face; Face[] faces;
-		Face[] SelectedFaces{
+		public Face[] SelectedFaces{
 			get { return iconView.SelectedFaces.ToArray(); }	
 		}
 		FaceIconView iconView;
@@ -42,6 +42,10 @@ namespace FaceSpot
 			
 			if(SelectedFaces.Length == 1)
 				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
+			
+			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
+			PopulatePeopleCategories (ChangePersonTo,People.Tag);
+				
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),
 			                     new EventHandler(DeleteActivated),true);
@@ -99,5 +103,58 @@ namespace FaceSpot
 				Log.DebugTimerPrint (timer, "HandleDeleteCommand took {0}");
 			}
 		}
+		
+		void PopulatePeopleCategories (MenuItem menu ,Tag parent)
+		{
+			if( (parent as Category).Children.Count > 0)
+			{
+				menu.Submenu = new Menu();	
+			}
+			foreach (Tag tag in (parent as Category).Children) {
+				if (tag is Category) {
+					Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
+					ImageMenuItem item = MakeTagMenuItem((Menu)menu.Submenu,tag,true);
+//						GtkUtil.MakeMenuItem((Menu)menu.Submenu,tag.Name,new EventHandler(ApplyPerson)
+//						                     ,true);
+					PopulatePeopleCategories (item,tag);
+				}
+			}
+		}
+		
+		ImageMenuItem MakeTagMenuItem(Menu menu,Tag tag,bool enabled){
+			ImageMenuItem img_item = new PersonMenuItem(this,tag,true);
+			menu.Append (img_item);
+			img_item.ShowAll ();
+			return img_item;
+		}
+	}
+	
+	
+	class PersonMenuItem : ImageMenuItem
+	{
+		public Tag tag;
+		FaceIconViewPopupMenu menu;
+		public PersonMenuItem(FaceIconViewPopupMenu menu,Tag tag,bool enabled) : base(tag.Name){
+			if(tag.Icon != null){
+				Image = new Image(tag.Icon);
+			}	
+			this.Activated += new EventHandler(ApplyPerson);
+			Sensitive = enabled;
+			this.tag = tag;
+			this.menu = menu;
+		}
+		void ApplyPerson (object sender, EventArgs e)
+		{
+			//Log.Debug("ApplyPerson"+ sender.GetType().ToString());
+			if( sender is PersonMenuItem ){
+				PersonMenuItem item = (PersonMenuItem) sender;
+				foreach (Face face in menu.SelectedFaces){
+					face.tag = item.tag;
+					face.tagConfirmed = true;
+					FaceSpotDb.Instance.Faces.Commit(face);
+				}
+			}
+		}
+		
 	}
 }

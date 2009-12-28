@@ -112,17 +112,17 @@ public class FaceSidebarWidget : ScrolledWindow {
 			else if (mode == FaceEditMode.Edit)
 			{
 				EditFace();
-				UpdateFaceIconView();
+				//UpdateFaceIconView();
 				
 			}
 		}
 		
-		public void UpdateFaceIconView(){
-			if(knownFaceIconView != null)
-				knownFaceIconView.UpdateFaces();
-			if(unknownFaceIconView !=null)
-				unknownFaceIconView.UpdateFaces();
-		}
+//		public void UpdateFaceIconView(){
+//			if(knownFaceIconView != null)
+//				knownFaceIconView.UpdateFaces();
+//			if(unknownFaceIconView !=null)
+//				unknownFaceIconView.UpdateFaces();
+//		}
 		
 		private void EditFace () {
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
