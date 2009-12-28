@@ -117,5 +117,12 @@ namespace FaceSpot.Db
 		public string Name {
 			get { return tag==null ? null : tag.Name ; }	
 		}
+
+		public Tag Tag {
+			get {
+				return tag;
+			}
+			set { tag = value;}
+		}
 	}
 }

@@ -78,7 +78,7 @@ namespace FaceSpot
 			Directory.CreateDirectory (testSavePath);
 			foreach (string s in testSet) {
 				int sec = DateTime.Now.Second;
-				Image<Bgr, Byte> aaa = new Image<Bgr, Byte> (testPath + s + ".jpg");
+				//Image<Bgr, Byte> aaa = new Image<Bgr, Byte> (testPath + s + ".jpg");
 				
 				FaceImagePos[] faceImagePos = FaceDetector.Detect (new Image<Bgr, Byte> (testPath + s + ".jpg"));
 				Image<Bgr, Byte>[] testDetect = new Image<Bgr, Byte>[faceImagePos.Length];

@@ -42,7 +42,8 @@ namespace FaceSpot
 				Console.WriteLine("#"+j);
 				FacePixbufPos f = faces[j];
 				Log.Debug("left = {0}, right = {1}, width = {2},size = {3}",f.leftX, f.topY, f.pixbuf.Width,f.pixbuf.SaveToBuffer("jpeg").Length);
-				Face face = faceStore.CreateFace(photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);												
+				//Face face = 
+					faceStore.CreateFace(photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);												
 			}
 			FaceSpotDb.Instance.PhotosAddOn.SetIsDetected(photo.DefaultVersion,true);
 			Log.Debug("Detection Job Finished #"+photo.Id);

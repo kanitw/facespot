@@ -149,9 +149,7 @@ namespace FaceSpot
 			if( sender is PersonMenuItem ){
 				PersonMenuItem item = (PersonMenuItem) sender;
 				foreach (Face face in menu.SelectedFaces){
-					face.tag = item.tag;
-					face.tagConfirmed = true;
-					FaceSpotDb.Instance.Faces.Commit(face);
+					FaceSpotDb.Instance.Faces.SetTag(face,item.tag);
 				}
 			}
 		}
