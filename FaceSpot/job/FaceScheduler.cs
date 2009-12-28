@@ -23,7 +23,7 @@ namespace FaceSpot
 		
 		private FaceScheduler ()
 		{
-			Scheduler.JobFinished += SchedulerJobFinished;	
+			//Scheduler.JobFinished += SchedulerJobFinished;	
 			//Scheduler.JobStarted += SchedulerJobStarted;
 		}
 

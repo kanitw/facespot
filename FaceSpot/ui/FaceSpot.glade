@@ -452,6 +452,20 @@
                     <property name="y">32</property>
                   </packing>
                 </child>
+                <child>
+                  <widget class="GtkLabel" id="PersonErrorLabel">
+                    <property name="width_request">339</property>
+                    <property name="height_request">36</property>
+                    <property name="visible">True</property>
+                    <property name="xalign">0.0099999997764825821</property>
+                    <property name="label" translatable="yes">Entered Person Not Found
+Pressing OK Will Create New Person</property>
+                  </widget>
+                  <packing>
+                    <property name="x">15</property>
+                    <property name="y">74</property>
+                  </packing>
+                </child>
               </widget>
               <packing>
                 <property name="position">1</property>

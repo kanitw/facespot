@@ -51,13 +51,13 @@ namespace FaceSpot
 		{
 			MainWindow.Toplevel.PhotoView.View.Selection = face.Selection;
 				
-			iconView.SelectedFace = face;
+			//iconView.SelectedFace = face;
 			FaceSidebarWidget.Instance.Mode = FaceSidebarWidget.FaceEditMode.Edit;
 		}
 
 		void EditActivated (object sender, EventArgs e)
 		{
-			iconView.SelectedFace = face;
+			//iconView.SelectedFace = face;
 			//FaceEditorDialog dialog = 
 				new FaceEditorDialog (face,this.Toplevel,false);
 		}
