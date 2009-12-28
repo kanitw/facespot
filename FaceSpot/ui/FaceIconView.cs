@@ -180,50 +180,57 @@ namespace FaceSpot
 		
 		void HandleButtonPressEvent (object o, ButtonPressEventArgs args)
 		{
-			if(args.Event.Button == 3){
-				
-				TreePath facePath;
-				CellRenderer faceCell;
-				Face selectedFace = null;
-				TreeIter faceIter;
-				this.GetItemAtPos((int)args.Event.X,(int)args.Event.Y,out facePath,out faceCell);
-				if(facePath==null) return;
-	
-				listStore.GetIter(out faceIter,facePath);
-				try{
-					selectedFace = (Face) listStore.GetValue(faceIter,2);
-				}finally{}
-				
-				Log.Debug("Button Pressed on Face :"+selectedFace.Id);
-				
-				bool isInSelection = false;
-				
-				List<Face> selectedFaces = SelectedFaces;
-				foreach(Face f in selectedFaces){
-					if(f.Equals(selectedFace)){
-							isInSelection = true;
-						}
-				}
-				
-				if(!isInSelection){
-					this.UnselectAll();
-					this.SelectPath(facePath);	
-					selectedFaces.Clear();
-					selectedFaces.Add(selectedFace);
-				}
-				String fids = "";
-				foreach(Face f in selectedFaces){
-					fids += f.Id + " ";
-				}
-				Log.Debug("With+"+ selectedFaces.Count + " Selection :"+fids);
-				FaceIconViewPopupMenu popup = new FaceIconViewPopupMenu();
-				popup.Activate(args.Event,
-				               //selectedFace,selectedFaces.ToArray(),
-				               this);
-				
-				args.RetVal =true;
+			if ( args.Event.Type == EventType.TwoButtonPress && args.Event.Button == 1){
+				HandleDoubleClick(args);
+			}
+			else if( args.Event.Type == EventType.ButtonPress && args.Event.Button == 3){
+				HandleRightClick (args);
 			}
 		}
+
+		void HandleDoubleClick (ButtonPressEventArgs args)
+		{
+			Log.Debug("Double Click at Face#"+SelectedFace.Id);
+		}
+		
+		void HandleRightClick (ButtonPressEventArgs args)
+		{
+			TreePath facePath;
+			CellRenderer faceCell;
+			Face selectedFace = null;
+			TreeIter faceIter;
+			this.GetItemAtPos ((int)args.Event.X, (int)args.Event.Y, out facePath, out faceCell);
+			if (facePath == null)
+				return;
+			listStore.GetIter (out faceIter, facePath);
+			try {
+				selectedFace = (Face)listStore.GetValue (faceIter, 2);
+			} finally {
+			}
+			Log.Debug ("Button Pressed on Face :" + selectedFace.Id);
+			bool isInSelection = false;
+			List<Face> selectedFaces = SelectedFaces;
+			foreach (Face f in selectedFaces) {
+				if (f.Equals (selectedFace)) {
+					isInSelection = true;
+				}
+			}
+			if (!isInSelection) {
+				this.UnselectAll ();
+				this.SelectPath (facePath);
+				selectedFaces.Clear ();
+				selectedFaces.Add (selectedFace);
+			}
+			String fids = "";
+			foreach (Face f in selectedFaces) {
+				fids += f.Id + " ";
+			}
+			Log.Debug ("With+" + selectedFaces.Count + " Selection :" + fids);
+			FaceIconViewPopupMenu popup = new FaceIconViewPopupMenu ();
+			popup.Activate (args.Event, this);
+			args.RetVal = true;
+		}
+
 		
 		//TODO if have time - Add Keyboard Support
 		//TODO Add Menu to Edit Menu Bar for this

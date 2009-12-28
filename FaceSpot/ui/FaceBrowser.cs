@@ -18,7 +18,6 @@ namespace FaceSpot
 		protected Glade.XML xml;
 		private void initGladeXML()
 		{
-//			Log.Debug("Look for 2 .glade");
 			xml = new Glade.XML(null,"FaceSpot.ui.FaceSpot.glade",dialog_name,"f-spot");
 			xml.Autoconnect(this);
 		}
@@ -121,7 +120,6 @@ namespace FaceSpot
 				SuggestionConfirmButton.Sensitive = true;
 				SuggestionDeclineButton.Sensitive = true;
 				knownFaceIconView.UnselectAll();
-				
 			}else {
 				SuggestionConfirmButton.Sensitive = false;
 				SuggestionDeclineButton.Sensitive = false;
@@ -145,18 +143,18 @@ namespace FaceSpot
 		void PeopleTreeViewSelectionChanged (object sender, EventArgs e)
 		{
 			TreeIter iter;
-			peopleTreeView.Selection.GetSelected(out iter);
-			Tag tag = (Tag) peopleTreeView.Model.GetValue(iter,2);
-			if(tag!=null){
-				MainNotebook.Page = KnownFacePage;
-				knownFaceIconView.Tag = tag;
-				suggestFaceIconView.Tag = tag;
+			if(peopleTreeView.Selection.GetSelected(out iter)){
+				Tag tag = (Tag) peopleTreeView.Model.GetValue(iter,2);
+				if(tag!=null){
+					MainNotebook.Page = KnownFacePage;
+					knownFaceIconView.Tag = tag;
+					suggestFaceIconView.Tag = tag;
+				}
 			}
 		}
 
 		void Menuitem_preferenceActivated (object sender, EventArgs e)
 		{
-			
 		}
 	}
 //	

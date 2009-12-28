@@ -26,6 +26,8 @@ namespace FaceSpot
 		Label PersonErrorLabel;
 		const string PersonErrorLabelMarkup = "Entered Person Not Found\r\n"+
 					"Pressing OK Will Create New Person";
+		const string NoPersonErrorLabelMarkup = "Empty Text\r\n"+
+					"Pressing OK will match this image with no person";
 		[Widget]
 		ComboBoxEntry peopleComboBoxEntry;
 		EntryCompletion entryCompletion;
@@ -47,17 +49,16 @@ namespace FaceSpot
 			peopleComboBoxEntry.Model = peopleTreeStore;
 			
 			peopleComboBoxEntry.Changed += PeopleComboBoxEntryChanged;
-			
-			
 		}
 		void InitializeEntryCompletion ()
 		{
+			entryCompletion = new EntryCompletion();
+			
+			peopleComboBoxEntry.Entry.Completion = entryCompletion;
 			entryCompletion.Model = peopleTreeStore;
 			entryCompletion.TextColumn = 0;
-			//entryCompletion.PopupCompletion = true;
 			entryCompletion.InlineCompletion = true;
-			entryCompletion = new EntryCompletion();
-			peopleComboBoxEntry.Entry.Completion = entryCompletion;
+			
 		}
 		Tag SelectedTag{
 			get {  return MainWindow.Toplevel.Database.Tags.GetTagByName (
@@ -65,18 +66,18 @@ namespace FaceSpot
 		}
 		void PeopleComboBoxEntryChanged (object sender, EventArgs e)
 		{
-			if( SelectedTag == null && 
-			   peopleComboBoxEntry.ActiveText.Trim().Length !=0)
+			if( SelectedTag == null )
 			{
-				PersonErrorLabel.Markup = PersonErrorLabelMarkup;
+				if (peopleComboBoxEntry.ActiveText.Trim().Length !=0)
+					PersonErrorLabel.Markup = PersonErrorLabelMarkup;
+				else
+					PersonErrorLabel.Markup = NoPersonErrorLabelMarkup;
 			}else {
 				PersonErrorLabel.Text ="";
 			}	
 			//entryCompletion.Complete();
 		}
 		
-		
-
 		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter parentIter,int level)
 		{
 			foreach (Tag tag in (parent as Category).Children) {
@@ -101,7 +102,6 @@ namespace FaceSpot
 		{
 			this.face =face;
 			this.newFace = newFace;
-			//entryCompletion.MatchFunc = entryCompletionMatchFunc 
 			Dialog.Parent = parent;
 			Dialog.Modal  = true;
 			//Dialog.TransientFor = parent;
@@ -117,7 +117,7 @@ namespace FaceSpot
 			PersonErrorLabel.Text = "";
 			
 			if(face.tag != null){
-				Log.Debug("Tag "+face.tag.Name+" for this face yet");
+				Log.Debug("Set Entry's text to Tag "+face.tag.Name);
 				peopleComboBoxEntry.Entry.Text = face.tag.Name;
 			}else 
 				Log.Debug("No Tag for this face yet"+face.Id);
@@ -150,31 +150,41 @@ namespace FaceSpot
 		}
 		private void HandleOkOldFace ()
 		{
-			face.tag = SelectedTag;
-			face.tagConfirmed = SelectedTag != null;
-			FaceSpotDb.Instance.Faces.Commit(face);
+			HandleOk();
+		}
+		
+		private void HandleOk(){
+			if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
+				if (SelectedTag != null) {
+					Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
+					face.tag = SelectedTag;
+				} else {
+					//Create new Tag
+					Log.Debug ("FaceEditor OK : New Tag" + peopleComboBoxEntry.ActiveText);
+					Category cat= MainWindow.Toplevel.Database.Tags.CreateCategory( 
+						People.Category,
+					    peopleComboBoxEntry.ActiveText.Trim (),
+						true);                        
+					face.tag = cat;
+				}
+				if(face.tag.Icon == null){
+					face.tag.Icon = face.iconPixbuf;
+					MainWindow.Toplevel.Database.Tags.Commit(face.tag);
+				}
+				face.tagConfirmed = true;
+				FaceSpotDb.Instance.Faces.Commit(face);
+			} else {
+				Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
+				if(face.tag != null){
+					FaceSpotDb.Instance.Faces.DeclineTag(face);
+				}
+			}
+			
 		}
 		
 		private void HandleOkNewFace ()
 		{
-			if (SelectedTag != null) {
-				Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
-				//FaceSpotDb.Instance.Faces.AddTag (face, selectedTag, true);
-				face.tag = SelectedTag;
-				face.tagConfirmed = SelectedTag != null;
-				FaceSpotDb.Instance.Faces.Commit(face);
-			} else {
-				if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
-					//FIX ME - fix bug around here
-					Log.Debug ("FaceEditor OK : New Tag" + peopleComboBoxEntry.ActiveText);
-					TagCommands.Create createCom = new TagCommands.Create (
-						MainWindow.Toplevel.Database.Tags, MainWindow.Toplevel.GetToplevel (this));
-					//SelectedTag = 
-						createCom.Execute (TagCommands.TagType.Tag, null);
-				} else {
-					Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
-				}
-			}
+			HandleOk();
 			FaceSpotDb.Instance.CommitTransaction ();
 		}
 
