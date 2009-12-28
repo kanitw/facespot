@@ -26,9 +26,7 @@ namespace FaceSpot
 		{
 			//if(photo.Id!=202)return false;
 			Log.Debug("Detection Job Called #"+photo.Id);
-			
-			
-			
+									
 			FacePixbufPos[] faces = FaceDetector.DetectToPixbuf(photo);
 			
 							         	
@@ -42,14 +40,15 @@ namespace FaceSpot
 				Console.WriteLine("#"+j);
 				FacePixbufPos f = faces[j];
 				Log.Debug("left = {0}, right = {1}, width = {2},size = {3}",f.leftX, f.topY, f.pixbuf.Width,f.pixbuf.SaveToBuffer("jpeg").Length);
-				//FaceSpotDb.Instance.PhotosAddOn.SetIsDetected(photo.DefaultVersion, true);
-				Face face = faceStore.CreateFace(f.photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);								
-				//faceStore.Commit(face);				
+				Face face = faceStore.CreateFace(photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);												
 			}
+			FaceSpotDb.Instance.PhotosAddOn.SetIsDetected(photo.DefaultVersion,true);
+			Log.Debug("Detection Job Finished #"+photo.Id);
 			
-			Log.Debug("Detection Job Finished #"+photo.Id);				
+			
 			return true;
 		}
+		
 		//Decide Whether to use persistent job on this type
 		const bool persistent = false;
 		public static DetectionJob Create(Photo photo){

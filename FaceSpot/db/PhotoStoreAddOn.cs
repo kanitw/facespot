@@ -51,10 +51,10 @@ namespace FaceSpot
 		}
 		
 		public void SetIsDetected(PhotoVersion version,bool val){
-			
+			Log.Debug("SetIsDetected isnull :: " + (version==null));
 			try {
 	        	Database.ExecuteNonQuery(
-    				new DbCommand("UPDATE photo_version SET is_auto_detected = :is_auto_detected" +
+    				new DbCommand("UPDATE photo_versions SET is_auto_detected = :is_auto_detected " +
     			    	"WHERE photo_id = :photo_id AND version_id = :version_id",
 				        "is_auto_detected",val,
     			        "photo_id",version.Photo.Id,

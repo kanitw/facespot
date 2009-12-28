@@ -118,8 +118,10 @@ public class FaceSidebarWidget : ScrolledWindow {
 		}
 		
 		public void UpdateFaceIconView(){
-			knownFaceIconView.UpdateFaces();
-			unknownFaceIconView.UpdateFaces();
+			if(knownFaceIconView != null)
+				knownFaceIconView.UpdateFaces();
+			if(unknownFaceIconView !=null)
+				unknownFaceIconView.UpdateFaces();
 		}
 		
 		private void EditFace () {

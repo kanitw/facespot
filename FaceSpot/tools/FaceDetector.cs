@@ -249,7 +249,7 @@ namespace FaceSpot
 		public uint leftX;
 		public uint topY;
 		
-		public FaceImagePos(Emgu.CV.Image<Bgr, byte> image, uint leftX, uint topY){
+		public FaceImagePos(Photo photo, Emgu.CV.Image<Bgr, byte> image, uint leftX, uint topY){
 			this.photo = photo;
 			this.image = image;
 			this.leftX = leftX;

@@ -9,7 +9,6 @@ using FSpot;
 using Gtk;
 using Mono.Unix;
 
-using Emgu;
 using Emgu.CV.Structure;
 using FaceSpot;
 using FaceSpot.Db;
