@@ -7,6 +7,7 @@ using FSpot.Widgets;
 using FSpot.Extensions;
 using Gdk;
 using System.Collections.Generic;
+
 namespace FaceSpot.Db
 {
 	//FIXME Handle Photo Deleted, Edited , PhotoVersion Deleted, PhotoVersion Edited
@@ -276,15 +277,18 @@ namespace FaceSpot.Db
 			//hack
 			long unix_time = 10000;//DbUtils.UnixTimeFromDateTime( photo.Time);
 			
-			Log.Debug("CreateFace : Db Exec Query");
+			Log.Debug("CreateFace : Db Exec Query" );
+			DbCommand dbcom = null;
+			
+			try{
 			//FIXME Check Whether MD5 Sum of Photo has been generated
-			DbCommand dbcom = new DbCommand (
+				dbcom = new DbCommand (
 					"INSERT INTO faces (photo_id,photo_version_id, left_x," +
 					"top_y, width, tag_id, tag_confirm, auto_detected, auto_recognized,"+
 			        "photo_md5, time"+ ",icon"+ ")" +
 					"VALUES (:photo_id,:photo_version_id, :left_x," +
-					":top_y, :width, :tag_id, :tag_confirm, :auto_detected, :auto_recognized,"
-					+":photo_md5, :time, :icon"+ ")",
+					":top_y, :width, :tag_id, :tag_confirm, :auto_detected, :auto_recognized,"+
+					":photo_md5, :time, :icon"+ ")",
 					":photo_id", photo.Id,
 			        ":photo_version_id",photo.DefaultVersionId,
 					":left_x", leftX,
@@ -298,6 +302,10 @@ namespace FaceSpot.Db
 					":time", unix_time
 			        ,":icon",GetIconString(iconPixbuf)
 			        );
+			}catch(System.Exception e){
+				Console.WriteLine(e.Message);
+			}
+			
 			Log.Debug(dbcom.ToString());
 			uint id = (uint)Database.Execute (					dbcom				);
 			Face face = new Face (id, leftX, topY, width, photo,tag,tagConfirmed,autoDetected,autoRecognized,iconPixbuf,unix_time);
