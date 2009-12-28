@@ -53,6 +53,8 @@ namespace FaceSpot
 				//DetectionJob job = 
 					DetectionJob.Create(photo);
 			}
+			
+			
 		}
 	}
 }

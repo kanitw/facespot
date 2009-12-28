@@ -3,6 +3,7 @@ using System;
 using FSpot;
 using FSpot.Utils;
 using Banshee.Kernel;
+using FaceSpot.Db;
 
 namespace FaceSpot
 {
@@ -16,8 +17,30 @@ namespace FaceSpot
 		
 		protected override bool Execute ()
 		{
+			//if(photo.Id!=202)return false;
 			Log.Debug("Detection Job Called #"+photo.Id);
 			
+			
+			
+			FacePixbufPos[] faces = FaceDetector.DetectToPixbuf(photo);
+			
+							         	
+			for(int j=0;j<faces.Length;j++)
+				faces[j].pixbuf.Save("out/job_"+j+photo.Name,"jpeg");
+			
+			FaceStore faceStore = FaceSpotDb.Instance.Faces;			
+			Log.Debug("#faces = {0}",faces.Length);
+			
+			for(int j=0;j<faces.Length;j++){
+				Console.WriteLine("#"+j);
+				FacePixbufPos f = faces[j];
+				Log.Debug("left = {0}, right = {1}, width = {2},size = {3}",f.leftX, f.topY, f.pixbuf.Width,f.pixbuf.SaveToBuffer("jpeg").Length);
+				//FaceSpotDb.Instance.PhotosAddOn.SetIsDetected(photo.DefaultVersion, true);
+				Face face = faceStore.CreateFace(f.photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);								
+				//faceStore.Commit(face);				
+			}
+			
+			Log.Debug("Detection Job Finished #"+photo.Id);				
 			return true;
 		}
 		//TODO Decide Whether to use persistent job on this type

@@ -3,6 +3,7 @@ using System;
 using Banshee.Database;
 using FSpot.Utils;
 using FSpot;
+
 namespace FaceSpot.Db
 {
 

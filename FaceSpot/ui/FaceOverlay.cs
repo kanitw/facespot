@@ -213,7 +213,7 @@ namespace FaceSpot
 
 		double Zoom {
 			get { return MainWindow.Toplevel.PhotoView.Zoom; }
-		}
+		}		
 		PixbufOrientation pixbuf_orientation {
 			get { return MainWindow.Toplevel.PhotoView.View.PixbufOrientation; }
 		}
