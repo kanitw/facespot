@@ -3,6 +3,7 @@ using System;
 using FSpot;
 using FSpot.Utils;
 using Banshee.Kernel;
+using FaceSpot.Db;
 
 namespace FaceSpot
 {
@@ -25,6 +26,23 @@ namespace FaceSpot
 		{
 			Log.Debug("Detection Job Called #"+photo.Id);
 			
+			for(int i=0;i<4;i++){
+				Photo p = MainWindow.Toplevel.Database.Photos.Get((uint)(i+201));
+				
+				FacePixbufPos[] faces = FaceDetector.DetectToPixbuf(p);
+								         	
+				for(int j=0;j<faces.Length;j++)
+					faces[j].pixbuf.Save("out/job_"+i+"_"+j+".jpeg","jpeg");
+				
+//				FaceStore faceStore = FaceSpotDb.Instance.Faces;				
+//				foreach(FacePixbufPos f in faces){
+//					Face face = faceStore.CreateFace(f.photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);
+//					faceStore.Commit(face);
+//					FaceSpotDb.Instance.PhotosAddOn.SetIsDetected(f.photo.DefaultVersion, true);
+//				}
+				
+				
+			}
 			return true;
 		}
 		//Decide Whether to use persistent job on this type
