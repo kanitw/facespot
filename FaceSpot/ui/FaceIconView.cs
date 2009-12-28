@@ -156,6 +156,7 @@ namespace FaceSpot
 				foreach( Face f in faceList){
 					TreeIter iter;
 					if(f.Name != null){
+						//this.Model.
 						listStore.GetIterFromString(out iter,f.Name);
 						if( !TreeIter.Zero.Equals(iter) ){
 							TreePath path = listStore.GetPath(iter);
@@ -216,7 +217,9 @@ namespace FaceSpot
 				}
 				Log.Debug("With+"+ selectedFaces.Count + " Selection :"+fids);
 				FaceIconViewPopupMenu popup = new FaceIconViewPopupMenu();
-				popup.Activate(args.Event,selectedFace,selectedFaces.ToArray(),this);
+				popup.Activate(args.Event,
+				               //selectedFace,selectedFaces.ToArray(),
+				               this);
 				
 				args.RetVal =true;
 			}
