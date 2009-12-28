@@ -6,6 +6,7 @@ using System;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.IO;
+using System.Reflection;
 
 
 using FSpot;
@@ -27,6 +28,21 @@ namespace FaceSpot
 		/// Face Detection Tester
 		/// </summary>
 		public static void Main(string[] arg){
+			
+			//Assembly _assembly = Assembly.GetExecutingAssembly();
+			
+			//Stream _xmlStream = _assembly.GetManifestResourceStream("FaceSpot.tools.haarcascade.haarcascadde_eye.xml");			
+			
+			
+//				Assembly _assembly = Assembly.GetExecutingAssembly();
+//			ManifestResourceInfo info =  _assembly.GetManifestResourceInfo("FaceSpot.tools.haarcascade.haarcascade_eye.xml");
+//			Console.WriteLine("---"+info.FileName);
+//			String location = _assembly.CodeBase;
+//			UriBuilder uri = new UriBuilder(location);
+//            string path = Uri.UnescapeDataString(uri.Path);
+//
+//			String xmlDirpath = Path.GetDirectoryName(path);
+//			Console.WriteLine("============== "+ xmlDirpath);
 			//Console.WriteLine("{0},{1}",1,2);
 			//ImageFile imageFile = new ImageFile(facedbPath + "testDetect/cp33.jpg");
 			//Console.WriteLine( FSpot.Utils.UriUtils.PathToFileUri(facedbPath + "testDetect/cp33.jpg") );

@@ -24,7 +24,7 @@ namespace FaceSpot
 		
 		protected override bool Execute ()
 		{
-			if(photo.Id!=202)return false;
+			//if(photo.Id!=202)return false;
 			Log.Debug("Detection Job Called #"+photo.Id);
 			
 			
@@ -33,7 +33,7 @@ namespace FaceSpot
 			
 							         	
 			for(int j=0;j<faces.Length;j++)
-				faces[j].pixbuf.Save("out/job_"+photo.Name+j+".jpeg","jpeg");
+				faces[j].pixbuf.Save("out/job_"+j+photo.Name,"jpeg");
 			
 			FaceStore faceStore = FaceSpotDb.Instance.Faces;			
 			Log.Debug("#faces = {0}",faces.Length);

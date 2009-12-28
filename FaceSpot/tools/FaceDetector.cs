@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -67,21 +69,25 @@ namespace FaceSpot
 			List<System.Drawing.Rectangle> recList = new List<System.Drawing.Rectangle>();
 			List<FaceImagePos> faceImagePosList = new List<FaceImagePos>();
 			
-			//Convert it to Grayscale			
+			//Convert it to Grayscale
 			Image<Gray, Byte> gray = image.Convert<Gray, Byte>();
 						
 	        //Normalizes brightness and increases contrast of the image
 	        gray._EqualizeHist();
-						 
-			string cDir = "/home/hyperjump/Projects/facespot/FaceSpot/tools/haarcascade/";
+			
+			//fixme : make this xml access standardized
+			Assembly _assembly = Assembly.GetExecutingAssembly();						
+			UriBuilder uri = new UriBuilder(_assembly.CodeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+			String xmlDirpath = Path.GetDirectoryName(path) + "/tools/haarcascade/";			
 			
 			
 	        //Load the HaarCascade objects			
-	        HaarCascade face = new HaarCascade(cDir + "haarcascade_frontalface_alt_tree.xml");	
-	        HaarCascade lefteye = new HaarCascade(cDir + "haarcascade_mcs_lefteye.xml");
-			HaarCascade righteye = new HaarCascade(cDir + "haarcascade_mcs_righteye.xml");
-			HaarCascade mouth = new HaarCascade(cDir + "haarcascade_mcs_mouth.xml");
-			HaarCascade nose = new HaarCascade(cDir + "haarcascade_mcs_nose.xml");					 					 				 
+	        HaarCascade face = new HaarCascade(xmlDirpath+ "haarcascade_frontalface_alt_tree.xml");	
+	        HaarCascade lefteye = new HaarCascade(xmlDirpath+ "haarcascade_mcs_lefteye.xml");
+			HaarCascade righteye = new HaarCascade(xmlDirpath+ "haarcascade_mcs_righteye.xml");
+			HaarCascade mouth = new HaarCascade(xmlDirpath+ "haarcascade_mcs_mouth.xml");
+			HaarCascade nose = new HaarCascade(xmlDirpath+ "haarcascade_mcs_nose.xml");					 					 				 
 				
 			// smallest dist between each face image, main criterian for images with more than one face
 			float smallestSqrDist = (float)(2 * Math.Pow(smallest_width ,2));
