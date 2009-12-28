@@ -42,7 +42,7 @@ namespace FaceSpot
 			);
 			if (reader.Read ())
 			{
-				return Convert.ToBoolean( reader["auto_detected"] );
+				return Convert.ToBoolean( reader["is_auto_detected"] );
 			}
 			reader.Close();
 			//TODO consider whether to throw exception

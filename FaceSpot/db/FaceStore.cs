@@ -181,7 +181,11 @@ namespace FaceSpot.Db
 		}
 		public Face CreateFace (Photo photo, uint leftX, uint topY, uint width, Pixbuf iconPixbuf,Tag tag
 		                        ,bool tagConfirmed,bool autoDetected,bool autoRecognized){
-			long unix_time = DbUtils.UnixTimeFromDateTime( photo.Time);
+			
+			Log.Debug("CreateFace called");
+			
+			//hack
+			long unix_time = 10000;//DbUtils.UnixTimeFromDateTime( photo.Time);
 			
 			Log.Debug("CreateFace : Db Exec Query");
 			//FIXME Check Whether MD5 Sum of Photo has been generated

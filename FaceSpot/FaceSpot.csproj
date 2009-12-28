@@ -103,6 +103,7 @@
     <Compile Include="ui\FaceOverlay.cs" />
     <Compile Include="db\PhotoStoreAddOn.cs" />
     <Compile Include="ui\People.cs" />
+    <Compile Include="job\FaceScheduler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
