@@ -4,6 +4,7 @@ using FSpot;
 using Banshee.Database;
 using FSpot.Utils;
 using Mono.Data.SqliteClient;
+using System.Collections.Generic;
 
 namespace FaceSpot
 {
@@ -61,6 +62,29 @@ namespace FaceSpot
 	        } catch (Exception ex){
 				Log.Exception(ex);
 			}
+		}
+		
+		public Photo[] GetUnDetectedPhoto(){
+				List<Photo> photo_list = new List<Photo>();
+			try{
+				SqliteDataReader reader = Database.Query(
+					new DbCommand("SELECT photos.id AS pid "+
+						"FROM photos INNER JOIN photo_versions ON "+
+						"photos.default_version_id = photo_versions.version_id AND "+
+						"photos.id = photo_versions.photo_id "+ 	
+				        "WHERE photo_versions.is_auto_detected = 0 " ));
+				Log.Debug("Get Undetected Photo");
+				while(reader.Read()){
+					Photo photo = MainWindow.Toplevel.Database.Photos.Get(
+					      Convert.ToUInt32( reader["pid"]));
+					if(photo != null)
+						photo_list.Add(photo);
+				}
+				reader.Close();
+			} catch (Exception ex){
+				Log.Exception(ex);
+			}
+			return photo_list.ToArray();
 		}
 	}
 }

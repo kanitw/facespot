@@ -80,6 +80,11 @@
     <Compile Include="ui\People.cs" />
     <Compile Include="db\PhotoStoreAddOn.cs" />
     <Compile Include="ui\FaceOverlay.cs" />
+    <Compile Include="job\FaceScheduler.cs" />
+    <Compile Include="job\DetectionJob.cs" />
+    <Compile Include="job\RecognitionJob.cs" />
+    <Compile Include="db\FaceJobStore.cs" />
+    <Compile Include="job\FaceJob.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -88,5 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="db\" />
+    <Folder Include="job\" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 
 namespace FaceSpot
 {
@@ -17,5 +18,6 @@ namespace FaceSpot
 		/// </summary>
 		public const Gdk.InterpType IconResizeInterpType = Gdk.InterpType.Hyper;
 		
+		//public System.Collections.Generic.
 	}
 }

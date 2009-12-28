@@ -52,4 +52,10 @@
     <EmbeddedResource Include="FaceService.addin.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\FaceSpot\FaceSpot.csproj">
+      <Project>{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}</Project>
+      <Name>FaceSpot</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

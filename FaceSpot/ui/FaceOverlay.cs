@@ -39,7 +39,7 @@ namespace FaceSpot
 			}
 		}
 
-		Cairo.Context ctx;
+		//Cairo.Context ctx;
 		private FaceOverlay () : base()
 		{
 			//ctx = CairoHelper.Create ( MainWindow.Toplevel.PhotoView.View.GdkWindow);

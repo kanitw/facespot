@@ -1,10 +1,12 @@
 
 using System;
+using System.Threading;
 using FSpot.Extensions;
 using FSpot.Utils;
 using FSpot;
 using Gtk;
 using Mono.Unix;
+using FaceSpot;
 namespace FaceSpot
 {
 	public class FaceService : IService
@@ -20,6 +22,7 @@ namespace FaceSpot
 			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
 			md.Run ();
 			md.Destroy ();
+			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
 			return true;
 		}
