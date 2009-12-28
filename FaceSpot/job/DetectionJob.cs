@@ -6,17 +6,10 @@ using Banshee.Kernel;
 
 namespace FaceSpot
 {
-
-
 	public class DetectionJob : FaceJob
 	{
 		Photo photo;
 		
-//		public override void Run ()
-//		{
-//			throw new System.NotImplementedException ();
-//		}
-
 		static JobStore job_store{
 			get { return MainWindow.Toplevel.Database.Jobs; }	
 		}
@@ -27,11 +20,12 @@ namespace FaceSpot
 			
 			return true;
 		}
-		//Decide Whether to use persistent job on this type
+		//TODO Decide Whether to use persistent job on this type
 		const bool persistent = false;
 		public static DetectionJob Create(Photo photo){
 			return (DetectionJob) job_store.Create(typeof(DetectionJob),photo.Id.ToString());
 		}
+		
 		public static DetectionJob Create(Photo photo,JobPriority priority)
 		{
 			uint id = 0;	
