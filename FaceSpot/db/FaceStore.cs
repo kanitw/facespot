@@ -9,7 +9,7 @@ using Gdk;
 using System.Collections.Generic;
 namespace FaceSpot.Db
 {
-	//FIXME Handle Photo Deleted , Face Deleted,  PhotoVersion Deleted, PhotoVersion Edited
+	//FIXME Handle Photo Deleted, Edited , PhotoVersion Deleted, PhotoVersion Edited
 	
 	public class FaceStore : DbStore<Face>
 	{
@@ -17,26 +17,102 @@ namespace FaceSpot.Db
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
 		{
+			MainWindow.Toplevel.Database.Photos.ItemsChanged += MainWindowToplevelDatabasePhotosItemsChanged;
+			MainWindow.Toplevel.Database.Photos.ItemsRemoved += MainWindowToplevelDatabasePhotosItemsRemoved;
+			MainWindow.Toplevel.Database.Tags.ItemsRemoved += MainWindowToplevelDatabaseTagsItemsRemoved;
+			MainWindow.Toplevel.Database.Tags.ItemsChanged += MainWindowToplevelDatabaseTagsItemsChanged;
+			
 			if ( ! is_new && Database.TableExists("faces")) return;
 			Log.Debug("Facestore Db Init");
-			//Add Database Initialization
+			InitTable();
+		}
+
+		void MainWindowToplevelDatabaseTagsItemsChanged (object sender, DbItemEventArgs<Tag> e)
+		{
+			Log.Debug("Tags Item Change Handled By FaceStore");
+			//Check for Removed Tags
+//			List<Tag> removed_tag = new List<Tag>();
+//			foreach(Tag tag in e.Items){
+//				Tag t = MainWindow.Toplevel.Database.Tags.Get(tag.Id);
+//				if(t ==null)
+//					removed_tag.Add(tag);
+//			}
+//			RemoveTag(removed_tag.ToArray());	
+			
+		}
+		
+		void MainWindowToplevelDatabasePhotosItemsChanged (object sender, DbItemEventArgs<Photo> e)
+		{
+			Log.Debug("Photo Item Change Handled By FaceStore");
+			//Check for Removed Photo 
+//			List<Photo> removed_photo = new List<Photo>();
+//			foreach(Photo photo in e.Items){
+//				Photo p = MainWindow.Toplevel.Database.Photos.Get(photo.Id);
+//				if(p ==null)
+//					removed_photo.Add(photo);
+//			}
+//			RemoveAllFacesOfPhotos(removed_photo.ToArray());	
+		}
+
+		void MainWindowToplevelDatabaseTagsItemsRemoved (object sender, DbItemEventArgs<Tag> e)
+		{
+			Log.Debug("Tags Item Removed Handled By FaceStore");
+			Tag[] tags = e.Items;
+			RemoveTag (tags);
+		}
+
+		void RemoveTag (Tag[] tags)
+		{
+			if(tags.Length ==0)return;
+			Log.Debug("Remove Tags From Faces");
+			foreach (Tag tag in tags) {
+				Face[] faces = GetByTag (tag, "");
+				foreach (Face face in faces) {
+					FaceSpotDb.Instance.Faces.DeclineTag (face);
+				}
+			}
+		}
+
+
+		void MainWindowToplevelDatabasePhotosItemsRemoved (object sender, DbItemEventArgs<Photo> e)
+		{
+			Log.Debug("Photo Item Removed Handled By FaceStore");
+			Photo[] photos = e.Items;
+			RemoveAllFacesOfPhotos (photos);
+		}
+
+		void RemoveAllFacesOfPhotos (Photo[] photos)
+		{
+			if(photos.Length ==0)return;
+			Log.Debug("Remove All Face of Photos");
+			foreach (Photo photo in photos) {
+				Face[] faces = GetByPhoto (photo, "");
+				foreach (Face face in faces) {
+					FaceSpotDb.Instance.Faces.Remove (face);
+				}
+			}
+		}
+
+		
+		void InitTable(){
+		//Add Database Initialization
 			try{
-			Database.ExecuteNonQuery(
-				"CREATE TABLE faces (\n"+
-			    "	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
-			    "	photo_id INTEGER NOT NULL, \n"+
-				"	photo_version_id INTEGER NOT NULL, \n"+
-				" 	tag_id INTEGER NULL, \n" +
-				"   tag_confirm BOOLEAN NOT NULL, \n"+
-				"   auto_detected BOOLEAN NOT NULL, \n"+
-				"   auto_recognized BOOLEAN NOT NULL, \n"+
-			    "	left_x INTEGER NOT NULL, \n"+
-			    "	top_y INTEGER NOT NULL, \n"+
-			    "	width INTEGER NOT NULL, \n"+
-			    " 	photo_md5 STRING NOT NULL, \n"+
-				"	time INTEGER NOT NULL \n,"+
-				"   icon TEXT NULL"+
-				")"  );
+				Database.ExecuteNonQuery(
+					"CREATE TABLE faces (\n"+
+				    "	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
+				    "	photo_id INTEGER NOT NULL, \n"+
+					"	photo_version_id INTEGER NOT NULL, \n"+
+					" 	tag_id INTEGER NULL, \n" +
+					"   tag_confirm BOOLEAN NOT NULL, \n"+
+					"   auto_detected BOOLEAN NOT NULL, \n"+
+					"   auto_recognized BOOLEAN NOT NULL, \n"+
+				    "	left_x INTEGER NOT NULL, \n"+
+				    "	top_y INTEGER NOT NULL, \n"+
+				    "	width INTEGER NOT NULL, \n"+
+				    " 	photo_md5 STRING NOT NULL, \n"+
+					"	time INTEGER NOT NULL \n,"+
+					"   icon TEXT NULL"+
+					")"  );
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
@@ -56,7 +132,7 @@ namespace FaceSpot.Db
 			catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
 			}
-			//FIXME Add "Alter" Table Query
+			//FIXME Add "Alter" Table Query	
 		}
 		
 		public override Face Get (uint id)

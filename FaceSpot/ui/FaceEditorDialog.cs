@@ -49,8 +49,6 @@ namespace FaceSpot
 			peopleComboBoxEntry.Model = peopleTreeStore;
 			
 			peopleComboBoxEntry.Changed += PeopleComboBoxEntryChanged;
-			
-			
 		}
 		void InitializeEntryCompletion ()
 		{
@@ -59,7 +57,6 @@ namespace FaceSpot
 			peopleComboBoxEntry.Entry.Completion = entryCompletion;
 			entryCompletion.Model = peopleTreeStore;
 			entryCompletion.TextColumn = 0;
-			//entryCompletion.PopupCompletion = true;
 			entryCompletion.InlineCompletion = true;
 			
 		}
