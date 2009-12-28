@@ -56,7 +56,7 @@ namespace FaceSpot
 		/// A <see cref="Image"/>
 		/// </returns>
 		public static FaceImagePos[] Detect(Image<Bgr, Byte> image){
-			Console.WriteLine("Detect start...");
+			Console.WriteLine("Detect called...");			
 			const bool drawRec = false;
 			const int smallest_width = 16;
 			const int cropped_width = 100;
