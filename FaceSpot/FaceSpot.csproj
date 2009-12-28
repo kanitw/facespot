@@ -6,17 +6,18 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8AE80E94-2B7E-4588-BB74-12DD7F111EAE}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>FaceSpot</RootNamespace>
     <AssemblyName>FaceSpot</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ReleaseVersion>0.8</ReleaseVersion>
+    <StartupObject>FaceSpot.JTest</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug</OutputPath>
+    <OutputPath>..\..\..\.config\f-spot\addins</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Release</OutputPath>
+    <OutputPath>..\..\..\.config\f-spot\addins</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -34,31 +35,40 @@
     <Reference Include="System" />
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="Mono.Posix" />
+    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="Cms, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="Mono.Data.SqliteClient" />
+    <Reference Include="gtk-dotnet, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="f-spot, Version=0.6.1.5, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
     <Reference Include="FSpot.Core, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
-    <Reference Include="FSpot.Utils, Version=0.0.0.0, Culture=neutral">
-      <Package>f-spot</Package>
-    </Reference>
-    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="FSpot.Widgets, Version=0.0.0.0, Culture=neutral">
-      <Package>f-spot</Package>
-    </Reference>
-    <Reference Include="Cms, Version=0.0.0.0, Culture=neutral">
-      <Package>f-spot</Package>
-    </Reference>
-    <Reference Include="Mono.Data.SqliteClient" />
-    <Reference Include="FSpot.Query, Version=0.0.0.0, Culture=neutral">
-      <Package>f-spot</Package>
-    </Reference>
     <Reference Include="FSpot.JobScheduler, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-dotnet, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="FSpot.Query, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="FSpot.Utils, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="FSpot.Widgets, Version=0.0.0.0, Culture=neutral">
+      <Package>f-spot</Package>
+    </Reference>
+    <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\emgucv\bin\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\emgucv\bin\Emgu.Util.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -75,13 +85,63 @@
     <Compile Include="ui\FaceIconView.cs" />
     <Compile Include="ui\FaceIconViewPopupMenu.cs" />
     <Compile Include="ui\FaceSidebarWidget.cs" />
+    <Compile Include="tools\FaceDetector.cs" />
+    <Compile Include="tools\JTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <EmbeddedResource Include="FaceSpot.addin.xml" />
     <EmbeddedResource Include="ui\FaceSpot.glade" />
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_eye.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_eye_tree_eyeglasses.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_frontalface_alt.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_frontalface_alt2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_frontalface_alt_tree.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_frontalface_default.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_lefteye_2splits.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_mcs_eyepair_big.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_mcs_eyepair_small.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_mcs_lefteye.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_mcs_mouth.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_mcs_nose.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_mcs_righteye.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_profileface.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tools\haarcascade\haarcascade_righteye_2splits.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="db\" />
+    <Folder Include="tools\" />
+    <Folder Include="lib\" />
+    <Folder Include="tools\haarcascade\" />
   </ItemGroup>
 </Project>
