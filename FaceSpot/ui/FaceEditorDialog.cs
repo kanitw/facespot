@@ -153,34 +153,41 @@ namespace FaceSpot
 		}
 		private void HandleOkOldFace ()
 		{
-			face.tag = SelectedTag;
-			face.tagConfirmed = SelectedTag != null;
-			FaceSpotDb.Instance.Faces.Commit(face);
+			HandleOk();
+		}
+		
+		private void HandleOk(){
+			if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
+				if (SelectedTag != null) {
+					Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
+					face.tag = SelectedTag;
+				} else {
+					//Create new Tag
+					Log.Debug ("FaceEditor OK : New Tag" + peopleComboBoxEntry.ActiveText);
+					Category cat= MainWindow.Toplevel.Database.Tags.CreateCategory( 
+						People.Category,
+					    peopleComboBoxEntry.ActiveText.Trim (),
+						true);                        
+					face.tag = cat;
+				}
+				if(face.tag.Icon == null){
+					face.tag.Icon = face.iconPixbuf;
+					MainWindow.Toplevel.Database.Tags.Commit(face.tag);
+				}
+				face.tagConfirmed = true;
+				FaceSpotDb.Instance.Faces.Commit(face);
+			} else {
+				Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
+				if(face.tag != null){
+					FaceSpotDb.Instance.Faces.DeclineTag(face);
+				}
+			}
+			
 		}
 		
 		private void HandleOkNewFace ()
 		{
-			if (SelectedTag != null) {
-				Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
-				//FaceSpotDb.Instance.Faces.AddTag (face, selectedTag, true);
-				face.tag = SelectedTag;
-				face.tagConfirmed = SelectedTag != null;
-				FaceSpotDb.Instance.Faces.Commit(face);
-			} else {
-				if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
-					//FIX ME - fix bug around here
-					Log.Debug ("FaceEditor OK : New Tag" + peopleComboBoxEntry.ActiveText);
-					TagCommands.Create createCom = new TagCommands.Create (
-						MainWindow.Toplevel.Database.Tags, MainWindow.Toplevel.GetToplevel (this));
-					//SelectedTag = 
-						createCom.Execute (TagCommands.TagType.Tag, null);
-				} else {
-					Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
-					if(face.tag != null){
-						FaceSpotDb.Instance.Faces.DeclineTag(face);
-					}
-				}
-			}
+			HandleOk();
 			FaceSpotDb.Instance.CommitTransaction ();
 		}
 

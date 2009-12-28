@@ -8,7 +8,7 @@ namespace FaceSpot
 	{
 		private static Tag tag;
 		public static Category Category {
-			get { return Tag.Category; }
+			get { return (Category)Tag; }
 		}
 		public static Tag Tag {
 			get {

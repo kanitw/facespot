@@ -23,29 +23,35 @@ namespace FaceSpot
 		
 		private FaceScheduler ()
 		{
-			//Scheduler.JobFinished += SchedulerJobFinished;	
+			Scheduler.JobFinished += SchedulerJobFinished;	
 			//Scheduler.JobStarted += SchedulerJobStarted;
 		}
 
 
 		void SchedulerJobFinished (IJob job)
 		{
-			Execute();
+			if( job is DetectionJob){
+				//TODO Add new Face Recognition Job	
+			}
+			//Execute();
 		}
 		
 		public void Execute(){
 			if(Scheduler.ScheduledJobsCount == 0){
-				QueueUncheckedPhoto();	
+				//MainWindow.Toplevel.PhotoView.
+				
+				QueueAnyUncheckedPhoto();	
 			}
 		}
 		
-		public void QueueUncheckedPhoto()
+		public void QueueAnyUncheckedPhoto()
 		{
 			Photo[] undetectedPhotos = FaceSpotDb.Instance.PhotosAddOn.GetUnDetectedPhoto();
 			foreach( Photo photo in undetectedPhotos)	
 			{
 				Log.Debug("DetectionJob .Create "+photo.Id);
-				DetectionJob job = DetectionJob.Create(photo);
+				//DetectionJob job = 
+					DetectionJob.Create(photo);
 			}
 		}
 	}

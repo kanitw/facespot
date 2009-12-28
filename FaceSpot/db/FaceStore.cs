@@ -9,6 +9,8 @@ using Gdk;
 using System.Collections.Generic;
 namespace FaceSpot.Db
 {
+	//FIXME Handle Photo Deleted , Face Deleted,  PhotoVersion Deleted, PhotoVersion Edited
+	
 	public class FaceStore : DbStore<Face>
 	{
 		const string ALL_FIELD_NAME = "id, photo_id, photo_version_id, tag_id, tag_confirm, auto_detected, auto_recognized, left_x, top_y, width, photo_md5, time, icon ";

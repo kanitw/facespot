@@ -30,15 +30,14 @@ namespace FaceSpot
 				GtkUtil.MakeMenuSeparator(this);
 			}
 			
-			
 			if(SelectedFaces.Length == 1 && 
 			   (iconView.type == FaceIconView.Type.KnownFaceSidebar
 			   || iconView.type == FaceIconView.Type.UnknownFaceSidebar)
 			   )
-			{
-				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 				GtkUtil.MakeMenuItem(this,"Move Face",new EventHandler(MoveActivated),true);
-			}
+			
+			if(SelectedFaces.Length == 1)
+				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),
 			                     new EventHandler(DeleteActivated),true);
