@@ -50,6 +50,15 @@ namespace FaceSpot
 			
 			
 		}
+		void InitializeEntryCompletion ()
+		{
+			entryCompletion.Model = peopleTreeStore;
+			entryCompletion.TextColumn = 0;
+			//entryCompletion.PopupCompletion = true;
+			entryCompletion.InlineCompletion = true;
+			entryCompletion = new EntryCompletion();
+			peopleComboBoxEntry.Entry.Completion = entryCompletion;
+		}
 		Tag SelectedTag{
 			get {  return MainWindow.Toplevel.Database.Tags.GetTagByName (
 					peopleComboBoxEntry.ActiveText.Trim());  }	
@@ -66,6 +75,8 @@ namespace FaceSpot
 			//entryCompletion.Complete();
 		}
 		
+		
+
 		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter parentIter,int level)
 		{
 			foreach (Tag tag in (parent as Category).Children) {
@@ -90,8 +101,6 @@ namespace FaceSpot
 		{
 			this.face =face;
 			this.newFace = newFace;
-			entryCompletion = new EntryCompletion();
-			
 			//entryCompletion.MatchFunc = entryCompletionMatchFunc 
 			Dialog.Parent = parent;
 			Dialog.Modal  = true;
@@ -114,13 +123,6 @@ namespace FaceSpot
 				Log.Debug("No Tag for this face yet"+face.Id);
 			
 			Dialog.ShowAll ();
-		}
-
-		void InitializeEntryCompletion ()
-		{
-			entryCompletion.Model = peopleTreeStore;
-			entryCompletion.PopupCompletion = true;
-			peopleComboBoxEntry.Entry.Completion = entryCompletion;
 		}
 
 
