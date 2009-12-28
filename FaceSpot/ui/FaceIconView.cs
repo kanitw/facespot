@@ -122,9 +122,18 @@ namespace FaceSpot
 				return selectedFaces.Count == 1 ? selectedFaces[0] : null;
 			}
 			set {
-				TreeIter iter;
-				listStore.GetIterFromString(out iter,value.Name);
-				this.SelectPath(listStore.GetPath(iter));
+//				TreeIter iter;
+//				//listStore
+//				listStore.GetIterFromString(out iter,value.Name);
+//				if( !TreeIter.Zero.Equals(iter) ){
+//					TreePath path = listStore.GetPath(iter);
+//					if(path!=null)
+//						this.SelectPath(path);
+//					
+//				}
+				List<Face> list = new List<Face>();
+				list.Add(value);
+				SelectedFaces = list;
 			}
 		}
 		
@@ -146,8 +155,15 @@ namespace FaceSpot
 				this.UnselectAll();
 				foreach( Face f in faceList){
 					TreeIter iter;
-					listStore.GetIterFromString(out iter,f.Name);
-					this.SelectPath(listStore.GetPath(iter));
+					if(f.Name != null){
+						//this.Model.
+						listStore.GetIterFromString(out iter,f.Name);
+						if( !TreeIter.Zero.Equals(iter) ){
+							TreePath path = listStore.GetPath(iter);
+							if(path!=null)
+								this.SelectPath(path);
+						}
+					}
 				}
 			}
 		}
@@ -201,7 +217,9 @@ namespace FaceSpot
 				}
 				Log.Debug("With+"+ selectedFaces.Count + " Selection :"+fids);
 				FaceIconViewPopupMenu popup = new FaceIconViewPopupMenu();
-				popup.Activate(args.Event,selectedFace,selectedFaces.ToArray(),this);
+				popup.Activate(args.Event,
+				               //selectedFace,selectedFaces.ToArray(),
+				               this);
 				
 				args.RetVal =true;
 			}

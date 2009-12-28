@@ -44,13 +44,13 @@ namespace FaceSpot.Db
 		public 
 		
 		#endregion
-		//TODO design how to add thumbnails
+		
 		const int faceDefaultWidth = 100;
 		public Pixbuf faceImage;
 		
-		//TODO Decide Whether to use this
 		public bool autoDetected, autoRecognized;
 		
+		//TODO Use Photo_md5 
 		string photo_md5;
 		
 		public Photo photo;
@@ -85,8 +85,6 @@ namespace FaceSpot.Db
 			//FIXME Possible Error HERE
 			photo_md5 = photo.MD5Sum;
 		}
-		
-		//TODO Add Function for move/scale(1:1) Face
 		
 		public void Dispose()
 		{

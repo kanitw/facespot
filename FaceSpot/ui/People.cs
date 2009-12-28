@@ -4,8 +4,6 @@ using FSpot;
 
 namespace FaceSpot
 {
-
-
 	public class People
 	{
 		private static Tag tag;

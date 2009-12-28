@@ -11,7 +11,7 @@ using FaceSpot.Db;
 namespace FaceSpot
 {
 
-	
+//TODO Add Checkbox to Show Rectangle	
 	
 public class FaceSidebarWidget : ScrolledWindow {
 		static FaceSidebarWidget instance;
