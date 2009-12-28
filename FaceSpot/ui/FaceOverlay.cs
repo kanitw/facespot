@@ -126,11 +126,6 @@ namespace FaceSpot
 			
 		}
 		
-		void BuildUI(){
-			
-			
-		}
-
 		void WinConfigureEvent (object o, ConfigureEventArgs args)
 		{
 			//TODO Finished This

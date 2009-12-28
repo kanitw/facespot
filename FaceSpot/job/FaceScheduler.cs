@@ -31,7 +31,8 @@ namespace FaceSpot
 		void SchedulerJobFinished (IJob job)
 		{
 			if( job is DetectionJob){
-				//TODO Add new Face Recognition Job	
+				DetectionJob dJob = (DetectionJob) job;
+				Log.Debug("DJob Finished Event "+dJob.JobOptions);
 			}
 			//Execute();
 		}
