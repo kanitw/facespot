@@ -28,7 +28,7 @@ namespace FaceSpot
 			           +" ("+Scheduler.ScheduledJobsCount+" Job(s) Left");
 			FacePixbufPos[] faces = null;
 			try {
-				faces = FaceDetector.DetectToPixbuf(photo);
+				faces = FaceDetector.DetectFaceToPixbuf(photo);
 			} catch (Exception ex) {
 				Log.Exception(ex);
 			}			         	

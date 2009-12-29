@@ -9,7 +9,8 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 
 using FSpot;
-	
+using FSpot.Utils;
+
 using Gdk;
 
 namespace FaceSpot
@@ -28,9 +29,9 @@ namespace FaceSpot
 			return new Pixbuf(ms.GetBuffer());
 		}
 		
-		public static FacePixbufPos[] DetectToPixbuf(Photo photo){
-			Console.WriteLine("DetectToPixbuf called...");
-			FaceImagePos[] faces = Detect(photo);
+		public static FacePixbufPos[] DetectFaceToPixbuf(Photo photo){
+			Log.Debug("DetectToPixbuf called...");
+			FaceImagePos[] faces = DetectFace(photo);
 			FacePixbufPos[] facesbuf = new FacePixbufPos[faces.Length];			
 			
 			for(int i=0;i<faces.Length;i++)
@@ -39,9 +40,9 @@ namespace FaceSpot
 			return facesbuf;
 		}
 		
-		public static FaceImagePos[] Detect(Photo photo){			
+		public static FaceImagePos[] DetectFace(Photo photo){			
 			Uri uri = photo.DefaultVersionUri;							
-			return Detect(new Emgu.CV.Image<Bgr, Byte>(uri.AbsolutePath));									
+			return DetectFace(new Emgu.CV.Image<Bgr, Byte>(uri.AbsolutePath));									
 		}
 		
 		/// <summary>
@@ -53,8 +54,8 @@ namespace FaceSpot
 		/// <returns>
 		/// A <see cref="Image"/>
 		/// </returns>
-		public static FaceImagePos[] Detect(Image<Bgr, Byte> image){
-			Console.WriteLine("Detect called...");			
+		public static FaceImagePos[] DetectFace(Image<Bgr, Byte> image){
+			Log.Debug("DetectFace called...");			
 			const bool drawRec = false;
 			const int smallest_width = 16;
 			const int cropped_width = 100;
