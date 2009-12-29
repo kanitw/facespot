@@ -55,7 +55,8 @@ namespace FaceSpot
 		/// A <see cref="Image"/>
 		/// </returns>
 		public static FaceImagePos[] DetectFace(Image<Bgr, Byte> image){
-			Log.Debug("DetectFace called...");			
+			Log.Debug("DetectFace called...");	
+			
 			const bool drawRec = false;
 			const int smallest_width = 16;
 			const int cropped_width = 100;

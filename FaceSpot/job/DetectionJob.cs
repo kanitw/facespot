@@ -32,8 +32,8 @@ namespace FaceSpot
 			} catch (Exception ex) {
 				Log.Exception(ex);
 			}			         	
-			for(int j=0;j<faces.Length;j++)
-				faces[j].pixbuf.Save("out/job_"+j+photo.Name,"jpeg");
+//			for(int j=0;j<faces.Length;j++)
+//				faces[j].pixbuf.Save("out/job_"+j+photo.Name,"jpeg");
 			
 			FaceStore faceStore = FaceSpotDb.Instance.Faces;			
 			Log.Debug("#faces = {0}",faces.Length);
