@@ -58,11 +58,11 @@ namespace FaceSpot
 			Log.Debug("DetectFace called...");	
 			
 			const bool drawRec = false;
-			const int smallest_width = 16;
+			const int smallest_width = 30;
 			const int cropped_width = 100;
 			
 			//Note that lowest confidence is 1 which means every face will be accepted
-			const int faceDetectConfd = 2;						
+			const int faceDetectConfd = 4;						
 			
 			Image<Bgr, Byte> faceImage = null;
 			List<Image<Bgr, Byte>> faceList = new List<Image<Bgr, byte>>();
