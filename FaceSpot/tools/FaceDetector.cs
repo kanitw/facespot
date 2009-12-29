@@ -57,12 +57,11 @@ namespace FaceSpot
 		public static FaceImagePos[] DetectFace(Image<Bgr, Byte> image){
 			Log.Debug("DetectFace called...");	
 			
-			const bool drawRec = false;
-			const int smallest_width = 30;
+			const int smallest_width = 25;
 			const int cropped_width = 100;
 			
 			//Note that lowest confidence is 1 which means every face will be accepted
-			const int faceDetectConfd = 4;						
+			const int faceDetectConfd = 5;						
 			
 			Image<Bgr, Byte> faceImage = null;
 			List<Image<Bgr, Byte>> faceList = new List<Image<Bgr, byte>>();
@@ -117,22 +116,16 @@ namespace FaceSpot
 	            if ((lefteyesDetected[0].Length == 0 &&  righteyesDetected[0].Length == 0 ) ||
 					(mouthDetected[0].Length == 0 && noseDetected[0].Length == 0)) 
 						continue;            					
-				
-//				LogWriteLine("[] = " + eyesDetected[0].Length);						
+					
 										
 				int higesteyeY = 0;
 					
 	            foreach (MCvAvgComp e in lefteyesDetected[0])
-	            {		
-//					LogWriteLine("len = "+e.neighbors);
-					
+	            {							
 	                if (e.neighbors >= 1)
 	                {							
 	                  System.Drawing.Rectangle eyeRect = e.rect;						
 	                  eyeRect.Offset(f.rect.X, f.rect.Y);				  
-							
-					  if(drawRec)									
-	                  	image.Draw(eyeRect, new Bgr(System.Drawing.Color.Red), 1);
 							
 					  if( f.rect.Y > higesteyeY ) higesteyeY = f.rect.Y;
 	                }
@@ -140,14 +133,11 @@ namespace FaceSpot
 								
 				foreach (MCvAvgComp e in righteyesDetected[0])
 	            {		
-					//LogWriteLine("len = "+e.neighbors);
 					
 	                if (e.neighbors >= 1)
 	                {							
 	                  System.Drawing.Rectangle eyeRect = e.rect;						
 	                  eyeRect.Offset(f.rect.X, f.rect.Y);				  
-					  if(drawRec)
-	                  	image.Draw(eyeRect, new Bgr(System.Drawing.Color.Red), 1);
 							
 					  if( f.rect.Y > higesteyeY ) higesteyeY = f.rect.Y;
 	                }
@@ -163,26 +153,19 @@ namespace FaceSpot
 	                if (e.neighbors >= 1)
 	                {							
 	                  System.Drawing.Rectangle mRect = e.rect;						
-	                  mRect.Offset(f.rect.X, f.rect.Y);	
-						
-					  if(drawRec)
-	                  	image.Draw(mRect, new Bgr(System.Drawing.Color.Green), 1);										  
+	                  mRect.Offset(f.rect.X, f.rect.Y);										  
 							
 					  if(e.rect.Y < lowestMouth) lowestMouth = e.rect.Y;
 	                }
 	            }								
-//				LogWriteLine("lowestMouth = " + lowestMouth);
 					
 				foreach (MCvAvgComp e in noseDetected[0])
 	            {		
-//					LogWriteLine("m len = " + e.neighbors);
 					
 	                if (e.neighbors >= 1)
 	                {							
 	                  System.Drawing.Rectangle mRect = e.rect;						
-	                  mRect.Offset(f.rect.X, f.rect.Y);	
-					  if(drawRec)
-	                  	image.Draw(mRect, new Bgr(System.Drawing.Color.Green), 1);										  
+	                  mRect.Offset(f.rect.X, f.rect.Y);										  
 	                }
 	            }		
 				
@@ -216,11 +199,9 @@ namespace FaceSpot
 				if(recList.Count==0 || minDistSqr > smallestSqrDist)
 				{
 					faceImage = image.Copy(rect);
-					faceImage = faceImage.Resize(cropped_width, cropped_width);
-					
+					faceImage = faceImage.Resize(cropped_width, cropped_width);					
 					faceImagePosList.Add(new FaceImagePos(faceImage, (uint)f.rect.Left, (uint)f.rect.Top, (uint)f.rect.Width));
-					//faceList.Add(faceImage);
-					//recList.Add(f.rect);
+					Log.Debug("width = {0}, height = {1}",rect.Width, rect.Height);
 				}				
 			}
 			
