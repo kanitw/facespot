@@ -104,13 +104,13 @@ namespace FaceSpot
 
 		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
 		{
-			if(MainNotebook.Page == UnknownFacePage){
-				unknownFaceIconView.UpdateFaces();
-			}
-			else {
-				knownFaceIconView.UpdateFaces();
-				suggestFaceIconView.UpdateFaces();
-			}
+//			if(MainNotebook.Page == UnknownFacePage){
+//				unknownFaceIconView.UpdateFaces();
+//			}
+//			else {
+//				knownFaceIconView.UpdateFaces();
+//				suggestFaceIconView.UpdateFaces();
+//			}
 		}
 
 		void SuggestFaceIconViewSelectionChanged (object sender, EventArgs e)

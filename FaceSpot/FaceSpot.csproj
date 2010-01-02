@@ -72,9 +72,9 @@
     <Reference Include="FSpot.Utils, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
-    <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+    <Reference Include="Emgu.CV, Version=2.1.0.663, Culture=neutral, PublicKeyToken=7281126722ab4438">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Emgu.CV.dll</HintPath>
+      <HintPath>..\..\emgucv\bin\Emgu.CV.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -3,38 +3,34 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpotService/FaceService.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/ui/FaceOverlay.cs" ctype="Workbench">
     <Files>
-      <File FileName="FaceSpot/db/FaceStore.cs" Line="198" Column="3" />
-      <File FileName="FaceSpot/ui/FaceIconViewPopupMenu.cs" Line="59" Column="33" />
-      <File FileName="FaceSpot/ui/FaceOverlay.cs" Line="128" Column="3" />
+      <File FileName="FaceSpot/db/FaceStore.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/FaceOverlay.cs" Line="132" Column="4" />
       <File FileName="FaceSpot/ui/FaceBrowser.cs" Line="1" Column="1" />
       <File FileName="FaceSpot/ui/PeopleTreeView.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FaceSidebarWidget.cs" Line="48" Column="4" />
-      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="86" Column="45" />
-      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="1" Column="1" />
-      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="17" Column="60" />
-      <File FileName="FaceSpot/job/RecognitionJob.cs" Line="39" Column="5" />
-      <File FileName="FaceSpot/job/FaceScheduler.cs" Line="35" Column="55" />
-      <File FileName="FaceSpotService/FaceService.cs" Line="12" Column="7" />
-      <File FileName="FaceSpot/tools/JTest.cs" Line="66" Column="28" />
+      <File FileName="FaceSpot/ui/FaceSidebarWidget.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/FaceIconView.cs" Line="1" Column="1" />
+      <File FileName="FaceSpotSidebar/FaceSidebar.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/job/RecognitionJob.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/job/FaceScheduler.cs" Line="1" Column="1" />
+      <File FileName="FaceSpotService/FaceService.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/tools/JTest.cs" Line="1" Column="1" />
       <File FileName="FaceSpot/tools/FaceDetector.cs" Line="1" Column="1" />
-      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="48" Column="4" />
-      <File FileName="FaceSpot/ui/PeopleTreeStore.cs" Line="15" Column="3" />
+      <File FileName="FaceSpot/ui/FaceEditorDialog.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/ui/PeopleTreeStore.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/db/Face.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/job/DetectionJob.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Node name="FaceSpot" expanded="True">
-            <Node name="References" expanded="True" />
-            <Node name="db" expanded="True" />
-            <Node name="job" expanded="True" />
-            <Node name="tools" expanded="True" />
-            <Node name="ui" expanded="True" />
+            <Node name="ui" expanded="True">
+              <Node name="FaceOverlay.cs" selected="True" />
+            </Node>
           </Node>
-          <Node name="FaceSpotService" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
+          <Node name="FaceSpotService" expanded="True" />
           <Node name="FaceSpotSidebar" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
