@@ -100,7 +100,7 @@ namespace FaceSpot
 						faces = FaceSpotDb.Instance.Faces.GetNotConfirmedFaceByTag(Tag);
 						break;
 					case Type.UnknownFaceBrowser:
-						faces = FaceSpotDb.Instance.Faces.GetUntaggedFace();
+						faces = FaceSpotDb.Instance.Faces.GetUntaggedFace("");
 						break;	
 				}
 			} catch(Exception ex) {

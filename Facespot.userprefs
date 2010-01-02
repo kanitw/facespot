@@ -1,0 +1,41 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" ctype="Workspace" />
+  <MonoDevelop.Ide.DebuggingService>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService>
+  <MonoDevelop.Ide.Workbench ActiveDocument="FaceSpot/tools/FaceDetector.cs" ctype="Workbench">
+    <Files>
+      <File FileName="FaceSpot/tools/FaceDetector.cs" Line="33" Column="42" />
+      <File FileName="FaceSpot/job/DetectionJob.cs" Line="36" Column="26" />
+      <File FileName="FaceSpot/db/PhotoStoreAddOn.cs" Line="71" Column="30" />
+      <File FileName="FaceSpot/tools/JTest.cs" Line="25" Column="4" />
+      <File FileName="FaceSpot/db/FaceStore.cs" Line="112" Column="18" />
+      <File FileName="FaceSpot/db/FaceJobStore.cs" Line="1" Column="1" />
+      <File FileName="FaceSpot/db/FaceSpotDb.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="FaceSpot" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="db" expanded="True" />
+            <Node name="job" expanded="True" />
+            <Node name="tools" expanded="True">
+              <Node name="haarcascade" expanded="True">
+                <Node name="haarcascade_frontalface_alt.xml" selected="True" />
+              </Node>
+            </Node>
+            <Node name="ui" expanded="True" />
+          </Node>
+          <Node name="FaceSpotService" expanded="True">
+            <Node name="References" expanded="True" />
+          </Node>
+          <Node name="FaceSpotSidebar" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

@@ -37,7 +37,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
 		public FaceIconView knownFaceIconView,unknownFaceIconView;
 		
-		
 		//PhotoList knownFaceList,unknownFaceList;
 			
 		public SidebarPage Page;
@@ -113,7 +112,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 			{
 				EditFace();
 				UpdateFaceIconView();
-				
 			}
 		}
 		

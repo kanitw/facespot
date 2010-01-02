@@ -74,7 +74,6 @@ namespace FaceSpot.Db
 			}
 		}
 
-
 		void MainWindowToplevelDatabasePhotosItemsRemoved (object sender, DbItemEventArgs<Photo> e)
 		{
 			Log.Debug("Photo Item Removed Handled By FaceStore");
@@ -93,7 +92,6 @@ namespace FaceSpot.Db
 				}
 			}
 		}
-
 		
 		void InitTable(){
 		//Add Database Initialization
@@ -134,7 +132,7 @@ namespace FaceSpot.Db
 				Log.Exception(ex);	
 			}
 			//FIXME Add "Alter" Table Query	
-		}
+		}		
 		
 		public override Face Get (uint id)
 		{
@@ -153,7 +151,18 @@ namespace FaceSpot.Db
 			reader.Close();
 			//TODO consider whether to use Unsafed Add (Compared to PhotoStore Class)
 			return face;
+		}							
+		public Face[] GetAllFaces(){
+		//fixme
+//			if (face != null)
+//				return face;
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+					      "FROM faces ")
+			);
+			return AddFacesFromReaderToCache(reader);
 		}
+		
 		private Face[] AddFacesFromReaderToCache (SqliteDataReader reader)
 		{
 			List<Face> faces = new List<Face> ();
@@ -175,8 +184,8 @@ namespace FaceSpot.Db
 			try { 
 				tag = Core.Database.Tags.GetTagById(Convert.ToInt32 (reader["tag_id"]));
 			}finally {}
-			if( tag ==null) 
-				Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
+			//if( tag ==null) 
+			//	Log.Debug("Null Tag of Face#"+Convert.ToUInt32 (reader["id"]));
 			
 			Pixbuf iconPixbuf = null;
 			if (reader["icon"] != null){
@@ -195,15 +204,12 @@ namespace FaceSpot.Db
 			AddToCache (face);
 			return face;
 		}
-
 		public Face[] GetKnownFacesByPhoto(Photo photo){
 			return GetByPhoto(photo,"AND tag_confirm = 1 AND NOT tag_id IS NULL ");
 		}
-		
 		public Face[] GetNotKnownFacesByPhoto(Photo photo){
 			return GetByPhoto(photo," AND ( tag_id IS NULL OR tag_confirm = 0 )");	
 		}
-		
 		public Face[] GetByPhoto(Photo photo, string addWhereClause){
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
@@ -214,11 +220,9 @@ namespace FaceSpot.Db
 			);
 			return AddFacesFromReaderToCache (reader);
 		}
-		
 		public Face[] GetConfirmedFaceByTag(Tag tag){
 			return GetByTag(tag,"AND tag_confirm = 1");	
 		}
-		
 		public Face[] GetNotConfirmedFaceByTag(Tag tag){
 			return GetByTag(tag,"AND tag_confirm = 0");	
 		}
@@ -234,13 +238,16 @@ namespace FaceSpot.Db
 			);
 			return AddFacesFromReaderToCache(reader);
 		}
-		public Face[] GetUntaggedFace(){
+		public Face[] GetUntaggedFace(string addWhereClause){
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
 				       "FROM faces " + 
-				       "WHERE tag_id IS NULL"));
+				       "WHERE tag_id IS NULL "+addWhereClause));
 			return AddFacesFromReaderToCache(reader);
-		}		
+		}
+		public Face[] GetNotRecognizedFace(){
+			return GetUntaggedFace("AND auto_recognized = 0");
+		}
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
 		{
 			if(photo == null) Log.Exception(new Exception( "BUG Null"));
@@ -274,8 +281,6 @@ namespace FaceSpot.Db
 		                        ,bool tagConfirmed,bool autoDetected,bool autoRecognized){
 			
 			Log.Debug("CreateFace called");
-			
-			//hack
 			long unix_time = 10000;//DbUtils.UnixTimeFromDateTime( photo.Time);
 			
 			Log.Debug("CreateFace : Db Exec Query" );

@@ -64,7 +64,11 @@
     </Reference>
     <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\emgucv2\Emgu.CV.dll</HintPath>
+      <HintPath>lib\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="NeuronDotNet.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\NeuronDotNet.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +98,13 @@
     <Compile Include="db\PhotoStoreAddOn.cs" />
     <Compile Include="ui\People.cs" />
     <Compile Include="job\FaceScheduler.cs" />
+    <Compile Include="tools\SerializeUtil.cs" />
+    <Compile Include="tools\EigenRecogizer.cs" />
+    <Compile Include="tools\FaceTrainer.cs" />
+    <Compile Include="tools\EigenValueTags.cs" />
+    <Compile Include="tools\FaceTag.cs" />
+    <Compile Include="tools\FaceClassifier.cs" />
+    <Compile Include="tools\ImageTypeConverter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

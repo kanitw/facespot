@@ -43,6 +43,7 @@ namespace FaceSpot
 //
 //			String xmlDirpath = Path.GetDirectoryName(path);
 //			Console.WriteLine("============== "+ xmlDirpath);
+			
 			//Console.WriteLine("{0},{1}",1,2);
 			//ImageFile imageFile = new ImageFile(facedbPath + "testDetect/cp33.jpg");
 			//Console.WriteLine( FSpot.Utils.UriUtils.PathToFileUri(facedbPath + "testDetect/cp33.jpg") );
@@ -68,7 +69,6 @@ namespace FaceSpot
 			string[] testSet = {
 				"girlgen",
 				"cp33",				
-				"girlgen2",
 				"cp33all"
 			};
 			string testPath = facedbPath + "testDetect/";

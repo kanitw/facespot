@@ -46,7 +46,6 @@ namespace FaceSpot.Db
 		#endregion
 		
 		const int faceDefaultWidth = 100;
-		public Pixbuf faceImage;
 		
 		public bool autoDetected, autoRecognized;
 		

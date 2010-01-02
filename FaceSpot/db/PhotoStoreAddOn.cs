@@ -72,7 +72,7 @@ namespace FaceSpot
 						"FROM photos INNER JOIN photo_versions ON "+
 						"photos.default_version_id = photo_versions.version_id AND "+
 						"photos.id = photo_versions.photo_id "+ 	
-				        "WHERE photo_versions.is_auto_detected = 0 " ));
+				        "WHERE photo_versions.is_auto_detected = 0 "));
 				Log.Debug("Get Undetected Photo");
 				while(reader.Read()){
 					Photo photo = MainWindow.Toplevel.Database.Photos.Get(

@@ -24,13 +24,26 @@ namespace FaceSpot
 			string msg = Catalog.GetString ("Face Service Start");
 			string desc = Catalog.GetString ("Sample Alert Box");
 			
-			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
+			FSpot.UI.Dialog.HigMessageDialog md = 
+				new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
 			md.Run ();
 			md.Destroy ();
+			FaceStore faceStore = FaceSpotDb.Instance.Faces;
+			Face[] faces = faceStore.GetAllFaces();			
+			//FaceTrainer.Train(faces);
 			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
 			
-			//TestDetect(timer);
+			
+			
+			
+//			foreach(Face f in faces){
+//				if(f.iconPixbuf == null)
+//					Log.Debug("id = {0}, name = {0}, audodetected = {0}",f.Id,f.Name,f.autoDetected);
+//			}
+//			Log.Debug("#faces to ProcessPCA() = {0}",faces.Length);
+//			
+//			EigenRecogizer.ProcessPCA(faces);
 			
 			return true;
 		}
