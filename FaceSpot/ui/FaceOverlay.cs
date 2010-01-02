@@ -52,9 +52,9 @@ namespace FaceSpot
 		Point old_winpos;
 		private FaceOverlay () : base("FaceOverlay")
 		{
-			Decorated = false;
-			Visible = false;
-			Opacity = 0.0;
+			Decorated = true;
+			Visible = true;
+			Opacity = 0.5;
 			//ModifyBg(StateType.
 			Gtk.Window win = (Gtk.Window) View.Toplevel;
 			win.GetPosition(out old_winpos.X,out old_winpos.Y);

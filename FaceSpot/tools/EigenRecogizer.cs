@@ -75,18 +75,18 @@ namespace FaceSpot
 			
 			for(int k=0;k<faces.Length;k++){
 				
-				if(faces[k].tag == null){
+				if(faces[k].Tag == null){
 					//Log.Debug("null Tag :: id = {0}, name = {0}",faces[k].Id,faces[k].Name);
 					continue;
 				}
 				else{
-					Log.Debug("tag = {0}, id = {0}, name = {0}",faces[k].tag.Name,faces[k].Id,faces[k].Name);
+					Log.Debug("tag = {0}, id = {0}, name = {0}",faces[k].Tag.Name,faces[k].Id,faces[k].Name);
 				}
 //				if(faces[k].iconPixbuf == null) {
 //					Log.Debug("id = {0}, name = {0}",faces[k].Id,faces[k].Name);
 //					continue;
 //				}
-				train_labelsList.Add(faces[k].tag.Name);
+				train_labelsList.Add(faces[k].Tag.Name);
 				train_imagesList.Add(ImageTypeConverter.ConvertPixbufToGrayCVImage(faces[k].iconPixbuf));
 			}
 			

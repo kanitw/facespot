@@ -45,9 +45,11 @@ namespace FaceSpot
 				v[j] = (double)eigenValue[j];				                                       		
 			
 			string suggestedName = FaceClassifier.AnalyseNetworkOutput(eigenVTags, bpnet.Run(v));							
-			if(suggestedName != null && suggestedName.Length == 0){
-				Tag tag = MainWindow.Toplevel.Database.Tags.GetTagByName(suggestedName);	
-				face.tag = tag;
+			if(suggestedName != null && suggestedName.Length != 0){
+				Tag tag = MainWindow.Toplevel.Database.Tags.GetTagByName(suggestedName);
+				if(tag ==null ) Log.Debug("Error: Doesn't Found Tag Name"+suggestedName);
+				else  Log.Debug("Found Tag"+tag.Name);
+				face.Tag = tag;
 			}
 			face.autoRecognized = true;
 			FaceSpotDb.Instance.Faces.Commit(face);

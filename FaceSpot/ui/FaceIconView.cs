@@ -67,8 +67,15 @@ namespace FaceSpot
 			this.SelectionMode = SelectionMode.Multiple;
 			
 			UpdateFaces();
+			
+			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
+		}
+
+		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
+		{
+			UpdateFaces();
 		}
 		
 		Tag tag;
@@ -80,11 +87,11 @@ namespace FaceSpot
 		
 		public void UpdateFaces(){
 			Face[] faces = null;
-			Log.Debug("Update Faces");
+			Log.Debug(this.type.ToString() + " : Update Faces");
 			FSpot.Photo photo = null;
 			if(FaceSidebarWidget.Instance != null)
 			photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
-			Log.Debug("Get Faces");
+			//Log.Debug("Get Faces");
 			try {
 				switch (type){
 					case Type.KnownFaceSidebar:

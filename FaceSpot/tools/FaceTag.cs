@@ -24,7 +24,7 @@ namespace FaceSpot
 			this.faceImage = faceImage;			
 		}
 		public FaceTag(Face f){
-			this.tag = f.tag.Name;			
+			this.tag = f.Tag.Name;			
 			this.faceImage = ImageTypeConverter.ConvertPixbufToCVImage(f.iconPixbuf).Convert<Gray, byte>();
 		}
 	}

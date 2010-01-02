@@ -7,6 +7,7 @@ using FSpot.Widgets;
 using FSpot.Utils;
 using FaceSpot;
 using FaceSpot.Db;
+using Banshee.Kernel;
 
 namespace FaceSpot
 {
@@ -36,7 +37,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		//HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
 		public FaceIconView knownFaceIconView,unknownFaceIconView;
-		
+	
 		//PhotoList knownFaceList,unknownFaceList;
 			
 		public SidebarPage Page;
@@ -81,6 +82,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			
 			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
 			mainVBox.PackEnd(detectFaceButton,false,false,0);
+			detectFaceButton.Clicked += DetectFaceButtonClicked;
 			
 			addFaceButton = new Button(manualAddFaceString);
 			mainVBox.PackEnd(addFaceButton,false,false,0);
@@ -102,6 +104,12 @@ public class FaceSidebarWidget : ScrolledWindow {
 			ShowAll();
 		}
 
+		void DetectFaceButtonClicked (object sender, EventArgs e)
+		{
+			if(SelectedItem != null && SelectedItem is Photo)
+				DetectionJob.Create((Photo)SelectedItem,JobPriority.Highest);
+		}
+
 		void AddFaceButtonClicked (object sender, EventArgs e)
 		{
 			Log.Debug ("Add/Edit Face Button Clicked");
@@ -111,17 +119,24 @@ public class FaceSidebarWidget : ScrolledWindow {
 			else if (mode == FaceEditMode.Edit)
 			{
 				EditFace();
-				UpdateFaceIconView();
 			}
 		}
 		
-		public void UpdateFaceIconView(){
-			if(knownFaceIconView != null)
-				knownFaceIconView.UpdateFaces();
-			if(unknownFaceIconView !=null)
-				unknownFaceIconView.UpdateFaces();
-		}
+//		public void UpdateFaceIconView(){
+//			if(knownFaceIconView != null)
+//				knownFaceIconView.UpdateFaces();
+//			if(unknownFaceIconView !=null)
+//				unknownFaceIconView.UpdateFaces();
+//		}
 		
+		public Face SelectedFace{
+			get { 
+				Face face = knownFaceIconView.SelectedFace;
+				if(face==null) face = unknownFaceIconView.SelectedFace;
+				return face;  
+			}		
+		}
+			
 		private void EditFace () {
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
 			if (Rectangle.Zero == view.Selection) {
@@ -129,15 +144,14 @@ public class FaceSidebarWidget : ScrolledWindow {
 				AlertNoMove();
 			}else {
 				view.SelectionXyRatio = 1;
-				Face face = knownFaceIconView.SelectedFace;
-				if(face==null) face = unknownFaceIconView.SelectedFace;
+				Face face =SelectedFace;
 				if(face!=null){
 					face.iconPixbuf = FaceSpotDb.Instance.Faces.GetFacePixbufFromView();
 					FaceSpotDb.Instance.Faces.Commit(face);
 					AlertMove();
-				}else 
+				}
+				else 
 					Log.Exception(new Exception("Bug at EditFace"));
-				
 			}
 			Mode = FaceEditMode.Add;
 		}
@@ -257,7 +271,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 			{
 				ClearPhotoFaces();
 				if( SelectedItem == null)return;
-				
 				//FSpot.Photo photo = (FSpot.Photo) SelectedItem;
 				if(vboxRemoved){
 					//AddWithViewport (mainVBox); 

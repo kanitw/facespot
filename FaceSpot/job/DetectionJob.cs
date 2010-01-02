@@ -1,4 +1,3 @@
-
 using System;
 using FSpot;
 using FSpot.Utils;
@@ -32,16 +31,13 @@ namespace FaceSpot
 		{
 			//if(photo.Id!=202)return false;
 			Log.Debug("Detection Job Called #"+photo.Id + " " + priority.ToString()
-			           +" ("+Scheduler.ScheduledJobsCount+" Job(s) Left");
+			           +" ("+Scheduler.ScheduledJobsCount+" Job(s) Left)");
 			FacePixbufPos[] facesPixbufPos = null;
 			try {
 				facesPixbufPos = FaceDetector.DetectFaceToPixbuf(photo);
 			} catch (Exception ex) {
 				Log.Exception(ex);
-			}			         	
-//			for(int j=0;j<faces.Length;j++)
-//				faces[j].pixbuf.Save("out/job_"+j+photo.Name,"jpeg");
-			
+			}		
 			FaceStore faceStore = FaceSpotDb.Instance.Faces;			
 			Log.Debug("#faces = {0}",facesPixbufPos.Length);
 			List<Face> faces = new List<Face>();

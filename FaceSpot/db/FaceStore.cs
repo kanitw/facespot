@@ -322,15 +322,26 @@ namespace FaceSpot.Db
  		{
 			Commit(new Face[]{item});
 		}
+		
+		public void SetTag(Face face,Tag tag)
+		{
+			face.Tag = tag;
+			ConfirmTag(face);
+		}
+		
 		public void ConfirmTag(Face face)
 		{
 			face.tagConfirmed = true;
 			Commit(face);
+			if(!face.photo.HasTag(face.Tag)){
+				face.photo.AddTag(face.Tag);
+				MainWindow.Toplevel.Database.Photos.Commit(face.photo);
+			}
 		}
 		public void DeclineTag(Face face)
 		{
 			face.tagConfirmed = false;
-			face.tag = null;
+			face.Tag = null;
 			Commit(face);
 		}
 		
@@ -344,9 +355,9 @@ namespace FaceSpot.Db
 					", tag_id = :tag_id, tag_confirm = :tag_confirm,"+
 					"auto_detected = :auto_detected, auto_recognized = :auto_recognized, "+				                                       
 				    "left_x = :left_x, top_y = :top_y,"+
-					"width = :width , photo_md5 = :photo_md5,  icon = :icon  WHERE id= :id",
+					"width = :width , photo_md5 = :photo_md5, icon = :icon  WHERE id= :id",
 						"photo_id", face.photo.Id,
-						"tag_id",face.tag !=null ? (Object) face.tag.Id : null,
+						"tag_id",face.Tag !=null ? (Object) face.Tag.Id : null,
 						"tag_confirm", face.tagConfirmed,
 				        "auto_detected",face.autoDetected,
 				        "auto_recognized",face.autoRecognized,

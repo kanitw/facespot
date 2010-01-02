@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using FaceSpot.Db;
@@ -26,7 +25,6 @@ namespace FaceSpot
 			Scheduler.JobFinished += SchedulerJobFinished;	
 			//Scheduler.JobStarted += SchedulerJobStarted;
 		}
-
 
 		void SchedulerJobFinished (IJob job)
 		{

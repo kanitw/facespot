@@ -60,10 +60,8 @@ namespace FaceSpot
 				Photo p = MainWindow.Toplevel.Database.Photos.Get((uint)(i+201));
 				
 //				FacePixbufPos[] faces = FaceDetector.DetectToPixbuf(p);
-								         	
 //				for(int j=0;j<faces.Length;j++)
 //					faces[j].pixbuf.Save("out/job_"+i+"_"+j+".jpeg","jpeg");
-				
 //				FaceStore faceStore = FaceSpotDb.Instance.Faces;
 //				
 //				foreach(FacePixbufPos f in faces){

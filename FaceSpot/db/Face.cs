@@ -1,4 +1,3 @@
-
 using System;
 using FSpot;
 using Gdk;
@@ -59,7 +58,7 @@ namespace FaceSpot.Db
 		/// <summary>
 		/// 
 		/// </summary>
-		public Tag tag;
+		private Tag tag;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -115,6 +114,13 @@ namespace FaceSpot.Db
 		
 		public string Name {
 			get { return tag==null ? null : tag.Name ; }	
+		}
+
+		public Tag Tag {
+			get {
+				return tag;
+			}
+			set { tag = value;}
 		}
 	}
 }

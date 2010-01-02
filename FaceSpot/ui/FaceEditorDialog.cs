@@ -42,10 +42,8 @@ namespace FaceSpot
 		{
 			//categories
 			Log.Debug("PeopleArrayListCreated");
-			
-			peopleTreeStore = new TreeStore(typeof(String),typeof(Tag));
+			peopleTreeStore = new PeopleTreeStore();
 			//TreeIter iter = peopleTreeStore.AppendValues(People.Tag.Name,People.Tag);
-			PopulatePeopleCategories(peopleTreeStore,People.Tag,TreeIter.Zero,0);
 			peopleComboBoxEntry.Model = peopleTreeStore;
 			
 			peopleComboBoxEntry.Changed += PeopleComboBoxEntryChanged;
@@ -78,19 +76,7 @@ namespace FaceSpot
 			//entryCompletion.Complete();
 		}
 		
-		void PopulatePeopleCategories (TreeStore treeStore ,Tag parent,TreeIter parentIter,int level)
-		{
-			foreach (Tag tag in (parent as Category).Children) {
-				if (tag is Category) {
-					Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
-					TreeIter iter = 
-						(parentIter.Equals(TreeIter.Zero) ?
-						treeStore.AppendValues(tag.Name,/*parent,*/tag):
-							treeStore.AppendValues(parentIter,tag.Name,/*parent,*/tag)) ;
-					PopulatePeopleCategories (treeStore,tag,iter,level+1);
-				}
-			}
-		}
+		
 		#endregion
 
 		protected new string dialog_name = "FaceEditorDialog";
@@ -116,9 +102,9 @@ namespace FaceSpot
 			InitializeEntryCompletion ();
 			PersonErrorLabel.Text = "";
 			
-			if(face.tag != null){
-				Log.Debug("Set Entry's text to Tag "+face.tag.Name);
-				peopleComboBoxEntry.Entry.Text = face.tag.Name;
+			if(face.Tag != null){
+				Log.Debug("Set Entry's text to Tag "+face.Tag.Name);
+				peopleComboBoxEntry.Entry.Text = face.Tag.Name;
 			}else 
 				Log.Debug("No Tag for this face yet"+face.Id);
 			
@@ -145,7 +131,7 @@ namespace FaceSpot
 				HandleOkNewFace ();
 			else
 				HandleOkOldFace ();
-			FaceSidebarWidget.Instance.UpdateFaceIconView();
+			//FaceSidebarWidget.Instance.UpdateFaceIconView();
 			ClearEditor ();
 		}
 		private void HandleOkOldFace ()
@@ -157,7 +143,7 @@ namespace FaceSpot
 			if (peopleComboBoxEntry.ActiveText.Trim ().Length > 0) {
 				if (SelectedTag != null) {
 					Log.Debug ("FaceEditor OK : Found Tag" + peopleComboBoxEntry.ActiveText);
-					face.tag = SelectedTag;
+					FaceSpotDb.Instance.Faces.SetTag(face, SelectedTag);
 				} else {
 					//Create new Tag
 					Log.Debug ("FaceEditor OK : New Tag" + peopleComboBoxEntry.ActiveText);
@@ -165,17 +151,15 @@ namespace FaceSpot
 						People.Category,
 					    peopleComboBoxEntry.ActiveText.Trim (),
 						true);                        
-					face.tag = cat;
+					FaceSpotDb.Instance.Faces.SetTag(face, cat);
 				}
-				if(face.tag.Icon == null){
-					face.tag.Icon = face.iconPixbuf;
-					MainWindow.Toplevel.Database.Tags.Commit(face.tag);
+				if(face.Tag.Icon == null){
+					face.Tag.Icon = face.iconPixbuf;
+					MainWindow.Toplevel.Database.Tags.Commit(face.Tag);
 				}
-				face.tagConfirmed = true;
-				FaceSpotDb.Instance.Faces.Commit(face);
 			} else {
 				Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
-				if(face.tag != null){
+				if(face.Tag != null){
 					FaceSpotDb.Instance.Faces.DeclineTag(face);
 				}
 			}
