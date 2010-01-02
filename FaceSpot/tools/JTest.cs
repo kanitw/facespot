@@ -28,7 +28,7 @@ namespace FaceSpot
 		/// Face Detection Tester
 		/// </summary>
 		public static void Main(string[] arg){
-			
+			//TestDetect();
 			//Assembly _assembly = Assembly.GetExecutingAssembly();
 			
 			//Stream _xmlStream = _assembly.GetManifestResourceStream("FaceSpot.tools.haarcascade.haarcascadde_eye.xml");			
@@ -66,8 +66,8 @@ namespace FaceSpot
 		static void TestDetect ()
 		{
 			string[] testSet = {
-				"cp33",
 				"girlgen",
+				"cp33",				
 				"girlgen2",
 				"cp33all"
 			};
@@ -80,7 +80,7 @@ namespace FaceSpot
 				int sec = DateTime.Now.Second;
 				//Image<Bgr, Byte> aaa = new Image<Bgr, Byte> (testPath + s + ".jpg");
 				
-				FaceImagePos[] faceImagePos = FaceDetector.Detect (new Image<Bgr, Byte> (testPath + s + ".jpg"));
+				FaceImagePos[] faceImagePos = FaceDetector.DetectFace (new Image<Bgr, Byte> (testPath + s + ".jpg"));
 				Image<Bgr, Byte>[] testDetect = new Image<Bgr, Byte>[faceImagePos.Length];
 				for(int i=0;i<faceImagePos.Length;i++)
 					testDetect[i] = faceImagePos[i].image;

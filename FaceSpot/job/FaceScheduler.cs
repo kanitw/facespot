@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using FaceSpot.Db;
@@ -54,8 +53,6 @@ namespace FaceSpot
 				//DetectionJob job = 
 					DetectionJob.Create(photo);
 			}
-			
-			
 		}
 	}
 }

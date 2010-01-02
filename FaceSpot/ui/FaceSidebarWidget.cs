@@ -7,11 +7,12 @@ using FSpot.Widgets;
 using FSpot.Utils;
 using FaceSpot;
 using FaceSpot.Db;
+using Banshee.Kernel;
 
 namespace FaceSpot
 {
-
-//TODO Add Checkbox to Show Rectangle	
+	
+//TODO Add Checkbox to Show Rectangle
 	
 public class FaceSidebarWidget : ScrolledWindow {
 		static FaceSidebarWidget instance;
@@ -23,21 +24,19 @@ public class FaceSidebarWidget : ScrolledWindow {
 			Add,
 			Edit
 		}
-	//	Delay updateDelay;
+		//	Delay updateDelay;
 		
 		VBox mainVBox;//,faceVBox;
 		VPaned faceVPane;
 		Button addFaceButton;
 		Button detectFaceButton;
-	
 		Label pleaseSelectPictureLabel;
 		
 		Expander knownFaceExpander, unknownFaceExpander;
 		//HandleBox faceHandleBox;
 		ScrolledWindow knownFaceScrolledWindow, unknownFaceScrolledWindow;
 		public FaceIconView knownFaceIconView,unknownFaceIconView;
-		
-		
+	
 		//PhotoList knownFaceList,unknownFaceList;
 			
 		public SidebarPage Page;
@@ -49,8 +48,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 			instance = this;
 			
 			mainVBox = new VBox();
-			//mainVBox.Spacing = 6;
-			//faceVBox = new VBox();
 			faceVPane = new VPaned();
 			
 			pleaseSelectPictureLabel = new Label ();
@@ -82,6 +79,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			
 			detectFaceButton = new Button(Catalog.GetString("Re-Detect Face From This Picture"));
 			mainVBox.PackEnd(detectFaceButton,false,false,0);
+			detectFaceButton.Clicked += DetectFaceButtonClicked;
 			
 			addFaceButton = new Button(manualAddFaceString);
 			mainVBox.PackEnd(addFaceButton,false,false,0);
@@ -94,13 +92,18 @@ public class FaceSidebarWidget : ScrolledWindow {
 			unknownFaceExpander.ResizeMode = ResizeMode.Parent;
 			Log.Debug("HeightR");
 			
-			
 			ShadowType = ShadowType.None;
 			BorderWidth = 0;
 			//AddWithViewport(pleaseSelectPictureLabel);
 			AddWithViewport (mainVBox);
 			//mainVBox.Visible = false;
 			ShowAll();
+		}
+
+		void DetectFaceButtonClicked (object sender, EventArgs e)
+		{
+			if(SelectedFace != null)
+				DetectionJob.Create(SelectedFace.photo,JobPriority.Highest);
 		}
 
 		void AddFaceButtonClicked (object sender, EventArgs e)
@@ -112,8 +115,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 			else if (mode == FaceEditMode.Edit)
 			{
 				EditFace();
-				//UpdateFaceIconView();
-				
 			}
 		}
 		
@@ -124,6 +125,14 @@ public class FaceSidebarWidget : ScrolledWindow {
 //				unknownFaceIconView.UpdateFaces();
 //		}
 		
+		public Face SelectedFace{
+			get { 
+				Face face = knownFaceIconView.SelectedFace;
+				if(face==null) face = unknownFaceIconView.SelectedFace;
+				return face;  
+			}		
+		}
+			
 		private void EditFace () {
 			PhotoImageView view = MainWindow.Toplevel.PhotoView.View;
 			if (Rectangle.Zero == view.Selection) {
@@ -131,15 +140,14 @@ public class FaceSidebarWidget : ScrolledWindow {
 				AlertNoMove();
 			}else {
 				view.SelectionXyRatio = 1;
-				Face face = knownFaceIconView.SelectedFace;
-				if(face==null) face = unknownFaceIconView.SelectedFace;
+				Face face =SelectedFace;
 				if(face!=null){
 					face.iconPixbuf = FaceSpotDb.Instance.Faces.GetFacePixbufFromView();
 					FaceSpotDb.Instance.Faces.Commit(face);
 					AlertMove();
-				}else 
+				}
+				else 
 					Log.Exception(new Exception("Bug at EditFace"));
-				
 			}
 			Mode = FaceEditMode.Add;
 		}
@@ -214,7 +222,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 			}
 		}
 
-		
 		public void HandleSelectionChanged (IBrowsableCollection collection) {
 			Log.Debug("Face Sidebar Handle Selection Change");
 			if (collection != null && collection.Count == 1)
@@ -259,7 +266,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 			{
 				ClearPhotoFaces();
 				if( SelectedItem == null)return;
-				
 				//FSpot.Photo photo = (FSpot.Photo) SelectedItem;
 				if(vboxRemoved){
 					//AddWithViewport (mainVBox); 

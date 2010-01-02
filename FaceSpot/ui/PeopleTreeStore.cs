@@ -7,7 +7,6 @@ using FSpot.Utils;
 namespace FaceSpot
 {
 	//TODO Consider whether to Add On Tag Change / Removed Handler
-	
 	/// <summary>
 	/// Create A Tree Store That has all people in itself
 	/// </summary>
