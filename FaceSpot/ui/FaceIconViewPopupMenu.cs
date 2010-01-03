@@ -19,13 +19,24 @@ namespace FaceSpot
 		FaceIconView iconView;
 		public FaceIconViewPopupMenu () : base(){}
 		
+		private bool IsAllSelectionSuggested(){
+			if(SelectedFaces == null || SelectedFaces.Length == 0) return false;
+			foreach (Face face in SelectedFaces)
+			{
+				if(face.tagConfirmed  || face.Tag == null) return false;
+			}
+			return true;
+		}
+		
 		public void Activate(Gdk.EventButton eb, 
 		                     //Face face, Face[] faces,
 		                     FaceIconView iconView)
 		{
 			//this.face = face; this.faces= faces; 
 			this.iconView = iconView;
-			if(iconView.type == FaceIconView.Type.SuggestedFaceBrowser){
+			if(iconView.type == FaceIconView.Type.SuggestedFaceBrowser
+			   || IsAllSelectionSuggested()
+			   ){
 				GtkUtil.MakeMenuItem(this,"Confirm Person",new EventHandler(ConfirmActivated),SelectedFaces.Length>0);
 				GtkUtil.MakeMenuItem(this,"Decline Person",new EventHandler(DeclineActivated),SelectedFaces.Length>0);
 				GtkUtil.MakeMenuSeparator(this);
@@ -45,8 +56,8 @@ namespace FaceSpot
 			
 			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
 			PopulatePeopleCategories (ChangePersonTo,People.Tag);
-//			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);	
-//			MakeTagMenuItem((Menu)ChangePersonTo.Submenu,null,true);
+			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
+			GtkUtil.MakeMenuItem((Menu)ChangePersonTo.Submenu,"-", new EventHandler(ChangePersonToNoOneActivated));
 			
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),
@@ -83,6 +94,13 @@ namespace FaceSpot
 			//iconView.SelectedFace = face;
 			//FaceEditorDialog dialog = 
 				new FaceEditorDialog ( iconView.SelectedFace,this.Toplevel,false);
+		}
+		void ChangePersonToNoOneActivated (object sender, EventArgs e)
+		{
+			if(SelectedFaces == null) return;
+			foreach (Face face in SelectedFaces){
+				FaceSpotDb.Instance.Faces.DeclineTag(face);
+			}
 		}
 
 		void DeleteActivated (object sender, EventArgs e)
