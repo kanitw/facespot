@@ -47,9 +47,11 @@ namespace FaceSpot.Db
 			Database.BeginTransaction();
 		}
 		public void RollbackTransaction(){
+			if(Database.InTransaction)
 			Database.RollbackTransaction();	
 		}
 		public void CommitTransaction(){
+			if(Database.InTransaction)
 			Database.CommitTransaction();	
 		}
 		
