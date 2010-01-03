@@ -153,10 +153,7 @@ namespace FaceSpot
 						true);                        
 					FaceSpotDb.Instance.Faces.SetTag(face, cat);
 				}
-				if(face.Tag.Icon == null){
-					face.Tag.Icon = face.iconPixbuf;
-					MainWindow.Toplevel.Database.Tags.Commit(face.Tag);
-				}
+				
 			} else {
 				Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
 				if(face.Tag != null){

@@ -28,7 +28,7 @@ namespace FaceSpot
 			
 			float[][] eigenMatrix = new float[nums_train][];						    
 			
-			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/5);
+			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/2);
 	         
 			for(int i=0;i<nums_train;i++){
 				
@@ -46,6 +46,9 @@ namespace FaceSpot
 			return eigenValueTags;
 		}				
 			
+		//fix me
+		//public static EigenObjectRecognizer processedEigen;
+		
 		/// <summary>
 		/// Process PCA and save a serialized recognizer in specified savepath
 		/// </summary>
@@ -68,7 +71,7 @@ namespace FaceSpot
 			List<string> train_labelsList = new List<string>();
 			 					
 			// input in this stage is faces (List of FaceTag)
-			Log.Debug("total faces to be detected = "+ numsFaces);
+			//Log.Debug("total faces to be detected = "+ numsFaces);
 				
 			// load faces from detected data			
 			int i = 0;
@@ -97,8 +100,9 @@ namespace FaceSpot
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
 			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,7500,ref crit);
 
+			//processedEigen = eigenRec;
 			// Serialize
-			SerializeUtil.Serialize("/home/hyperjump/eigenRec", eigenRec);			
+			SerializeUtil.Serialize("/home/hyperjump/eigenRec.dat", eigenRec);			
 			
 			// save recognized data into file of eigen value and into EigenValueTags class								
 			EigenValueTags eigenVtags = RecordEigenValue(eigenRec);															

@@ -32,11 +32,17 @@ namespace FaceSpot
 			LoadTrainedNetwork();
 		}
 		
-		public void Classify(Face face){										                
+		public void Classify(Face face){
+			//fix these two lines			
+			LoadEigenRecognizer();
+			LoadTrainedNetwork();
+			
 			Log.Debug("Classify called - {0}",face.Id);
 			float[] eigenValue = eigenRec.GetEigenDistances(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
 			
+			Log.Debug("eigenValue.Length = {0}", eigenValue.Length);
 			int inputNodes = bpnet.InputLayer.NeuronCount;
+			Log.Debug("bpnet.InputLayer.NeuronCount = {0}", bpnet.InputLayer.NeuronCount);
 			double[] v = new double[inputNodes];
 					
 			//fixme - this is slow
@@ -63,8 +69,15 @@ namespace FaceSpot
 				Tag tag = MainWindow.Toplevel.Database.Tags.GetTagByName(suggestedName);
 				if(tag ==null ) Log.Debug("Error: Doesn't Found Tag Name"+suggestedName);
 				else  Log.Debug("Found Tag"+tag.Name);
-				face.Tag = tag;
-				Log.Debug("Classify Face#"+face.Id+" Finished : ="+suggestedName+"?");
+				
+				if(!face.HasRejected(tag)){
+					Log.Debug("Classify Face#"+face.Id+" Finished : ="+suggestedName+"?");
+					face.Tag = tag;
+				}
+				else 
+					Log.Debug("Unfortunately Face#"+face.Id+" has already rejected ="+suggestedName+"!");
+				
+				
 			}else 
 				Log.Debug("Classify Face#"+face.Id+" Finished - No suggestions");
 			face.autoRecognized = true;
@@ -97,8 +110,8 @@ namespace FaceSpot
 				}
 			}	
 			Log.Debug("AnalyseNetwork... max = "+max);
-			if(max < 0.75)
-				return null;
+//			if(max < 0.75)
+//				return null;
 			
 			string[] labels = eigenVTags.FacesLabel;
 			
@@ -109,7 +122,7 @@ namespace FaceSpot
 			Log.Debug("LoadTrainedNetwork called...");
 			//fixme 
 			//change loading method					
-			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
+			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
 			//bpnet = FaceTrainer.bpnet;
 		}
 		
@@ -117,7 +130,8 @@ namespace FaceSpot
 			Log.Debug("LoadEigenRecognizer called...");
 			//fixme			
 			//change loading method
-			//eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec.dat");						
+			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec.dat");						
+			//eigenRec = EigenRecogizer.processedEigen;
 		}
 		
 	}	
