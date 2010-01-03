@@ -131,6 +131,7 @@ namespace FaceSpot.Db
 				    " 	photo_md5 STRING NOT NULL, \n"+
 					"	time INTEGER NOT NULL \n,"+
 					"   icon TEXT NULL"+
+				    " UNIQUE (photo_id, left_x,top_y,width)"+                     
 					")"  );
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
 				Log.Exception(ex);	
@@ -397,6 +398,10 @@ namespace FaceSpot.Db
 		{
 			face.Tag = tag;
 			ConfirmTag(face);
+			if(face.Tag.Icon == null){
+					face.Tag.Icon = face.iconPixbuf;
+					MainWindow.Toplevel.Database.Tags.Commit(face.Tag);
+			}
 		}
 		
 		public void ConfirmTag(Face face)

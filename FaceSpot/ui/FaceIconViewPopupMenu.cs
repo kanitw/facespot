@@ -141,7 +141,7 @@ namespace FaceSpot
 		public Tag tag;
 		FaceIconViewPopupMenu menu;
 		public PersonMenuItem(FaceIconViewPopupMenu menu,Tag tag,bool force_enabled) 
-			: base(tag != null ? tag.Name : "-" )
+			: base((tag != null ? tag.Name : "-" )+"label")
 		{
 			if(tag !=null && tag.Icon != null){
 				Image = new Image(tag.Icon);

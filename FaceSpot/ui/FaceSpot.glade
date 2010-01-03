@@ -222,7 +222,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <widget class="GtkHBox" id="hbox1">
-                            <property name="height_request">20</property>
+                            <property name="height_request">30</property>
                             <property name="visible">True</property>
                             <child>
                               <widget class="GtkLabel" id="label7">
