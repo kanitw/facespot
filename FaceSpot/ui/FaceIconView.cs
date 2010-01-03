@@ -45,12 +45,12 @@ namespace FaceSpot
 			switch (type){
 				case Type.KnownFaceSidebar:
 				case Type.UnknownFaceSidebar :
-					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face));
+					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(string));
 					break;
 				case Type.KnownFaceBrowser:
 				case Type.SuggestedFaceBrowser:
 				case Type.UnknownFaceBrowser:
-					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(Pixbuf));
+					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(string),typeof(Pixbuf));
 					break;
 			}
 			this._type = type;
@@ -60,6 +60,7 @@ namespace FaceSpot
 			this.Model =  listStore;
 			this.TextColumn = 0;
 			this.PixbufColumn =1;
+			this.TooltipColumn = 3;
 			//this.
 			this.ButtonPressEvent += HandleButtonPressEvent;
 			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
@@ -125,11 +126,12 @@ namespace FaceSpot
 			foreach (Face face in faces) {
 				//Log.Debug ("Append Face#" + (i++) + "  ");
 				if (face != null) {
-					string name = face.Name == null ? "? : #"+face.Id.ToString () : face.Name;
+					string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
+					string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
 					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 					if (pixbuf == null)
 						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
-					listStore.AppendValues (name, pixbuf, face);
+					listStore.AppendValues (name, pixbuf, face,nameWithIdIfUnknown);
 				} else
 					Log.Exception (new Exception ("Allowed null Face input to the faceiconview"));
 			}
@@ -158,7 +160,6 @@ namespace FaceSpot
 //					TreePath path = listStore.GetPath(iter);
 //					if(path!=null)
 //						this.SelectPath(path);
-//					
 //				}
 				List<Face> list = new List<Face>();
 				list.Add(value);

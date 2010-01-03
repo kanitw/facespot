@@ -111,10 +111,10 @@ namespace FaceSpot
 			if( (parent as Category).Children.Count > 0 )
 			{
 				menu.Submenu = new Menu();
-				//if (parent != People.Tag){
+				if (parent != People.Tag){
 					ImageMenuItem item = MakeTagMenuItem((Menu)menu.Submenu,parent,true);
 					GtkUtil.MakeMenuSeparator((Menu)menu.Submenu);
-				//}
+				}
 			}
 			foreach (Tag tag in (parent as Category).Children) {
 				if (tag is Category) {
@@ -141,13 +141,14 @@ namespace FaceSpot
 		public Tag tag;
 		FaceIconViewPopupMenu menu;
 		public PersonMenuItem(FaceIconViewPopupMenu menu,Tag tag,bool force_enabled) 
-			: base(tag != null ? tag.Name : "-" ){
+			: base(tag != null ? tag.Name : "-" )
+		{
 			if(tag !=null && tag.Icon != null){
 				Image = new Image(tag.Icon);
 			}	
 			if(force_enabled ||( tag as Category).Children.Count == 0)
 				this.Activated += new EventHandler(ApplyPerson);
-			Sensitive = force_enabled;
+			Sensitive = true;
 			this.tag = tag;
 			this.menu = menu;
 		}

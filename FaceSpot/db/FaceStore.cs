@@ -23,9 +23,14 @@ namespace FaceSpot.Db
 			MainWindow.Toplevel.Database.Tags.ItemsRemoved += MainWindowToplevelDatabaseTagsItemsRemoved;
 			MainWindow.Toplevel.Database.Tags.ItemsChanged += MainWindowToplevelDatabaseTagsItemsChanged;
 			
-			if ( ! is_new && Database.TableExists("faces")) return;
-			Log.Debug("Facestore Db Init");
-			InitTable();
+			if ( is_new || !Database.TableExists("faces")) {
+				Log.Debug("Facestore Db Init");
+				InitFaceTable();
+			}
+			if( is_new || !Database.TableExists("facenotags")){
+				InitFaceNoTagTable();
+					
+			}
 		}
 
 		void MainWindowToplevelDatabaseTagsItemsChanged (object sender, DbItemEventArgs<Tag> e)
@@ -93,7 +98,22 @@ namespace FaceSpot.Db
 			}
 		}
 		
-		void InitTable(){
+		void InitFaceNoTagTable(){
+			try {
+				Database.ExecuteNonQuery(
+					"CREATE TABLE facenotags(\n"+
+				    "	face_id INTEGER NOT NULL,\n"+
+				   	"   tag_id INTEGER NOT NULL, \n"+
+				   	"   UNIQUE (face_id, tag_id) \n"+
+				    ")"                     );
+			}
+			catch (Exception ex)
+			{
+				Log.Exception(ex);	
+			}
+		}
+		
+		void InitFaceTable(){
 		//Add Database Initialization
 			try{
 				Database.ExecuteNonQuery(
@@ -246,7 +266,7 @@ namespace FaceSpot.Db
 			return AddFacesFromReaderToCache(reader);
 		}
 		public Face[] GetNotRecognizedFace(){
-			return GetUntaggedFace("AND auto_recognized = 0");
+			return GetUntaggedFace("AND auto_recognized = 0 AND tag_confirm = 0");
 		}
 		public Face CreateFaceFromView (Photo photo, uint leftX, uint topY, uint width)
 		{
@@ -254,6 +274,56 @@ namespace FaceSpot.Db
 			Log.Debug("Face: Creating Pixbuf From View");
 			Pixbuf pixbuf = GetFacePixbufFromView ();
 			return CreateFace(photo,leftX,topY,width,pixbuf,null,false,false,false);
+		}
+		
+		internal List<Tag> GetRejectedTag(Face face){
+			SqliteDataReader reader = Database.Query (
+					new DbCommand ("SELECT tag_id " +
+				       "FROM facenotags " + 
+				       "WHERE face_id = :face_id ",
+				       "face_id", face.Id
+					)
+				);
+				List<Tag> notags = new List<Tag> ();
+				while (reader.Read ()) {
+					Tag tag = MainWindow.Toplevel.Database.Tags.Get(Convert.ToUInt32( reader["tag_id"]));
+					if(tag!=null)
+						notags.Add (tag);
+				}
+				reader.Close ();
+				return notags;
+		}
+		
+		public void AddRejectedTag(Face face,Tag tag){
+			if(face==null || tag == null)return;
+			if(face.HasRejected(tag))return;
+			try {
+				DbCommand dbcom= new	DbCommand(
+					"INSERT INTO facenotags (face_id,tag_id) " +
+				    "VALUES (:face_id,:tag_id)",
+				     "face_id",face.Id,
+				     "tag_id",tag.Id);
+				Database.Execute ( dbcom);
+				face.RejectedTagList.Add(tag);
+			}catch (Exception ex){
+				Log.Exception(ex);
+			}
+		}
+		
+		public void RemoveRejectedTag(Face face,Tag tag){
+			if(face==null || tag == null)return;
+			if(!face.HasRejected(tag))return;
+			try {
+				DbCommand dbcom = new DbCommand (
+						"DELETE FROM facenotags WHERE face_id = :face_id , tag_id = :tag_id ",
+						":face_id", face.Id,
+				        ":tag_id", tag.Id 
+				        );
+				Database.Execute (dbcom	);
+				face.RejectedTagList.Remove(tag);
+			} catch (Exception ex) {
+				Log.Exception(ex);
+			}
 		}
 
 		public Pixbuf GetFacePixbufFromView ()
@@ -340,7 +410,12 @@ namespace FaceSpot.Db
 		}
 		public void DeclineTag(Face face)
 		{
+			Log.Debug("Declining Face#"+face.Id);
 			face.tagConfirmed = false;
+			if(face.Tag !=null)
+				AddRejectedTag(face,face.Tag);
+			else 
+				Log.Debug("Decline Null Tag!!");
 			face.Tag = null;
 			Commit(face);
 		}

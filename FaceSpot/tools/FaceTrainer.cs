@@ -11,6 +11,7 @@ namespace FaceSpot
 
 	public class FaceTrainer
 	{				
+		public static BackpropagationNetwork bpnet;
 		
 		public static void Train(Face[] faces){
 			TrainNetwork(EigenRecogizer.ProcessPCA(faces));
@@ -82,7 +83,7 @@ namespace FaceSpot
 			input_hidden.Momentum = 0.3;
 			hidden_output.Momentum = 0.3;
 			
-			BackpropagationNetwork bpnet = new BackpropagationNetwork(inputLayer,outputlayer);
+			bpnet = new BackpropagationNetwork(inputLayer,outputlayer);
 			TrainingSet tset = new TrainingSet(inputNodes, outputNodes);			
 			for(int i=0;i<numstrain;i++)
 				tset.Add(new TrainingSample(trainInputD[i], trainOutputD[i]));
@@ -95,25 +96,40 @@ namespace FaceSpot
 			bpnet.SetLearningRate(0.2);
 			bpnet.Learn(tset, numEpoch);
 						
+			Log.Debug("error = {0}",bpnet.MeanSquaredError);
+			
 //			string savepath = facedbPath + "object/";
 //			if(!Directory.Exists(savepath))
 //				Directory.CreateDirectory(savepath);
 			
 			// Serialize
 			SerializeUtil.Serialize("/home/hyperjump/nn.dat", bpnet);
-			// Deserialize
-			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
+			bpnet = null;
 			
+			
+			// Deserialize
+			BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
+			Log.Debug("error = {0}",testnet.MeanSquaredError);
+			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
+			//Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			// test by using training data
 			int correct = 0;			
 			for(int i=0;i<numInstances;i++){
 				
 				double[] v = new double[inputNodes];
-				for(int j=0;j<v.Length;j++)
+				for(int j=0;j<v.Length;j++){
 					v[j] = (double)eigen.eigenTaglist[i].val[j];
+					Console.Write("{0},",v[j]);
+				}								                                       	
+				Console.WriteLine();
+			
+				double[] netOutput = testnet.Run(v);
+				Console.WriteLine("net out:");
+				for(int j=0;j<netOutput.Length;j++)
+					Console.Write("{0},",netOutput[j]);
 				
-				string result = FaceClassifier.AnalyseNetworkOutput(eigen, bpnet.Run(v));
-				if(result.Equals(eigen.eigenTaglist[i].tag))
+				string result = FaceClassifier.AnalyseNetworkOutput(eigen, netOutput);
+				if(eigen.eigenTaglist[i].tag.Equals(result))
 					correct++;				
 			}
 			Log.Debug("% correct = " + (float)correct/(float)numInstances * 100);

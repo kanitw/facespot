@@ -3,6 +3,8 @@ using FSpot;
 using Gdk;
 using FSpot.Widgets;
 using FSpot.Utils;
+using System.Collections;
+using System.Collections.Generic;
 	
 namespace FaceSpot.Db
 {
@@ -59,6 +61,8 @@ namespace FaceSpot.Db
 		/// 
 		/// </summary>
 		private Tag tag;
+		//private Tag[] rejectedTag;
+		private List<Tag> rejectedTag;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -113,14 +117,39 @@ namespace FaceSpot.Db
 		}
 		
 		public string Name {
-			get { return tag==null ? null : tag.Name ; }	
+			get { return tag==null ? null : tag.Name + (tagConfirmed ? "" : "?") ; }	
 		}
 
 		public Tag Tag {
 			get {
 				return tag;
 			}
-			set { tag = value;}
+			set { 
+				tag = value;
+				FaceSpotDb.Instance.Faces.RemoveRejectedTag(this,tag);
+			}
+		}
+		
+		internal List<Tag> RejectedTagList {
+			get {
+				if(rejectedTag == null){
+					rejectedTag = FaceSpotDb.Instance.Faces.GetRejectedTag(this);	
+				}
+				return rejectedTag;
+			}
+		}
+		
+		public Tag[] RejectedTag{
+			get {
+				List<Tag> list = RejectedTagList;
+				
+				if(list!=null) return list.ToArray();
+				return new Tag[]{};
+			}
+		}
+		
+		public bool HasRejected(Tag tag){
+			return RejectedTagList.Contains(tag);
 		}
 	}
 }
