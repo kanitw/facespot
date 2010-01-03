@@ -23,11 +23,19 @@ namespace FaceSpot
 		private FaceScheduler ()
 		{
 			Scheduler.JobFinished += SchedulerJobFinished;	
+			//Scheduler.J
+			MainWindow.Toplevel.Database.Photos.ItemsAdded += MainWindowToplevelDatabasePhotosItemsAdded;
 			//Scheduler.JobStarted += SchedulerJobStarted;
+		}
+
+		void MainWindowToplevelDatabasePhotosItemsAdded (object sender, DbItemEventArgs<Photo> e)
+		{
+			Execute();
 		}
 
 		void SchedulerJobFinished (IJob job)
 		{
+			Log.Debug("Scheduler Job Finished");
 			if( job is DetectionJob){
 				DetectionJob dJob = (DetectionJob) job;
 				Log.Debug("DJob Finished Event "+dJob.JobOptions);
@@ -46,8 +54,11 @@ namespace FaceSpot
 		public void Execute(){
 			if(Scheduler.ScheduledJobsCount == 0)
 			{
+				Log.Debug("No Job Try to Add New Job !!");
 				//MainWindow.Toplevel.PhotoView.
 				QueueAnyUncheckedPhoto();	
+			}else {
+				
 			}
 		}
 		const int QUEUE_ENTRY_LIMIT = 5;

@@ -12,7 +12,7 @@ namespace FaceSpot
 
 	public class FaceClassifier
 	{
-		private double[] v;
+		
 		private BackpropagationNetwork bpnet;
 		private EigenObjectRecognizer eigenRec;
 		private static FaceClassifier instance;		
@@ -33,27 +33,43 @@ namespace FaceSpot
 		}
 		
 		public void Classify(Face face){										                
+			Log.Debug("Classify called - {0}",face.Id);
 			float[] eigenValue = eigenRec.GetEigenDistances(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
 			
 			int inputNodes = bpnet.InputLayer.NeuronCount;
-			v = new double[inputNodes];
+			double[] v = new double[inputNodes];
 					
 			//fixme - this is slow
 			EigenValueTags eigenVTags = EigenRecogizer.RecordEigenValue(eigenRec);
 						
-			for(int j=0;j<inputNodes;j++)
+			for(int j=0;j<inputNodes;j++){
 				v[j] = (double)eigenValue[j];				                                       		
+				Console.Out.Write("{0},",v[j]);
+			}
+			Console.WriteLine();
 			
-			string suggestedName = FaceClassifier.AnalyseNetworkOutput(eigenVTags, bpnet.Run(v));							
+			Console.WriteLine("network output:");
+			Log.Debug("mean sqr error = {0}",bpnet.MeanSquaredError);
+			double[] output = bpnet.Run(v);
+			
+			for(int j=0;j<output.Length;j++)
+				Console.Write("{0},",output[j]);
+			Console.WriteLine();
+			string suggestedName = FaceClassifier.AnalyseNetworkOutput(eigenVTags, output);			
+			
+			Log.Debug("no suggestion - id = {0}, name = {0}",face.Id, face.Name);
+			
 			if(suggestedName != null && suggestedName.Length != 0){
 				Tag tag = MainWindow.Toplevel.Database.Tags.GetTagByName(suggestedName);
 				if(tag ==null ) Log.Debug("Error: Doesn't Found Tag Name"+suggestedName);
 				else  Log.Debug("Found Tag"+tag.Name);
 				face.Tag = tag;
-			}
+				Log.Debug("Classify Face#"+face.Id+" Finished : ="+suggestedName+"?");
+			}else 
+				Log.Debug("Classify Face#"+face.Id+" Finished - No suggestions");
 			face.autoRecognized = true;
 			FaceSpotDb.Instance.Faces.Commit(face);
-			Log.Debug("Classify Face#"+face.Id+" Finished : ="+suggestedName+"?");
+			
 			
 		}
 		
@@ -79,22 +95,29 @@ namespace FaceSpot
 					maxIndex = i;
 					max = f[i];
 				}
-			}									
+			}	
+			Log.Debug("AnalyseNetwork... max = "+max);
+			if(max < 0.75)
+				return null;
+			
 			string[] labels = eigenVTags.FacesLabel;
 			
 			return labels[maxIndex];
 		}
 		
 		private void LoadTrainedNetwork(){
+			Log.Debug("LoadTrainedNetwork called...");
 			//fixme 
-			//change loading method
-			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");			
+			//change loading method					
+			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
+			bpnet = FaceTrainer.bpnet;
 		}
 		
 		private void LoadEigenRecognizer(){
+			Log.Debug("LoadEigenRecognizer called...");
 			//fixme			
 			//change loading method
-			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec");						
+			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec.dat");						
 		}
 		
 	}	
