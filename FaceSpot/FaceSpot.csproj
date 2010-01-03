@@ -89,7 +89,6 @@
     <Compile Include="ui\PeopleTreeView.cs" />
     <Compile Include="tools\FaceDetector.cs" />
     <Compile Include="tools\JTest.cs" />
-    <Compile Include="ui\FaceOverlay.cs" />
     <Compile Include="job\DetectionJob.cs" />
     <Compile Include="job\RecognitionJob.cs" />
     <Compile Include="db\FaceJobStore.cs" />
