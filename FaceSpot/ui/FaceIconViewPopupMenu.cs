@@ -119,8 +119,8 @@ namespace FaceSpot
 				uint timer = Log.DebugTimerStart ();
 				
 				FaceSpotDb.Instance.Faces.Remove(SelectedFaces);
-				//TODO Decide whether UpdateQuery is the appropriate command
-				MainWindow.Toplevel.UpdateQuery ();
+				//TODO Decide whether UpdateQuery is the appropriate command - I Think it's not - next time u can remove this 2 lines
+				//MainWindow.Toplevel.UpdateQuery ();
 				Log.DebugTimerPrint (timer, "HandleDeleteCommand took {0}");
 			}
 		}

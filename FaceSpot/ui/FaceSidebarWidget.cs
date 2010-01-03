@@ -11,9 +11,7 @@ using Banshee.Kernel;
 
 namespace FaceSpot
 {
-
 //TODO Add Checkbox to Show Rectangle	
-	
 public class FaceSidebarWidget : ScrolledWindow {
 		static FaceSidebarWidget instance;
 		FaceEditMode mode = FaceEditMode.Add;
@@ -107,7 +105,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		void DetectFaceButtonClicked (object sender, EventArgs e)
 		{
 			if(SelectedItem != null && SelectedItem is Photo)
-				DetectionJob.Create((Photo)SelectedItem,JobPriority.Highest);
+				DetectionJob.Create((Photo)SelectedItem,JobPriority.AboveNormal);
 		}
 
 		void AddFaceButtonClicked (object sender, EventArgs e)
@@ -225,7 +223,6 @@ public class FaceSidebarWidget : ScrolledWindow {
 				}
 			}
 		}
-
 		
 		public void HandleSelectionChanged (IBrowsableCollection collection) {
 			Log.Debug("Face Sidebar Handle Selection Change");

@@ -99,6 +99,12 @@ namespace FaceSpot
 						knownFaceIconView.IsShowFullImage =isShowFullImage;
 						unknownFaceIconView.IsShowFullImage = isShowFullImage;
 						suggestFaceIconView.IsShowFullImage = isShowFullImage;
+						if(MainNotebook.Page == KnownFacePage){
+							knownFaceIconView.UpdateFaces();
+							suggestFaceIconView.UpdateFaces();
+						}else{
+							unknownFaceIconView.UpdateFaces();
+						}
 					}
 				}		
 		void ToggleImageFaceButtonToggled (object sender, EventArgs e)

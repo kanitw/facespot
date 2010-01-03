@@ -12,6 +12,7 @@
         <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="menubar1">
+            <property name="width_request">800</property>
             <property name="visible">True</property>
             <child>
               <widget class="GtkMenuItem" id="menuitem2">
@@ -256,11 +257,14 @@
                                 <property name="icon_size">1</property>
                                 <child>
                                   <widget class="GtkToolButton" id="SuggestionLabel">
+                                    <property name="width_request">400</property>
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Choose Each Pictture To Confirm Whether It is correct Suggestion</property>
+                                    <property name="sensitive">False</property>
+                                    <property name="is_important">True</property>
+                                    <property name="label" translatable="yes">Choose Each Picture To Confirm Whether It Is Correct Suggestion</property>
                                   </widget>
                                   <packing>
-                                    <property name="expand">False</property>
+                                    <property name="expand">True</property>
                                     <property name="homogeneous">True</property>
                                   </packing>
                                 </child>
@@ -290,7 +294,7 @@
                                     <property name="visible">True</property>
                                     <property name="is_important">True</property>
                                     <property name="use_underline">True</property>
-                                    <property name="stock_id">gtk-close</property>
+                                    <property name="stock_id">gtk-no</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>

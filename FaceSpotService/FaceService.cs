@@ -30,17 +30,7 @@ namespace FaceSpot
 			md.Run ();
 			md.Destroy ();
 			
-			//fix me here, now do a training process every time
-			FaceStore faceStore = FaceSpotDb.Instance.Faces;
-			Face[] faces = faceStore.GetAllFaces();			
-			List<Face> faceList = new List<Face>();			
-			
-			foreach(Face f in faces){
-				if(f.tagConfirmed)
-					faceList.Add(f);
-			}	
-			if(faceList.Count>0)
-				FaceTrainer.Train(faceList.ToArray());
+			TrainingJob.Create();
 			
 			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");

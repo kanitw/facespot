@@ -72,6 +72,10 @@ namespace FaceSpot
 			Log.Debug("New Face IconView "+type.ToString());
 			UpdateFaces();
 			
+//				Spacing = 0;
+//				RowSpacing =0 ;
+//				ColumnSpacing =0;
+//				Margin =0;
 			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
@@ -98,8 +102,7 @@ namespace FaceSpot
 			photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
 			//Log.Debug("Get Faces");
 			if(!isShowFullImage){
-				ItemWidth = 50;
-				Spacing = 2;
+				ItemWidth =50;
 				//Font
 			}
 			try {
@@ -140,9 +143,12 @@ namespace FaceSpot
 					Pixbuf facePixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 					if (facePixbuf == null)
 						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
-					if(IsBrowserType){
-						Pixbuf fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
-						
+					if(IsBrowserType && IsShowFullImage){
+						Pixbuf fullPixbuf = ThumbnailCache.Default.GetThumbnailForUri(face.photo.DefaultVersionUri);
+						if(fullPixbuf == null){
+							fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
+							ThumbnailCache.Default.AddThumbnail(face.photo.DefaultVersionUri,fullPixbuf);
+						}
 						listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
 					}
 					else
@@ -234,7 +240,7 @@ namespace FaceSpot
 					PixbufColumn = 4;
 				else 
 					PixbufColumn = 1;
-				UpdateFaces();
+				
 			}
 		}
 		
