@@ -26,8 +26,9 @@ namespace FaceSpot
 		const int UnknownFacePage= 1;
 		
 		private Gtk.Window browserWindow;
-		[Widget] Button SuggestionConfirmButton;
-		[Widget] Button SuggestionDeclineButton;
+		[Widget] ToolButton SuggestionConfirmButton;
+		[Widget] ToolButton SuggestionDeclineButton;
+		[Widget] ToggleToolButton ToggleImageFaceButton;
 		[Widget] Button UnknownFaceButton;
 		[Widget] ScrolledWindow KnownFacePhotoScrolledWindow;
 		[Widget] ScrolledWindow SuggestedFacePhotoScrolledWindow;
@@ -57,11 +58,11 @@ namespace FaceSpot
 //			SuggestionConfirmButton.ImagePosition = PositionType.Left;
 			
 			SuggestionConfirmButton.Sensitive = false;
-			SuggestionConfirmButton.Label = "Yes";
+			//SuggestionConfirmButton.Label = "Yes";
 			SuggestionConfirmButton.Clicked += SuggestionConfirmButtonClicked;
 			
 			SuggestionDeclineButton.Sensitive = false;
-			SuggestionDeclineButton.Label = "No";
+			//SuggestionDeclineButton.Label = "No";
 			SuggestionDeclineButton.Clicked += SuggestionDeclineButtonClicked;
 			
 			peopleTreeView = new PeopleTreeView();
@@ -84,8 +85,27 @@ namespace FaceSpot
 			
 			UnknownFaceButton.Clicked += UnknownFaceButtonClicked;
 			
+			ToggleImageFaceButton.Toggled += ToggleImageFaceButtonToggled;
 			browserWindow.ShowAll();
 		}
+		bool isShowFullImage = false;
+
+		public bool IsShowFullImage {
+					get {
+						return isShowFullImage;
+					}
+					set {
+						isShowFullImage = value;
+						knownFaceIconView.IsShowFullImage =isShowFullImage;
+						unknownFaceIconView.IsShowFullImage = isShowFullImage;
+						suggestFaceIconView.IsShowFullImage = isShowFullImage;
+					}
+				}		
+		void ToggleImageFaceButtonToggled (object sender, EventArgs e)
+		{
+			IsShowFullImage = ! IsShowFullImage;
+		}
+
 
 		void SuggestionDeclineButtonClicked (object sender, EventArgs e)
 		{
