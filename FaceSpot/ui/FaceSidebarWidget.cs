@@ -298,7 +298,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				unknownFaceIconView.SelectionChanged += UnknownFaceIconViewSelectionChanged;
 				ShowAll();
 				
-				FaceOverlay.Instance.ShowOverlayFaces();
+//				FaceOverlay.Instance.ShowOverlayFaces();
 			}
 			catch (Exception e){
 				FSpot.Utils.Log.Exception (e);
@@ -308,7 +308,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		void UnknownFaceIconViewSelectionChanged (object sender, EventArgs e)
 		{
 			Log.Debug("Unknown Face Icon Selection Changed");
-			FaceOverlay.Instance.ShowOverlayFaces();
+//			FaceOverlay.Instance.ShowOverlayFaces();
 			if(unknownFaceIconView.SelectedFaces.Count > 0){
 				knownFaceIconView.UnselectAll();
 				//MainWindow.Toplevel.PhotoView.View.
@@ -322,7 +322,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 		void KnownFaceIconViewSelectionChanged (object sender, EventArgs e)
 		{
 			Log.Debug("known Face Icon Selection Changed");
-			FaceOverlay.Instance.ShowOverlayFaces();
+//			FaceOverlay.Instance.ShowOverlayFaces();
 			if(knownFaceIconView.SelectedFaces.Count > 0){
 				unknownFaceIconView.UnselectAll();
 				//MainWindow.Toplevel.PhotoView.View.Realize();
