@@ -66,7 +66,7 @@ namespace FaceSpot
 			this.AddEvents((int)EventMask.ButtonPressMask | (int)EventMask.ButtonReleaseMask);
 			this.SelectionChanged += HandleSelectionChanged;
 			this.SelectionMode = SelectionMode.Multiple;
-			
+			Log.Debug("New Face IconView "+type.ToString());
 			UpdateFaces();
 			
 			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
@@ -76,6 +76,7 @@ namespace FaceSpot
 
 		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
 		{
+			Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
 			UpdateFaces();
 		}
 		
@@ -204,6 +205,7 @@ namespace FaceSpot
 			}
 			set {
 				tag = value;
+				Log.Debug("FaceIconView "+type.ToString()+"Tag Assigned");
 				UpdateFaces();
 			}
 		}

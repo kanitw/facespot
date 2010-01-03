@@ -21,7 +21,7 @@ namespace FaceSpot
 		{
 			foreach (Tag tag in (parent as Category).Children) {
 				if (tag is Category) {
-					Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
+					//Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
 					TreeIter iter = 
 						(parentIter.Equals(TreeIter.Zero) ?
 						treeStore.AppendValues(tag.Name,/*parent,*/tag):
