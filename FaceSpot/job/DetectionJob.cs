@@ -11,9 +11,9 @@ namespace FaceSpot
 	{
 		Photo photo;
 		Face[] resultFaces;
-		static JobStore job_store{
-			get { return MainWindow.Toplevel.Database.Jobs; }	
-		}
+//		static JobStore job_store{
+//			get { return MainWindow.Toplevel.Database.Jobs; }	
+//		}
 
 		public Photo Photo {
 			get {
@@ -30,7 +30,7 @@ namespace FaceSpot
 		protected override bool Execute ()
 		{
 			//if(photo.Id!=202)return false;
-			Log.Debug("Detection Job Called #"+photo.Id + " " + priority.ToString()
+			Log.Debug("Detection Job Called #"+photo.Id + " " + _priority.ToString()
 			           +" ("+Scheduler.ScheduledJobsCount+" Job(s) Left)");
 			FacePixbufPos[] facesPixbufPos = null;
 			try {
@@ -73,7 +73,7 @@ namespace FaceSpot
 			return job;
 		}
 		
-		JobPriority priority;
+		JobPriority _priority;
 //		public DetectionJob (uint id, string job_options, int run_at, JobPriority job_priority, bool persistent) 
 //			: this (id, job_options, DbUtils.DateTimeFromUnixTime (run_at), job_priority, persistent)
 //		{}
@@ -81,7 +81,7 @@ namespace FaceSpot
 		public DetectionJob (uint id, string job_options, DateTime run_at, JobPriority job_priority, bool persistent) 
 			: base (id, job_options, job_priority, run_at, persistent)
 		{
-			this.priority = job_priority;
+			this._priority = job_priority;
 			this.photo = MainWindow.Toplevel.Database.Photos.Get(Convert.ToUInt32(job_options));
 		}
 	}

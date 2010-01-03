@@ -11,8 +11,6 @@ namespace FaceSpot.Db
 	public class Face : DbItem, IDisposable//, IBrowsableItem
 		//TODO Decide whether should it implement IComparable
 	{
-		uint faceID;		
-		
 		uint leftX,topY,width;	
 		#region Position/Width Encapsulation
 		public uint LeftX {
@@ -73,7 +71,6 @@ namespace FaceSpot.Db
 		             Tag tag,bool tagConfirmed, bool autoDetected, bool autoRecognized, Pixbuf icon,long unix_time) 
 			: base (id)
 		{
-			this.faceID = id;
 			this.leftX = leftX;
 			this.topY = topY;
 			this.width = width;
