@@ -43,10 +43,10 @@ namespace FaceSpot
 			if(SelectedFaces.Length == 1)
 				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			
-			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
-			PopulatePeopleCategories (ChangePersonTo,People.Tag);
-			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);	
-			MakeTagMenuItem((Menu)ChangePersonTo.Submenu,null,true);
+//			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
+//			PopulatePeopleCategories (ChangePersonTo,People.Tag);
+//			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);	
+//			MakeTagMenuItem((Menu)ChangePersonTo.Submenu,null,true);
 			
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),
@@ -118,7 +118,7 @@ namespace FaceSpot
 			}
 			foreach (Tag tag in (parent as Category).Children) {
 				if (tag is Category) {
-					Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
+					//Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
 					ImageMenuItem item = MakeTagMenuItem((Menu)menu.Submenu,tag,false);
 //						GtkUtil.MakeMenuItem((Menu)menu.Submenu,tag.Name,new EventHandler(ApplyPerson)
 //						                     ,true);

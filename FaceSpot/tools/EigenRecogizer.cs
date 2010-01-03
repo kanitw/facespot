@@ -28,7 +28,7 @@ namespace FaceSpot
 			
 			float[][] eigenMatrix = new float[nums_train][];						    
 			
-			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/2);
+			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/5);
 	         
 			for(int i=0;i<nums_train;i++){
 				
@@ -63,7 +63,8 @@ namespace FaceSpot
 		/// </param>
 		//private void ProcessPCA(List<FaceTag> faces){		
 		public static EigenValueTags ProcessPCA(Face[] faces){
-			Log.Debug("Recognize Started...");		
+			//fixme : cope with zero faces			
+			Log.Debug("ProcessPCA Started...");		
 			
 			int numsFaces = faces.Length;
 			
@@ -77,7 +78,7 @@ namespace FaceSpot
 			int i = 0;
 			
 			for(int k=0;k<faces.Length;k++){
-				
+				Log.Debug(" k = {0}",k);
 				if(faces[k].Tag == null){
 					//Log.Debug("null Tag :: id = {0}, name = {0}",faces[k].Id,faces[k].Name);
 					continue;
@@ -93,16 +94,24 @@ namespace FaceSpot
 				train_imagesList.Add(ImageTypeConverter.ConvertPixbufToGrayCVImage(faces[k].iconPixbuf));
 			}
 			
+			//fixme 
+			for(int k=0; k<train_imagesList.Count;k++){
+				train_imagesList[k] = train_imagesList[k].Resize(100,100);
+			}
+			
 			string[] train_labels = train_labelsList.ToArray();
 			Image<Gray, Byte>[] train_images = train_imagesList.ToArray();
-			
+			for(int k=0;k<train_images.Length;k++){
+				train_images[k].Save("/home/hyperjump/out/"+k + "t.png");
+			}
+			Log.Debug("#labels = {0} \n #images  {0}",train_labels.Length, train_labels.Length);
 			
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
 			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,7500,ref crit);
 
 			//processedEigen = eigenRec;
 			// Serialize
-			SerializeUtil.Serialize("/home/hyperjump/eigenRec.dat", eigenRec);			
+			SerializeUtil.Serialize("eigenRec.dat", eigenRec);			
 			
 			// save recognized data into file of eigen value and into EigenValueTags class								
 			EigenValueTags eigenVtags = RecordEigenValue(eigenRec);															

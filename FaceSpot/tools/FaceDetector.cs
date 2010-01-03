@@ -32,9 +32,13 @@ namespace FaceSpot
 			return facesbuf;
 		}
 		
-		public static FaceImagePos[] DetectFace(Photo photo){			
-			Uri uri = photo.DefaultVersionUri;							
-			return DetectFace(new Emgu.CV.Image<Bgr, Byte>(uri.AbsolutePath));									
+		public static FaceImagePos[] DetectFace(Photo photo){									
+			Uri uri = photo.DefaultVersionUri;				
+						
+			string s = uri.LocalPath;
+			//fixme - not sure about this
+			s.Replace("%20"," ");
+			return DetectFace(new Emgu.CV.Image<Bgr, Byte>(s));									
 		}
 		
 		/// <summary>

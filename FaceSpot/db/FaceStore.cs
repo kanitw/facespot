@@ -27,10 +27,12 @@ namespace FaceSpot.Db
 				Log.Debug("Facestore Db Init");
 				InitFaceTable();
 			}
-			if( is_new || !Database.TableExists("facenotags")){
+			if( is_new || !Database.TableExists("facenotags")){						
+				Log.Debug("InitFaceNoTagTable()");
 				InitFaceNoTagTable();
 					
 			}
+			Log.Debug("FaceStore Constuctor ended");
 		}
 
 		void MainWindowToplevelDatabaseTagsItemsChanged (object sender, DbItemEventArgs<Tag> e)
@@ -99,6 +101,7 @@ namespace FaceSpot.Db
 		}
 		
 		void InitFaceNoTagTable(){
+			Log.Debug("InitFaceNoTagTable called");
 			try {
 				Database.ExecuteNonQuery(
 					"CREATE TABLE facenotags(\n"+
@@ -111,9 +114,11 @@ namespace FaceSpot.Db
 			{
 				Log.Exception(ex);	
 			}
+			Log.Debug("InitFaceNoTagTable ended");
 		}
 		
 		void InitFaceTable(){
+			Log.Debug("InitFaceTable called");
 		//Add Database Initialization
 			try{
 				Database.ExecuteNonQuery(
@@ -130,7 +135,7 @@ namespace FaceSpot.Db
 				    "	width INTEGER NOT NULL, \n"+
 				    " 	photo_md5 STRING NOT NULL, \n"+
 					"	time INTEGER NOT NULL \n,"+
-					"   icon TEXT NULL"+
+					"   icon TEXT NULL\n,"+
 				    " UNIQUE (photo_id, left_x,top_y,width)"+                     
 					")"  );
 			}catch ( Mono.Data.SqliteClient.SqliteSyntaxException ex){
@@ -153,6 +158,8 @@ namespace FaceSpot.Db
 				Log.Exception(ex);	
 			}
 			//FIXME Add "Alter" Table Query	
+			
+			Log.Debug("InitFaceTable ended");
 		}		
 		
 		public override Face Get (uint id)

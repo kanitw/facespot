@@ -26,7 +26,7 @@ namespace FaceSpot
 		private static void TrainNetwork(EigenValueTags eigen){
 			Log.Debug("Train Started...");
 			
-			string[] dLabels = eigen.FacesLabel;//FindDistinctClass(eigen);						
+			string[] dLabels = eigen.FacesLabel;					
 			int numInstances = eigen.eigenTaglist.Count;
 			int inputNodes = eigen.eigenTaglist[0].val.Length;					
 			int outputNodes = dLabels.Length;
@@ -92,7 +92,7 @@ namespace FaceSpot
 			bpnet.JitterNoiseLimit = 0.0001;
 			bpnet.Initialize();
 			
-			int numEpoch = 100;			
+			int numEpoch = 200;			
 			bpnet.SetLearningRate(0.2);
 			bpnet.Learn(tset, numEpoch);
 						
@@ -103,12 +103,12 @@ namespace FaceSpot
 //				Directory.CreateDirectory(savepath);
 			
 			// Serialize
-			SerializeUtil.Serialize("/home/hyperjump/nn.dat", bpnet);
+			SerializeUtil.Serialize("nn.dat", bpnet);
 			bpnet = null;
 			
 			
 			// Deserialize
-			BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
+			BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
 			Log.Debug("error = {0}",testnet.MeanSquaredError);
 			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
 			//Log.Debug("error = {0}",bpnet.MeanSquaredError);

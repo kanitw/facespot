@@ -38,8 +38,9 @@ namespace FaceSpot
 			foreach(Face f in faces){
 				if(f.tagConfirmed)
 					faceList.Add(f);
-			}			
-			FaceTrainer.Train(faceList.ToArray());
+			}	
+			if(faceList.Count>0)
+				FaceTrainer.Train(faceList.ToArray());
 			
 			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");

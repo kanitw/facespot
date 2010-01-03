@@ -6,6 +6,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using FSpot;
 using FSpot.Utils;
+using System.IO;
 
 namespace FaceSpot
 {
@@ -32,13 +33,18 @@ namespace FaceSpot
 			LoadTrainedNetwork();
 		}
 		
-		public void Classify(Face face){
+		public void Classify(Face face){			
 			//fix these two lines			
-			LoadEigenRecognizer();
-			LoadTrainedNetwork();
+			//LoadEigenRecognizer();
+			//LoadTrainedNetwork();
 			
 			Log.Debug("Classify called - {0}",face.Id);
-			float[] eigenValue = eigenRec.GetEigenDistances(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
+			Emgu.CV.Image<Gray, byte> emFace = ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf);			
+			emFace.Save("/home/hyperjump/out/"+face.Id + "a.png");
+			
+			//emFace.Save(face.Tag.Name+".jpg");
+			float[] eigenValue = EigenObjectRecognizer.EigenDecomposite(emFace,eigenRec.EigenImages,eigenRec.AverageImage);
+			//float[] eigenValue = eigenRec.GetEigenDistances(emFace);
 			
 			Log.Debug("eigenValue.Length = {0}", eigenValue.Length);
 			int inputNodes = bpnet.InputLayer.NeuronCount;
@@ -47,9 +53,15 @@ namespace FaceSpot
 					
 			//fixme - this is slow
 			EigenValueTags eigenVTags = EigenRecogizer.RecordEigenValue(eigenRec);
-						
+			
+			//Note this!
+			Random r = new Random();	
 			for(int j=0;j<inputNodes;j++){
-				v[j] = (double)eigenValue[j];				                                       		
+				v[j] = (double)eigenValue[j];	
+				
+//				v[j] /= r.Next(1,3);
+//				if(r.Next(1,6) > 3)
+//					v[j] *= -1;
 				Console.Out.Write("{0},",v[j]);
 			}
 			Console.WriteLine();
@@ -76,14 +88,12 @@ namespace FaceSpot
 				}
 				else 
 					Log.Debug("Unfortunately Face#"+face.Id+" has already rejected ="+suggestedName+"!");
-				
-				
+								
 			}else 
 				Log.Debug("Classify Face#"+face.Id+" Finished - No suggestions");
+			
 			face.autoRecognized = true;
-			FaceSpotDb.Instance.Faces.Commit(face);
-			
-			
+			FaceSpotDb.Instance.Faces.Commit(face);						
 		}
 		
 		/// <summary>
@@ -110,8 +120,8 @@ namespace FaceSpot
 				}
 			}	
 			Log.Debug("AnalyseNetwork... max = "+max);
-//			if(max < 0.75)
-//				return null;
+			if(max < 0.7)
+				return null;
 			
 			string[] labels = eigenVTags.FacesLabel;
 			
@@ -122,7 +132,7 @@ namespace FaceSpot
 			Log.Debug("LoadTrainedNetwork called...");
 			//fixme 
 			//change loading method					
-			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
+			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
 			//bpnet = FaceTrainer.bpnet;
 		}
 		
@@ -130,8 +140,55 @@ namespace FaceSpot
 			Log.Debug("LoadEigenRecognizer called...");
 			//fixme			
 			//change loading method
-			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec.dat");						
+			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("eigenRec.dat");						
 			//eigenRec = EigenRecogizer.processedEigen;
+			
+			if(!System.IO.Directory.Exists("a.csv"))
+			   WriteEigenValueFile(eigenRec,"","a");			
+		}
+		
+			/// <summary>
+		/// Given savepath and filename, create a csv file containing set of eigen values.
+		/// The csv is formatted according to WEKA classifer.
+		/// </summary>
+		/// <param name="eigenRec">
+		/// A <see cref="EigenObjectRecognizer"/>
+		/// </param>
+		/// <param name="savepath">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="filename">
+		/// A <see cref="System.String"/>
+		/// </param>
+		private void WriteEigenValueFile(EigenObjectRecognizer eigenRec, string savepath, string filename){
+			
+			// don't store eigen value more than this number
+			const int MAX_EIGEN_LENGTH = 50;
+			
+			int nums_train = eigenRec.Labels.Length;
+			
+			float[] eigenvalue_float = new float[nums_train];
+			float[][] eigenMatrix = new float[nums_train][];
+				
+		    TextWriter tw = new StreamWriter(savepath+filename+".csv");
+			
+			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/5);
+			
+			// write header
+			for(int i=0;i<max_eigenvalueLength;i++){
+				tw.Write("a"+i+",");				
+			}			
+			tw.WriteLine("class");
+	         
+			for(int i=0;i<nums_train;i++){				
+				Emgu.CV.Matrix<float> eigenValue = eigenRec.EigenValues[i];
+					
+				for(int k=0; k<max_eigenvalueLength; k++)														
+					tw.Write(eigenValue.Data[k,0]+",");									
+																								
+				tw.WriteLine(eigenRec.Labels[i]);
+			}		 				  		
+	        tw.Close();	
 		}
 		
 	}	
