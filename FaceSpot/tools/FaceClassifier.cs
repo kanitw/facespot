@@ -110,14 +110,14 @@ namespace FaceSpot
 			//fixme 
 			//change loading method					
 			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
-			bpnet = FaceTrainer.bpnet;
+			//bpnet = FaceTrainer.bpnet;
 		}
 		
 		private void LoadEigenRecognizer(){
 			Log.Debug("LoadEigenRecognizer called...");
 			//fixme			
 			//change loading method
-			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec.dat");						
+			//eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("/home/hyperjump/eigenRec.dat");						
 		}
 		
 	}	
