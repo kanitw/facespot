@@ -23,8 +23,10 @@ namespace FaceSpot
 		{
 			uint timer = Log.InformationTimerStart ("Starting FaceService");
 			string msg = Catalog.GetString ("Face Service Start");
-			string desc = Catalog.GetString ("Sample Alert Box");
-			
+			string desc = Catalog.GetString ("FaceSpot Face Service is runnning. \r\n"+
+			                                 "\r\n"+
+			                                 "You can turn int off by choosing Edit>Manage Extensions");
+		
 			FSpot.UI.Dialog.HigMessageDialog md = 
 				new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
 			md.Run ();

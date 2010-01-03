@@ -77,9 +77,8 @@ namespace FaceSpot
 		}
 		void ShowImageActivated (object sender, EventArgs e)
 		{
-			//Just Hide Photo photo = iconView.SelectedFace.photo;
-			//TODO Finish this Function
-			//if( (Menu
+			MainWindow.Toplevel.ViewMode == MainWindow.ModeType.PhotoView;
+			//MainWindow.Toplevel.Query.Terms.
 		}
 		void MoveActivated (object sender, EventArgs e)
 		{

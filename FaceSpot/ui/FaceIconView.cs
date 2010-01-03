@@ -138,7 +138,7 @@ namespace FaceSpot
 			foreach (Face face in faces) {
 				//Log.Debug ("Append Face#" + (i++) + "  ");
 				if (face != null) {
-					string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
+					string name = face.Name == null ? "    ?    " /*+" : #"+face.Id.ToString ()*/ : face.Name;
 					string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
 					Pixbuf facePixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 					if (facePixbuf == null)
@@ -148,6 +148,9 @@ namespace FaceSpot
 						if(fullPixbuf == null){
 							fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
 							ThumbnailCache.Default.AddThumbnail(face.photo.DefaultVersionUri,fullPixbuf);
+							Pixbuf pb = ThumbnailCache.Default.GetThumbnailForUri(face.photo.DefaultVersionUri);
+							if(pb == null) Log.Debug("Bug in Thumbnail Caching!");
+							else Log.Debug("NoBug in caching");
 						}
 						listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
 					}
