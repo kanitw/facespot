@@ -45,8 +45,8 @@ namespace FaceSpot
 			
 			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
 			PopulatePeopleCategories (ChangePersonTo,People.Tag);
-			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);	
-			MakeTagMenuItem((Menu)ChangePersonTo.Submenu,null,true);
+//			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);	
+//			MakeTagMenuItem((Menu)ChangePersonTo.Submenu,null,true);
 			
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),
@@ -68,6 +68,7 @@ namespace FaceSpot
 		{
 			//Just Hide Photo photo = iconView.SelectedFace.photo;
 			//TODO Finish this Function
+			//if( (Menu
 		}
 		void MoveActivated (object sender, EventArgs e)
 		{
@@ -112,59 +113,88 @@ namespace FaceSpot
 			{
 				menu.Submenu = new Menu();
 				if (parent != People.Tag){
-					ImageMenuItem item = MakeTagMenuItem((Menu)menu.Submenu,parent,true);
+					/*ImageMenuItem*/Gtk.MenuItem item = MakeTagMenuItem((Menu)menu.Submenu,parent,true);
 					GtkUtil.MakeMenuSeparator((Menu)menu.Submenu);
 				}
 			}
 			foreach (Tag tag in (parent as Category).Children) {
 				if (tag is Category) {
 					Log.Debug("Append  : "+tag.Name + " to "+parent.Name);
-					ImageMenuItem item = MakeTagMenuItem((Menu)menu.Submenu,tag,false);
-//						GtkUtil.MakeMenuItem((Menu)menu.Submenu,tag.Name,new EventHandler(ApplyPerson)
+					/*ImageMenuItem*/Gtk.MenuItem item = MakeTagMenuItem((Menu)menu.Submenu,tag,false);
+//					GtkUtil.MakeMenuItem((Menu)menu.Submenu,tag.Name,null//new EventHandler(ApplyPerson)
 //						                     ,true);
 					PopulatePeopleCategories (item,tag);
 				}
 			}
 		}
 		
-		ImageMenuItem MakeTagMenuItem(Menu menu,Tag tag,bool force_enabled){
-			ImageMenuItem img_item = new PersonMenuItem(this,tag,force_enabled);
+		/*ImageMenuItem*/Gtk.MenuItem MakeTagMenuItem(Menu menu,Tag tag,bool force_enabled){
+			ImageMenuItem img_item = new ImageMenuItem(tag !=null ?tag.Name : "-" ) ;
+			if(force_enabled ||( tag as Category).Children.Count == 0){
+				img_item.Activated += delegate {
+					foreach (Face face in this.SelectedFaces){
+						if(tag != null)
+							FaceSpotDb.Instance.Faces.SetTag(face,tag);
+						else 
+							FaceSpotDb.Instance.Faces.DeclineTag(face);
+					}	
+				};
+			}
+			if(tag !=null && tag.Icon != null){
+				img_item.Image = new Image(tag.Icon);
+			}
+			img_item.Sensitive = true;
+			//this..
+			img_item.TooltipText = tag != null ? tag.Name : "-";
 			menu.Append (img_item);
-			img_item.Show ();
+			img_item.ShowAll ();
 			return img_item;
 		}
+
 	}
 	
 	
-	class PersonMenuItem : ImageMenuItem
-	{
-		public Tag tag;
-		FaceIconViewPopupMenu menu;
-		public PersonMenuItem(FaceIconViewPopupMenu menu,Tag tag,bool force_enabled) 
-			: base((tag != null ? tag.Name : "-" )+"label")
-		{
-			if(tag !=null && tag.Icon != null){
-				Image = new Image(tag.Icon);
-			}	
-			if(force_enabled ||( tag as Category).Children.Count == 0)
-				this.Activated += new EventHandler(ApplyPerson);
-			Sensitive = true;
-			this.tag = tag;
-			this.menu = menu;
-		}
-		void ApplyPerson (object sender, EventArgs e)
-		{
-			if( sender is PersonMenuItem ){
-				PersonMenuItem item = (PersonMenuItem) sender;
-				Log.Debug("ApplyPerson"+ (item.tag != null && item.tag.Name != null ? item.tag.Name : "-"));
-				foreach (Face face in menu.SelectedFaces){
-					if(item.tag != null)
-						FaceSpotDb.Instance.Faces.SetTag(face,item.tag);
-					else 
-						FaceSpotDb.Instance.Faces.DeclineTag(face);
-				}
-			}
-		}
-		
-	}
+//	class PersonMenuItem //: MenuItem//ImageMenuItem
+//	{
+//		ImageMenuItem imgItem;
+//		
+//		public Tag tag;
+//		FaceIconViewPopupMenu menu;
+//
+//		public ImageMenuItem ImgItem {
+//					get {
+//						return imgItem;
+//					}
+//				}		public PersonMenuItem(FaceIconViewPopupMenu menu,Tag tag,bool force_enabled) 
+//			: base()
+//		{
+////			if(tag !=null && tag.Icon != null){
+////				Image = new Image(tag.Icon);
+////			}	
+//			if(force_enabled ||( tag as Category).Children.Count == 0)
+//				this.Activated += new EventHandler(ApplyPerson);
+//			Sensitive = true;
+//			this.tag = tag;
+//			this.menu = menu;
+//			this.HeightRequest = 30;
+//			//this..
+//			this.Name = tag != null ? tag.Name : "-";
+//			this.TooltipText = tag != null ? tag.Name : "-";
+//		//	Show(
+//		}
+//		void ApplyPerson (object sender, EventArgs e)
+//		{
+//			if( sender is PersonMenuItem ){
+//				PersonMenuItem item = (PersonMenuItem) sender;
+//				Log.Debug("ApplyPerson"+ (item.tag != null && item.tag.Name != null ? item.tag.Name : "-"));
+//				foreach (Face face in menu.SelectedFaces){
+//					if(item.tag != null)
+//						FaceSpotDb.Instance.Faces.SetTag(face,item.tag);
+//					else 
+//						FaceSpotDb.Instance.Faces.DeclineTag(face);
+//				}
+//			}
+//		}
+//		
+//	}
 }

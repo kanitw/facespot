@@ -4,6 +4,7 @@ using Gtk;
 using FSpot.Utils;
 using Mono.Posix;
 using FSpot;
+
 using FaceSpot.Db;
 using Gdk;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace FaceSpot
 				 type==	Type.UnknownFaceSidebar;
 			}
 		}
+		
+		private bool isShowFullImage = false;
 		
 		public Type type{
 			get	{return _type;}
@@ -93,6 +96,11 @@ namespace FaceSpot
 			if(FaceSidebarWidget.Instance != null)
 			photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
 			//Log.Debug("Get Faces");
+			if(!isShowFullImage){
+				ItemWidth = 50;
+				Spacing = 2;
+				//Font
+			}
 			try {
 				switch (type){
 					case Type.KnownFaceSidebar:
@@ -128,10 +136,16 @@ namespace FaceSpot
 				if (face != null) {
 					string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
 					string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
-					Pixbuf pixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
-					if (pixbuf == null)
+					Pixbuf facePixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
+					if (facePixbuf == null)
 						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
-					listStore.AppendValues (name, pixbuf, face,nameWithIdIfUnknown);
+					if(IsBrowserType){
+						Pixbuf fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
+						
+						listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
+					}
+					else
+						listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown);
 				} else
 					Log.Exception (new Exception ("Allowed null Face input to the faceiconview"));
 			}
@@ -204,6 +218,20 @@ namespace FaceSpot
 			}
 			set {
 				tag = value;
+				UpdateFaces();
+			}
+		}
+
+		public bool IsShowFullImage {
+			get {
+				return isShowFullImage;
+			}
+			set {
+				isShowFullImage = value;
+				if(isShowFullImage)
+					PixbufColumn = 4;
+				else 
+					PixbufColumn = 1;
 				UpdateFaces();
 			}
 		}
