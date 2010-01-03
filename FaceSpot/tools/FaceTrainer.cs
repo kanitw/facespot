@@ -6,6 +6,7 @@ using NeuronDotNet.Core;
 using NeuronDotNet.Core.Backpropagation;
 using FaceSpot.Db;
 using System.IO;
+using System.Collections.Generic;
 
 namespace FaceSpot	
 {	
@@ -54,8 +55,8 @@ namespace FaceSpot
 					trainInput[numstrain][j] = eigen.eigenTaglist[i].val[j];
 				}
 				numstrain++;
-			}
-			
+			}						
+				
 			// convert to double
 			Log.Debug("nums train = "+ numstrain);
 			double[][] trainInputD = new double[numstrain][];
@@ -105,9 +106,7 @@ namespace FaceSpot
 			
 			// Serialize
 			string path = Path.Combine (FSpot.Global.BaseDirectory, "ann.dat");
-			SerializeUtil.Serialize(path, bpnet);
-			bpnet = null;
-			
+			SerializeUtil.Serialize(path, bpnet);						
 			
 			// Deserialize
 			//BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
@@ -121,22 +120,47 @@ namespace FaceSpot
 				double[] v = new double[inputNodes];
 				for(int j=0;j<v.Length;j++){
 					v[j] = (double)eigen.eigenTaglist[i].val[j];
-					Console.Write("{0},",v[j]);
+					//Console.Write("{0},",v[j]);
 				}								                                       	
-				Console.WriteLine();
+				//Console.WriteLine();
 			
 				double[] netOutput = bpnet.Run(v);
-				Console.WriteLine("net out:");
-				for(int j=0;j<netOutput.Length;j++)
-					Console.Write("{0},",netOutput[j]);
+				//Console.WriteLine("net out:");
+//				for(int j=0;j<netOutput.Length;j++)
+//					Console.Write("{0},",netOutput[j]);
 				
 				string result = FaceClassifier.AnalyseNetworkOutput(eigen, netOutput);
 				if(eigen.eigenTaglist[i].tag.Equals(result))
 					correct++;				
 			}
 			Log.Debug("% correct = " + (float)correct/(float)numInstances * 100);
-			Log.Debug("time ="+  System.DateTime.Now.TimeOfDay.Subtract(tp));											
 			
+			//Save Train Status
+
+			
+			Log.Debug("Saving Train Status...");
+			List<Tstate> tstateList = new List<Tstate>();
+			int[] num = new int[dLabels.Length];
+			Log.Debug("num length = {0}",num.Length);
+			
+			foreach(VTag vt in eigen.eigenTaglist){				
+				for(int k=0;k<num.Length;k++)					
+					if(vt.tag.Equals(dLabels[k]))
+						num[k]++;							
+			}			
+			for(int k=0;k<dLabels.Length;k++){
+				tstateList.Add(new Tstate(dLabels[k], num[k]));
+			}
+			Log.Debug("Seting tstateList...");
+			FaceSpotDb.Instance.TrainingData.Trainstat = tstateList;
+			
+			//test
+			tstateList = FaceSpotDb.Instance.TrainingData.Trainstat;
+			foreach(Tstate ts in tstateList){
+				Log.Debug("name = {0}, num = {1}",ts.name,ts.num);
+			}
+			
+			Log.Debug("time ="+  System.DateTime.Now.TimeOfDay.Subtract(tp));																			
 			Log.Debug("Train ended...\n");
 		}				
 	}

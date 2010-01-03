@@ -26,6 +26,7 @@ namespace FaceSpot.Db
 		
 		FaceStore face_store;
 		PhotoStoreAddOn photo_store_addon;
+		TrainingStore training_data;
 		//bool empty;
 		//string path;
 		
@@ -36,6 +37,10 @@ namespace FaceSpot.Db
 				return face_store;
 			}
 		}
+		public TrainingStore TrainingData{
+			get { return training_data; }	
+		}
+		
 		public PhotoStoreAddOn PhotosAddOn
 		{
 			get { return photo_store_addon; }	
@@ -62,6 +67,7 @@ namespace FaceSpot.Db
 			//FIXME Decide whether to use true/false value
 			face_store = new FaceStore (Database, false);
 			photo_store_addon = new PhotoStoreAddOn(Database);
+			training_data = new TrainingStore(Database);
 			Database.CommitTransaction ();
 			Log.DebugTimerPrint (timer, "FaceSpot Db Initialization took {0}");
 		}

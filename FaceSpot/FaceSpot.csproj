@@ -107,6 +107,7 @@
     <Compile Include="tools\ImageTypeConverter.cs" />
     <Compile Include="ui\PeopleTreeStore.cs" />
     <Compile Include="job\TrainingJob.cs" />
+    <Compile Include="db\TrainingStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

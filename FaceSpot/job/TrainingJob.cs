@@ -12,6 +12,7 @@ namespace FaceSpot
 
 	public class TrainingJob : FaceJob
 	{
+		
 		protected override bool Execute ()
 		{
 			Log.Debug("Training Job Called # " + priority.ToString()
