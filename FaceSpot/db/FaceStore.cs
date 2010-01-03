@@ -323,7 +323,7 @@ namespace FaceSpot.Db
 			if(!face.HasRejected(tag))return;
 			try {
 				DbCommand dbcom = new DbCommand (
-						"DELETE FROM facenotags WHERE face_id = :face_id , tag_id = :tag_id ",
+						"DELETE FROM facenotags WHERE face_id = :face_id AND tag_id = :tag_id ",
 						":face_id", face.Id,
 				        ":tag_id", tag.Id 
 				        );
