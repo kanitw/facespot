@@ -42,7 +42,6 @@ namespace FaceSpot
 		{
 			//categories
 			Log.Debug("PeopleArrayListCreated");
-			
 			peopleTreeStore = new PeopleTreeStore();
 			//TreeIter iter = peopleTreeStore.AppendValues(People.Tag.Name,People.Tag);
 			peopleComboBoxEntry.Model = peopleTreeStore;

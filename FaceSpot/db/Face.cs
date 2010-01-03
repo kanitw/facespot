@@ -45,7 +45,6 @@ namespace FaceSpot.Db
 		#endregion
 		
 		const int faceDefaultWidth = 100;
-		public Pixbuf faceImage;
 		
 		public bool autoDetected, autoRecognized;
 		
@@ -59,7 +58,7 @@ namespace FaceSpot.Db
 		/// <summary>
 		/// 
 		/// </summary>
-		public Tag tag;
+		private Tag tag;
 		/// <summary>
 		/// 
 		/// </summary>

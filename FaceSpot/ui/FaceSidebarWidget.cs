@@ -11,8 +11,8 @@ using Banshee.Kernel;
 
 namespace FaceSpot
 {
-	
-//TODO Add Checkbox to Show Rectangle
+
+//TODO Add Checkbox to Show Rectangle	
 	
 public class FaceSidebarWidget : ScrolledWindow {
 		static FaceSidebarWidget instance;
@@ -24,12 +24,13 @@ public class FaceSidebarWidget : ScrolledWindow {
 			Add,
 			Edit
 		}
-		//	Delay updateDelay;
+	//	Delay updateDelay;
 		
 		VBox mainVBox;//,faceVBox;
 		VPaned faceVPane;
 		Button addFaceButton;
 		Button detectFaceButton;
+	
 		Label pleaseSelectPictureLabel;
 		
 		Expander knownFaceExpander, unknownFaceExpander;
@@ -48,6 +49,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 			instance = this;
 			
 			mainVBox = new VBox();
+			//mainVBox.Spacing = 6;
+			//faceVBox = new VBox();
 			faceVPane = new VPaned();
 			
 			pleaseSelectPictureLabel = new Label ();
@@ -92,6 +95,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			unknownFaceExpander.ResizeMode = ResizeMode.Parent;
 			Log.Debug("HeightR");
 			
+			
 			ShadowType = ShadowType.None;
 			BorderWidth = 0;
 			//AddWithViewport(pleaseSelectPictureLabel);
@@ -102,8 +106,8 @@ public class FaceSidebarWidget : ScrolledWindow {
 
 		void DetectFaceButtonClicked (object sender, EventArgs e)
 		{
-			if(SelectedFace != null)
-				DetectionJob.Create(SelectedFace.photo,JobPriority.Highest);
+			if(SelectedItem != null && SelectedItem is Photo)
+				DetectionJob.Create((Photo)SelectedItem,JobPriority.Highest);
 		}
 
 		void AddFaceButtonClicked (object sender, EventArgs e)
@@ -222,6 +226,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 			}
 		}
 
+		
 		public void HandleSelectionChanged (IBrowsableCollection collection) {
 			Log.Debug("Face Sidebar Handle Selection Change");
 			if (collection != null && collection.Count == 1)

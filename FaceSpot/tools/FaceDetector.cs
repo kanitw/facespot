@@ -19,14 +19,7 @@ namespace FaceSpot
 
 		public FaceDetector ()
 		{			
-		}
-		
-		public static Pixbuf ConvertCVImageToPixbuf(Emgu.CV.Image<Bgr, byte> img){
-			System.Drawing.Bitmap bmp = img.Bitmap;
-			System.IO.MemoryStream ms = new System.IO.MemoryStream();
-			bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);			
-			return new Pixbuf(ms.GetBuffer());
-		}
+		}			
 		
 		public static FacePixbufPos[] DetectFaceToPixbuf(Photo photo){
 			Log.Debug("DetectToPixbuf called...");
@@ -235,7 +228,7 @@ namespace FaceSpot
 		}
 		
 		public FacePixbufPos toFacePixbufPos(){
-			return new FacePixbufPos(FaceDetector.ConvertCVImageToPixbuf(image), leftX, topY, width);
+			return new FacePixbufPos(ImageTypeConverter.ConvertCVImageToPixbuf(image), leftX, topY, width);
 		}
 	}
 }

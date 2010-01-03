@@ -11,6 +11,7 @@ using Mono.Unix;
 
 using FaceSpot;
 using FaceSpot.Db;
+using System.Collections.Generic;
 
 namespace FaceSpot
 {
@@ -24,13 +25,35 @@ namespace FaceSpot
 			string msg = Catalog.GetString ("Face Service Start");
 			string desc = Catalog.GetString ("Sample Alert Box");
 			
-			FSpot.UI.Dialog.HigMessageDialog md = new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
+			FSpot.UI.Dialog.HigMessageDialog md = 
+				new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);
 			md.Run ();
 			md.Destroy ();
+			
+			//fix me here, now do a training process every time
+			FaceStore faceStore = FaceSpotDb.Instance.Faces;
+			Face[] faces = faceStore.GetAllFaces();			
+			List<Face> faceList = new List<Face>();			
+			
+			foreach(Face f in faces){
+				if(f.tagConfirmed)
+					faceList.Add(f);
+			}			
+			FaceTrainer.Train(faceList.ToArray());
+			
 			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
 			
-			//TestDetect(timer);
+			
+			
+			
+//			foreach(Face f in faces){
+//				if(f.iconPixbuf == null)
+//					Log.Debug("id = {0}, name = {0}, audodetected = {0}",f.Id,f.Name,f.autoDetected);
+//			}
+//			Log.Debug("#faces to ProcessPCA() = {0}",faces.Length);
+//			
+//			EigenRecogizer.ProcessPCA(faces);
 			
 			return true;
 		}
@@ -43,8 +66,8 @@ namespace FaceSpot
 		}
 		
 		public void TestDetect(uint timer){
-			for(int i=0;i<4;i++){
-				Photo p = MainWindow.Toplevel.Database.Photos.Get((uint)(i+201));
+//			for(int i=0;i<4;i++){
+//				Photo p = MainWindow.Toplevel.Database.Photos.Get((uint)(i+201));
 				
 //				FacePixbufPos[] faces = FaceDetector.DetectToPixbuf(p);
 //				for(int j=0;j<faces.Length;j++)
@@ -58,7 +81,7 @@ namespace FaceSpot
 //				}
 			}
 		}
-		public void F(uint timer){
+		//public void F(uint timer){
 //			Photo p = MainWindow.Toplevel.Database.Photos.Get(186);
 //			Log.DebugTimerPrint(timer,"path = " + p.DefaultVersionUri.AbsolutePath);
 //			Gdk.Pixbuf p186 = new Gdk.Pixbuf(p.DefaultVersionUri.AbsolutePath);
@@ -120,8 +143,8 @@ namespace FaceSpot
 //			loadedPix = new Gdk.Pixbuf(ms.GetBuffer());
 //				
 //			loadedPix.Save("buffer.jpg","jpeg");
-		}
+		//}
 	}
 	
 	//public lass
-}
+//}
