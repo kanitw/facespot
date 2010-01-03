@@ -5,6 +5,7 @@ using FSpot.Utils;
 using NeuronDotNet.Core;
 using NeuronDotNet.Core.Backpropagation;
 using FaceSpot.Db;
+using System.IO;
 
 namespace FaceSpot	
 {	
@@ -103,13 +104,14 @@ namespace FaceSpot
 //				Directory.CreateDirectory(savepath);
 			
 			// Serialize
-			SerializeUtil.Serialize("nn.dat", bpnet);
+			string path = Path.Combine (FSpot.Global.BaseDirectory, "ann.dat");
+			SerializeUtil.Serialize(path, bpnet);
 			bpnet = null;
 			
 			
 			// Deserialize
-			BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
-			Log.Debug("error = {0}",testnet.MeanSquaredError);
+			//BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
+			Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
 			//Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			// test by using training data
@@ -123,7 +125,7 @@ namespace FaceSpot
 				}								                                       	
 				Console.WriteLine();
 			
-				double[] netOutput = testnet.Run(v);
+				double[] netOutput = bpnet.Run(v);
 				Console.WriteLine("net out:");
 				for(int j=0;j<netOutput.Length;j++)
 					Console.Write("{0},",netOutput[j]);

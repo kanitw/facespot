@@ -34,13 +34,10 @@ namespace FaceSpot
 		}
 		
 		public void Classify(Face face){			
-			//fix these two lines			
-			//LoadEigenRecognizer();
-			//LoadTrainedNetwork();
 			
 			Log.Debug("Classify called - {0}",face.Id);
 			Emgu.CV.Image<Gray, byte> emFace = ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf);			
-			emFace.Save("/home/hyperjump/out/"+face.Id + "a.png");
+			//emFace.Save("/home/hyperjump/out/"+face.Id + "a.png");
 			
 			//emFace.Save(face.Tag.Name+".jpg");
 			float[] eigenValue = EigenObjectRecognizer.EigenDecomposite(emFace,eigenRec.EigenImages,eigenRec.AverageImage);
@@ -132,7 +129,8 @@ namespace FaceSpot
 			Log.Debug("LoadTrainedNetwork called...");
 			//fixme 
 			//change loading method					
-			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
+			string path = Path.Combine (FSpot.Global.BaseDirectory, "ann.dat");
+			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize(path);
 			//bpnet = FaceTrainer.bpnet;
 		}
 		
@@ -140,7 +138,8 @@ namespace FaceSpot
 			Log.Debug("LoadEigenRecognizer called...");
 			//fixme			
 			//change loading method
-			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize("eigenRec.dat");						
+			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
+			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize(path);
 			//eigenRec = EigenRecogizer.processedEigen;
 			
 			if(!System.IO.Directory.Exists("a.csv"))

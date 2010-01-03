@@ -5,6 +5,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using FSpot.Utils;
 using FaceSpot.Db;
+using System.IO;
 
 namespace FaceSpot
 {
@@ -101,17 +102,17 @@ namespace FaceSpot
 			
 			string[] train_labels = train_labelsList.ToArray();
 			Image<Gray, Byte>[] train_images = train_imagesList.ToArray();
-			for(int k=0;k<train_images.Length;k++){
-				train_images[k].Save("/home/hyperjump/out/"+k + "t.png");
-			}
+//			for(int k=0;k<train_images.Length;k++){
+//				train_images[k].Save("/home/hyperjump/out/"+k + "t.png");
+//			}
 			Log.Debug("#labels = {0} \n #images  {0}",train_labels.Length, train_labels.Length);
 			
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
 			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,7500,ref crit);
 
-			//processedEigen = eigenRec;
+			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
 			// Serialize
-			SerializeUtil.Serialize("eigenRec.dat", eigenRec);			
+			SerializeUtil.Serialize(path, eigenRec);			
 			
 			// save recognized data into file of eigen value and into EigenValueTags class								
 			EigenValueTags eigenVtags = RecordEigenValue(eigenRec);															
