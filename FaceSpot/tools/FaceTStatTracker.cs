@@ -33,7 +33,7 @@ namespace FaceSpot
 			List<Tstate> faceDbStat = new List<Tstate>();			
 			
 			foreach(Tag t in tags){
-				Face[] f = FaceSpotDb.Instance.Faces.GetByTag(t,"");
+				Face[] f = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(t);
 				faceDbStat.Add(new Tstate(t.Name, f.Length));
 			}
 			return faceDbStat;
@@ -59,7 +59,8 @@ namespace FaceSpot
 				sumfaceDbStat+=t.num;
 			}
 			
-			if(tstat.Count!=faceDbStat.Count || Math.Abs(sumTstat - sumfaceDbStat) > 3){				
+			Log.Debug("#tstat = {0}, #faceDbStat = {1}", sumTstat, sumfaceDbStat);
+			if(Math.Abs(sumTstat - sumfaceDbStat) > 2){
 				
 				TrainingJob.Create();
 				
@@ -67,6 +68,8 @@ namespace FaceSpot
 				
 				TrainingJob.finished = false;
 				FaceSpotDb.Instance.Faces.ClearAutoRecognized();
+				
+				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
 				FaceScheduler.Instance.Execute();
 			}
 			

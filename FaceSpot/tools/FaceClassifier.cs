@@ -16,8 +16,8 @@ namespace FaceSpot
 		
 		private BackpropagationNetwork bpnet;
 		private EigenObjectRecognizer eigenRec;
-		private static FaceClassifier instance;		
-		
+		private bool isReady = false;
+		private static FaceClassifier instance;				
 		public static FaceClassifier Instance
 		{
 			get { 
@@ -29,15 +29,19 @@ namespace FaceSpot
 			}
 		}
 		
-		internal void LoadResource(){
-			
-			LoadEigenRecognizer();
-			LoadTrainedNetwork();
+		internal void LoadResource(){				
+			isReady = LoadEigenRecognizer();
+			isReady &= LoadTrainedNetwork();
 		}		
 		
 		internal void Classify(Face face){			
+			if(!isReady){				
+				//Log.Debug(">>> Classify() not ready");
+				return;
+			}
 			
-			Log.Debug("Classify called - {0}",face.Id);
+			Log.Debug(">>> Classify() called - {0}", face.Id);
+			
 			Emgu.CV.Image<Gray, byte> emFace = ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf);			
 			//emFace.Save("/home/hyperjump/out/"+face.Id + "a.png");
 			
@@ -46,6 +50,10 @@ namespace FaceSpot
 			//float[] eigenValue = eigenRec.GetEigenDistances(emFace);
 			
 			Log.Debug("eigenValue.Length = {0}", eigenValue.Length);
+			if(bpnet == null){
+				Log.Debug("bpnet == null");
+				LoadTrainedNetwork();
+			}
 			int inputNodes = bpnet.InputLayer.NeuronCount;
 			Log.Debug("bpnet.InputLayer.NeuronCount = {0}", bpnet.InputLayer.NeuronCount);
 			double[] v = new double[inputNodes];
@@ -118,7 +126,7 @@ namespace FaceSpot
 				}
 			}	
 			//Log.Debug("AnalyseNetwork... max = "+max);
-			if(max < 0.7)
+			if(max < 0.75)
 				return null;
 			
 			string[] labels = eigenVTags.FacesLabel;
@@ -126,22 +134,30 @@ namespace FaceSpot
 			return labels[maxIndex];
 		}
 		
-		private void LoadTrainedNetwork(){
-			Log.Debug("LoadTrainedNetwork called...");
-			//fixme 
-			//change loading method					
-			string path = Path.Combine (FSpot.Global.BaseDirectory, "ann.dat");
-			bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize(path);
-			//bpnet = FaceTrainer.bpnet;
+		private bool LoadTrainedNetwork(){
+			Log.Debug("LoadTrainedNetwork called...");	
+			try{	
+				string path = Path.Combine (FSpot.Global.BaseDirectory, "ann.dat");
+				bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize(path);			
+			}catch(Exception e){
+				Log.Exception(e);				
+				return false;
+			}
+			Log.Debug("LoadTrainedNetwork ended...");
+			return true;
 		}
 		
-		private void LoadEigenRecognizer(){
+		private bool LoadEigenRecognizer(){
 			Log.Debug("LoadEigenRecognizer called...");
-			//fixme			
-			//change loading method
-			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
-			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize(path);
-			//eigenRec = EigenRecogizer.processedEigen;							
+			try{
+				string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
+				eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize(path);					
+			}catch(Exception e){
+				Log.Exception(e);
+				return false;
+			}
+			Log.Debug("LoadEigenRecognizer ended...");
+			return true;
 		}
 		
 		/// <summary>

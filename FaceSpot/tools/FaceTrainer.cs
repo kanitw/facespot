@@ -15,10 +15,10 @@ namespace FaceSpot
 	{				
 		public static BackpropagationNetwork bpnet;
 		
-		public static void Train(Face[] faces){
+		public static void Train(Face[] faces){			
 			TrainNetwork(EigenRecogizer.ProcessPCA(faces));
 			FaceClassifier.Instance.LoadResource();
-			FaceSpotDb.Instance.Faces.ClearAutoRecognized();
+			//FaceSpotDb.Instance.Faces.ClearAutoRecognized();
 		}
 		
 		/// <summary>
@@ -59,8 +59,9 @@ namespace FaceSpot
 				numstrain++;
 			}						
 				
+
 			// convert to double
-//			Log.Debug("nums train = "+ numstrain);
+			Log.Debug("nums train = "+ numstrain);
 			double[][] trainInputD = new double[numstrain][];
 			double[][] trainOutputD = new double[numstrain][];
 			for(int i=0;i<numstrain;i++){				
@@ -77,17 +78,20 @@ namespace FaceSpot
 					
 //			TimeSpan tp = System.DateTime.Now.TimeOfDay;	
 			
+			Log.Debug("NeuronDotNet.Core.Backpropagation.SigmoidLayer inputLayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(inputNodes)");
+			Log.Debug("#in = {0}, #hid = {1}, #out = {2}",inputNodes,hiddenNodes,outputNodes);
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer inputLayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(inputNodes);
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer hiddenlayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(hiddenNodes);
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer outputlayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(outputNodes);
-			
+			Log.Debug("BackpropagationConnector input_hidden =  new BackpropagationConnector(inputLayer, hiddenlayer);");
 			BackpropagationConnector input_hidden =  new BackpropagationConnector(inputLayer, hiddenlayer);
 			BackpropagationConnector hidden_output =  new BackpropagationConnector(hiddenlayer, outputlayer);
 			
 			input_hidden.Momentum = 0.3;
 			hidden_output.Momentum = 0.3;
-			
+			Log.Debug("bpnet = new BackpropagationNetwork(inputLayer,outputlayer);");
 			bpnet = new BackpropagationNetwork(inputLayer,outputlayer);
+			Log.Debug("TrainingSet tset = new TrainingSet(inputNodes, outputNodes);");
 			TrainingSet tset = new TrainingSet(inputNodes, outputNodes);			
 			for(int i=0;i<numstrain;i++)
 				tset.Add(new TrainingSample(trainInputD[i], trainOutputD[i]));
@@ -100,7 +104,7 @@ namespace FaceSpot
 			bpnet.SetLearningRate(0.2);
 			bpnet.Learn(tset, numEpoch);
 						
-//			Log.Debug("error = {0}",bpnet.MeanSquaredError);
+			Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			
 //			string savepath = facedbPath + "object/";
 //			if(!Directory.Exists(savepath))

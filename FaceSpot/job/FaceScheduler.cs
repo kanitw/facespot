@@ -75,6 +75,11 @@ namespace FaceSpot
 				DetectionJob.Create(photo);
 				if(i++ == QUEUE_ENTRY_LIMIT) break;
 			}
+			
+			
+			if(FaceSpotDb.Instance.Faces.GetTaggedFace().Length == 0)
+				return;
+			
 			i=0;
 			Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
 			Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);

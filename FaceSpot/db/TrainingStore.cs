@@ -16,9 +16,8 @@ namespace FaceSpot
 		private Banshee.Database.QueuedSqliteDatabase database;
 		private List<Tstate> trainstat;
 		public List<Tstate> Trainstat{
-			get{
-				if(trainstat == null)
-					trainstat = GetTrainstat();
+			get{				
+				trainstat = GetTrainstat();
 				return trainstat;
 			}
 			set{

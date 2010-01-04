@@ -55,9 +55,12 @@ namespace FaceSpot
 				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			
 			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
-			PopulatePeopleCategories (ChangePersonTo,People.Tag);
-			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
-			GtkUtil.MakeMenuItem((Menu)ChangePersonTo.Submenu,"-", new EventHandler(ChangePersonToNoOneActivated));
+			
+			if(ChangePersonTo != null && ChangePersonTo.Submenu != null){
+				PopulatePeopleCategories (ChangePersonTo,People.Tag);			
+				GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
+				GtkUtil.MakeMenuItem((Menu)ChangePersonTo.Submenu,"-", new EventHandler(ChangePersonToNoOneActivated));
+			}
 			
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),

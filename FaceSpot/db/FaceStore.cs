@@ -244,6 +244,9 @@ namespace FaceSpot.Db
 			return GetByPhoto(photo," AND ( tag_id IS NULL OR tag_confirm = 0 )");	
 		}
 		public Face[] GetByPhoto(Photo photo, string addWhereClause){
+			if(photo == null)
+				return new Face[]{};
+			
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
 				       "FROM faces " + 
@@ -343,7 +346,16 @@ namespace FaceSpot.Db
 				Log.Exception(ex);
 			}
 		}
-		
+		public void RemoveNotConfirmTag(){			
+			try {
+				DbCommand dbcom = new DbCommand (
+						"UPDATE faces SET tag_id = null WHERE tag_confirm = 0"
+				        );
+				Database.Execute (dbcom	);				
+			} catch (Exception ex) {
+				Log.Exception(ex);
+			}
+		}
 		public void RemoveRejectedTag(Face face,Tag tag){
 			if(face==null || tag == null)return;
 			if(!face.HasRejected(tag))return;
