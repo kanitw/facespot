@@ -63,34 +63,23 @@ namespace FaceSpot
 		/// A <see cref="System.String"/>
 		/// </param>
 		//private void ProcessPCA(List<FaceTag> faces){		
-		public static EigenValueTags ProcessPCA(Face[] faces){
-			//fixme : cope with zero faces			
+		public static EigenValueTags ProcessPCA(Face[] faces){			
 			Log.Debug("ProcessPCA Started...");		
 			
 			int numsFaces = faces.Length;
 			
 			List<Image<Gray, Byte>> train_imagesList = new List<Image<Gray, byte>>();
 			List<string> train_labelsList = new List<string>();
-			 					
-			// input in this stage is faces (List of FaceTag)
-			//Log.Debug("total faces to be detected = "+ numsFaces);
 				
 			// load faces from detected data			
 			int i = 0;
 			
-			for(int k=0;k<faces.Length;k++){
-				Log.Debug(" k = {0}",k);
+			for(int k=0;k<faces.Length;k++){				
 				if(faces[k].Tag == null){
 					//Log.Debug("null Tag :: id = {0}, name = {0}",faces[k].Id,faces[k].Name);
 					continue;
 				}
-				else{
-					Log.Debug("tag = {0}, id = {0}, name = {0}",faces[k].Tag.Name,faces[k].Id,faces[k].Name);
-				}
-//				if(faces[k].iconPixbuf == null) {
-//					Log.Debug("id = {0}, name = {0}",faces[k].Id,faces[k].Name);
-//					continue;
-//				}
+				
 				train_labelsList.Add(faces[k].Tag.Name);
 				train_imagesList.Add(ImageTypeConverter.ConvertPixbufToGrayCVImage(faces[k].iconPixbuf));
 			}
@@ -102,10 +91,6 @@ namespace FaceSpot
 			
 			string[] train_labels = train_labelsList.ToArray();
 			Image<Gray, Byte>[] train_images = train_imagesList.ToArray();
-//			for(int k=0;k<train_images.Length;k++){
-//				train_images[k].Save("/home/hyperjump/out/"+k + "t.png");
-//			}
-			Log.Debug("#labels = {0} \n #images  {0}",train_labels.Length, train_labels.Length);
 			
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
 			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,7500,ref crit);

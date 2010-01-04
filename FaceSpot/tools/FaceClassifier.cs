@@ -21,19 +21,21 @@ namespace FaceSpot
 		public static FaceClassifier Instance
 		{
 			get { 
-				if(instance == null)
+				if(instance == null){
 					instance = new FaceClassifier();
+					instance.LoadResource();
+				}
 				return instance;
 			}
 		}
 		
-		private FaceClassifier ()
-		{
+		internal void LoadResource(){
+			
 			LoadEigenRecognizer();
 			LoadTrainedNetwork();
-		}
+		}		
 		
-		public void Classify(Face face){			
+		internal void Classify(Face face){			
 			
 			Log.Debug("Classify called - {0}",face.Id);
 			Emgu.CV.Image<Gray, byte> emFace = ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf);			
@@ -70,7 +72,7 @@ namespace FaceSpot
 			for(int j=0;j<output.Length;j++)
 				Console.Write("{0},",output[j]);
 			Console.WriteLine();
-			string suggestedName = FaceClassifier.AnalyseNetworkOutput(eigenVTags, output);			
+			string suggestedName = AnalyseNetworkOutput(eigenVTags, output);			
 			
 			Log.Debug("no suggestion - id = {0}, name = {0}",face.Id, face.Name);
 			
@@ -105,8 +107,7 @@ namespace FaceSpot
 		/// <returns>
 		/// A <see cref="System.String"/>
 		/// </returns>
-		public static string AnalyseNetworkOutput(EigenValueTags eigenVTags, double[] f){		
-			//fixme ^^ change >> static
+		public string AnalyseNetworkOutput(EigenValueTags eigenVTags, double[] f){		
 			double max = f[0];
 			int maxIndex = 0;
 						
@@ -116,7 +117,7 @@ namespace FaceSpot
 					max = f[i];
 				}
 			}	
-			Log.Debug("AnalyseNetwork... max = "+max);
+			//Log.Debug("AnalyseNetwork... max = "+max);
 			if(max < 0.7)
 				return null;
 			
@@ -140,13 +141,10 @@ namespace FaceSpot
 			//change loading method
 			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
 			eigenRec = (EigenObjectRecognizer)SerializeUtil.DeSerialize(path);
-			//eigenRec = EigenRecogizer.processedEigen;
-			
-			if(!System.IO.Directory.Exists("a.csv"))
-			   WriteEigenValueFile(eigenRec,"","a");			
+			//eigenRec = EigenRecogizer.processedEigen;							
 		}
 		
-			/// <summary>
+		/// <summary>
 		/// Given savepath and filename, create a csv file containing set of eigen values.
 		/// The csv is formatted according to WEKA classifer.
 		/// </summary>

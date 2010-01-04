@@ -17,6 +17,8 @@ namespace FaceSpot
 		
 		public static void Train(Face[] faces){
 			TrainNetwork(EigenRecogizer.ProcessPCA(faces));
+			FaceClassifier.Instance.LoadResource();
+			FaceSpotDb.Instance.Faces.ClearAutoRecognized();
 		}
 		
 		/// <summary>
@@ -26,7 +28,7 @@ namespace FaceSpot
 		/// A <see cref="EigenValueTags"/>
 		/// </param>
 		private static void TrainNetwork(EigenValueTags eigen){
-			Log.Debug("Train Started...");
+			Log.Debug("================ Train Started ================ ");
 			
 			string[] dLabels = eigen.FacesLabel;					
 			int numInstances = eigen.eigenTaglist.Count;
@@ -58,7 +60,7 @@ namespace FaceSpot
 			}						
 				
 			// convert to double
-			Log.Debug("nums train = "+ numstrain);
+//			Log.Debug("nums train = "+ numstrain);
 			double[][] trainInputD = new double[numstrain][];
 			double[][] trainOutputD = new double[numstrain][];
 			for(int i=0;i<numstrain;i++){				
@@ -73,7 +75,7 @@ namespace FaceSpot
 				}
 			}						 					     													
 					
-			TimeSpan tp = System.DateTime.Now.TimeOfDay;	
+//			TimeSpan tp = System.DateTime.Now.TimeOfDay;	
 			
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer inputLayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(inputNodes);
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer hiddenlayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(hiddenNodes);
@@ -98,7 +100,7 @@ namespace FaceSpot
 			bpnet.SetLearningRate(0.2);
 			bpnet.Learn(tset, numEpoch);
 						
-			Log.Debug("error = {0}",bpnet.MeanSquaredError);
+//			Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			
 //			string savepath = facedbPath + "object/";
 //			if(!Directory.Exists(savepath))
@@ -110,35 +112,36 @@ namespace FaceSpot
 			
 			// Deserialize
 			//BackpropagationNetwork testnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("nn.dat");
-			Log.Debug("error = {0}",bpnet.MeanSquaredError);
+//			Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			//bpnet = (BackpropagationNetwork)SerializeUtil.DeSerialize("/home/hyperjump/nn.dat");
 			//Log.Debug("error = {0}",bpnet.MeanSquaredError);
+			
 			// test by using training data
-			int correct = 0;			
-			for(int i=0;i<numInstances;i++){
-				
-				double[] v = new double[inputNodes];
-				for(int j=0;j<v.Length;j++){
-					v[j] = (double)eigen.eigenTaglist[i].val[j];
+//			int correct = 0;			
+//			for(int i=0;i<numInstances;i++){
+//				
+//				double[] v = new double[inputNodes];
+//				for(int j=0;j<v.Length;j++){
+//					v[j] = (double)eigen.eigenTaglist[i].val[j];
 					//Console.Write("{0},",v[j]);
-				}								                                       	
+//				}								                                       	
 				//Console.WriteLine();
 			
-				double[] netOutput = bpnet.Run(v);
+//				double[] netOutput = bpnet.Run(v);
 				//Console.WriteLine("net out:");
 //				for(int j=0;j<netOutput.Length;j++)
 //					Console.Write("{0},",netOutput[j]);
 				
-				string result = FaceClassifier.AnalyseNetworkOutput(eigen, netOutput);
-				if(eigen.eigenTaglist[i].tag.Equals(result))
-					correct++;				
-			}
-			Log.Debug("% correct = " + (float)correct/(float)numInstances * 100);
+//				string result = FaceClassifier.Instance.AnalyseNetworkOutput(eigen, netOutput);
+//				if(eigen.eigenTaglist[i].tag.Equals(result))
+//					correct++;				
+//			}
+//			Log.Debug("% correct = " + (float)correct/(float)numInstances * 100);
 			
 			//Save Train Status
 
 			
-			Log.Debug("Saving Train Status...");
+//			Log.Debug("Saving Train Status...");
 			List<Tstate> tstateList = new List<Tstate>();
 			int[] num = new int[dLabels.Length];
 			Log.Debug("num length = {0}",num.Length);
@@ -151,17 +154,11 @@ namespace FaceSpot
 			for(int k=0;k<dLabels.Length;k++){
 				tstateList.Add(new Tstate(dLabels[k], num[k]));
 			}
-			Log.Debug("Seting tstateList...");
-			FaceSpotDb.Instance.TrainingData.Trainstat = tstateList;
+
+			FaceSpotDb.Instance.TrainingData.Trainstat = tstateList;						
 			
-			//test
-			tstateList = FaceSpotDb.Instance.TrainingData.Trainstat;
-			foreach(Tstate ts in tstateList){
-				Log.Debug("name = {0}, num = {1}",ts.name,ts.num);
-			}
-			
-			Log.Debug("time ="+  System.DateTime.Now.TimeOfDay.Subtract(tp));																			
-			Log.Debug("Train ended...\n");
+//			Log.Debug("time ="+  System.DateTime.Now.TimeOfDay.Subtract(tp));																			
+			Log.Debug("================ Train ended ================ ");
 		}				
 	}
 }

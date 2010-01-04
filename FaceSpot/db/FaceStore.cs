@@ -15,6 +15,9 @@ namespace FaceSpot.Db
 	public class FaceStore : DbStore<Face>
 	{
 		const string ALL_FIELD_NAME = "id, photo_id, photo_version_id, tag_id, tag_confirm, auto_detected, auto_recognized, left_x, top_y, width, photo_md5, time, icon ";
+		//event System.EventHandler<Object>
+		//System.	
+		
 		public FaceStore (QueuedSqliteDatabase database, bool is_new)
 			: base(database, false)
 		{
@@ -22,6 +25,8 @@ namespace FaceSpot.Db
 			MainWindow.Toplevel.Database.Photos.ItemsRemoved += MainWindowToplevelDatabasePhotosItemsRemoved;
 			MainWindow.Toplevel.Database.Tags.ItemsRemoved += MainWindowToplevelDatabaseTagsItemsRemoved;
 			MainWindow.Toplevel.Database.Tags.ItemsChanged += MainWindowToplevelDatabaseTagsItemsChanged;
+			
+			//ItemsChanged += FaceTStatTracker.Instance.TrackFaceDbStatus;
 			
 			if ( is_new || !Database.TableExists("faces")) {
 				Log.Debug("Facestore Db Init");
@@ -33,8 +38,8 @@ namespace FaceSpot.Db
 					
 			}
 			Log.Debug("FaceStore Constuctor ended");
-		}
-
+		}				
+		
 		void MainWindowToplevelDatabaseTagsItemsChanged (object sender, DbItemEventArgs<Tag> e)
 		{
 			Log.Debug("Tags Item Change Handled By FaceStore");
@@ -273,6 +278,14 @@ namespace FaceSpot.Db
 				       "WHERE tag_id IS NULL "+addWhereClause));
 			return AddFacesFromReaderToCache(reader);
 		}
+		public Face[] GetTaggedFace(){
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE tag_id IS NOT NULL "));
+			return AddFacesFromReaderToCache(reader);
+		}
+		
 		public Face[] GetNotRecognizedFace(){
 			return GetUntaggedFace("AND auto_recognized = 0 AND tag_confirm = 0");
 		}
@@ -301,7 +314,20 @@ namespace FaceSpot.Db
 				reader.Close ();
 				return notags;
 		}
-		
+		/// <summary>
+		/// use this method when re-recognizing
+		/// </summary>
+		public void ClearAutoRecognized(){
+			try {
+				DbCommand dbcom= new	DbCommand(
+				    "UPDATE faces " +
+				    "SET auto_recognized = 0 " +
+				    "WHERE (auto_recognized = 1 and tag_confirm = 0)");								
+				Database.Execute ( dbcom);				
+			}catch (Exception ex){
+				Log.Exception(ex);
+			}
+		}
 		public void AddRejectedTag(Face face,Tag tag){
 			if(face==null || tag == null)return;
 			if(face.HasRejected(tag))return;
