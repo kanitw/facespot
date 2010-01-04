@@ -16,7 +16,7 @@ namespace FaceSpot
 			Log.Debug("Recognition Job Called #"+face.Id + " " + priority.ToString()
 			           +" ("+Scheduler.ScheduledJobsCount+" Job(s) Left");
 			
-			if(!face.tagConfirmed)
+			if(!face.TagConfirmed)
 				FaceClassifier.Instance.Classify(face);				
 			else 
 				Log.Debug("Face Confirmed Why resuggest");

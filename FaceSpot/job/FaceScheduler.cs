@@ -47,7 +47,10 @@ namespace FaceSpot
 				
 				
 			}
-			
+			if( job is TrainingJob){
+				Log.Debug(">>> SchedulerJobFinished : TrainingJob");
+				TrainingJob.finished = true;
+			}
 			Execute();
 		}
 		

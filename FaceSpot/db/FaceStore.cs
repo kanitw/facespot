@@ -438,8 +438,8 @@ namespace FaceSpot.Db
 		}
 		
 		public void ConfirmTag(Face face)
-		{
-			face.tagConfirmed = true;
+		{			
+			face.TagConfirmed = true;
 			Commit(face);
 			if(!face.photo.HasTag(face.Tag)){
 				face.photo.AddTag(face.Tag);
@@ -449,7 +449,7 @@ namespace FaceSpot.Db
 		public void DeclineTag(Face face)
 		{
 			Log.Debug("Declining Face#"+face.Id);
-			face.tagConfirmed = false;
+			face.TagConfirmed = false;
 			if(face.Tag !=null)
 				AddRejectedTag(face,face.Tag);
 			else 
@@ -471,7 +471,7 @@ namespace FaceSpot.Db
 					"width = :width , photo_md5 = :photo_md5, icon = :icon  WHERE id= :id",
 						"photo_id", face.photo.Id,
 						"tag_id",face.Tag !=null ? (Object) face.Tag.Id : null,
-						"tag_confirm", face.tagConfirmed,
+						"tag_confirm", face.TagConfirmed,
 				        "auto_detected",face.autoDetected,
 				        "auto_recognized",face.autoRecognized,
 						"left_x",face.LeftX,

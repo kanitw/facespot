@@ -38,24 +38,41 @@ namespace FaceSpot
 			}
 			return faceDbStat;
 		}
-		public void TrackFaceDbStatus(object sender, DbItemEventArgs<Face> e){							
+		
+		public void TrackFaceDbStatus(){							
 
 			
 			List<Tstate> tstat = FaceSpotDb.Instance.TrainingData.Trainstat;
-			List<Tstate> faceDbStat = GetFaceDbStat();			
-	
+			List<Tstate> faceDbStat = GetFaceDbStat();				
 			Log.Debug("tstat.Count = {0}, faceDbStat.Count = {1}", tstat.Count, faceDbStat.Count);
+			
 //			foreach(Tstate t in faceDbStat){
 //				Log.Debug("name = {0}, num = {1}", t.name, t.num);
 //			}
-							
-			if(tstat.Count!=faceDbStat.Count){
-				Log.Debug("===================================================");
-				RecognitionJob.Create(e.Items[0]);				
+			int sumTstat = 0;
+			foreach(Tstate t in tstat){
+				sumTstat+=t.num;
+			}
+			
+			int sumfaceDbStat = 0;
+			foreach(Tstate t in faceDbStat){
+				sumfaceDbStat+=t.num;
+			}
+			
+			if(tstat.Count!=faceDbStat.Count || Math.Abs(sumTstat - sumfaceDbStat) > 3){				
+				
+				TrainingJob.Create();
+				
+				while(!TrainingJob.finished);
+				
+				TrainingJob.finished = false;
+				FaceSpotDb.Instance.Faces.ClearAutoRecognized();
+				FaceScheduler.Instance.Execute();
 			}
 			
 			Log.Debug("TrackFacesStatus ended");	
 		}
+		
 		
 	}
 }

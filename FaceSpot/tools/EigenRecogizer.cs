@@ -102,7 +102,7 @@ namespace FaceSpot
 			// save recognized data into file of eigen value and into EigenValueTags class								
 			EigenValueTags eigenVtags = RecordEigenValue(eigenRec);															
 			
-			Log.Debug("Recognize Ended...");
+			Log.Debug("ProcessPCA ended...");		
 			
 			return eigenVtags;
 		}
