@@ -29,7 +29,9 @@ namespace FaceSpot
 			
 			float[][] eigenMatrix = new float[nums_train][];						    
 			
-			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/5);
+			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, 4 + nums_train/5);
+			if(nums_train < 5)
+				max_eigenvalueLength = nums_train;
 	         
 			for(int i=0;i<nums_train;i++){
 				
@@ -93,7 +95,7 @@ namespace FaceSpot
 			Image<Gray, Byte>[] train_images = train_imagesList.ToArray();
 			
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
-			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,7500,ref crit);
+			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,2000,ref crit);
 
 			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
 			// Serialize

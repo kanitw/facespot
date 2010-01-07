@@ -61,8 +61,6 @@ namespace FaceSpot
 			//fixme - this is slow
 			EigenValueTags eigenVTags = EigenRecogizer.RecordEigenValue(eigenRec);
 			
-			//Note this!
-			Random r = new Random();	
 			for(int j=0;j<inputNodes;j++){
 				v[j] = (double)eigenValue[j];	
 				
@@ -80,8 +78,20 @@ namespace FaceSpot
 			for(int j=0;j<output.Length;j++)
 				Console.Write("{0},",output[j]);
 			Console.WriteLine();
-			string suggestedName = AnalyseNetworkOutput(eigenVTags, output);			
 			
+			string suggestedName = AnalyseNetworkOutput(eigenVTags, output);			
+			string sss = eigenRec.Recognize(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
+			if( sss == null || sss.Length == 0){
+				
+				Log.Debug("=========================== EIGENREC NULL=============================");
+				suggestedName = null;
+			}
+			else{
+				Log.Debug("=========================== "+sss);
+				suggestedName = sss;
+				
+			}
+				
 			Log.Debug("no suggestion - id = {0}, name = {0}",face.Id, face.Name);
 			
 			if(suggestedName != null && suggestedName.Length != 0){
@@ -125,8 +135,9 @@ namespace FaceSpot
 					max = f[i];
 				}
 			}	
-			//Log.Debug("AnalyseNetwork... max = "+max);
-			if(max < 0.75)
+			Log.Debug("AnalyseNetwork... max = "+max);
+			
+			if(max < 0.8)
 				return null;
 			
 			string[] labels = eigenVTags.FacesLabel;
@@ -185,7 +196,9 @@ namespace FaceSpot
 				
 		    TextWriter tw = new StreamWriter(savepath+filename+".csv");
 			
-			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, nums_train/5);
+			int max_eigenvalueLength = Math.Min(MAX_EIGEN_LENGTH, 4 + nums_train/5);
+			if(nums_train < 5)
+				max_eigenvalueLength = nums_train;
 			
 			// write header
 			for(int i=0;i<max_eigenvalueLength;i++){

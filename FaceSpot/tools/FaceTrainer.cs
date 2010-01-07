@@ -77,8 +77,7 @@ namespace FaceSpot
 			}						 					     													
 					
 //			TimeSpan tp = System.DateTime.Now.TimeOfDay;	
-			
-			Log.Debug("NeuronDotNet.Core.Backpropagation.SigmoidLayer inputLayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(inputNodes)");
+						
 			Log.Debug("#in = {0}, #hid = {1}, #out = {2}",inputNodes,hiddenNodes,outputNodes);
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer inputLayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(inputNodes);
 			NeuronDotNet.Core.Backpropagation.SigmoidLayer hiddenlayer = new NeuronDotNet.Core.Backpropagation.SigmoidLayer(hiddenNodes);
@@ -100,11 +99,11 @@ namespace FaceSpot
 			bpnet.JitterNoiseLimit = 0.0001;
 			bpnet.Initialize();
 			
-			int numEpoch = 200;			
+			int numEpoch = 250;			
 			bpnet.SetLearningRate(0.2);
 			bpnet.Learn(tset, numEpoch);
 						
-			Log.Debug("error = {0}",bpnet.MeanSquaredError);
+//			Log.Debug("error = {0}",bpnet.MeanSquaredError);
 			
 //			string savepath = facedbPath + "object/";
 //			if(!Directory.Exists(savepath))
