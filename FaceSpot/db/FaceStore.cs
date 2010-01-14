@@ -458,43 +458,61 @@ namespace FaceSpot.Db
 				MainWindow.Toplevel.Database.Photos.Commit(face.photo);
 			}
 		}
+		
 		public void DeclineTag(Face face)
 		{
 			Log.Debug("Declining Face#"+face.Id);
-			face.TagConfirmed = false;
+			face.TagConfirmed = false;			
 			if(face.Tag !=null)
 				AddRejectedTag(face,face.Tag);
-			else 
-				Log.Debug("Decline Null Tag!!");
+			else
+				Log.Debug("Decline Null Tag!!");			
 			face.Tag = null;
 			Commit(face);
 		}
 		
 		public void Commit (Face[] items){
 			uint timer = Log.DebugTimerStart ();
-			Log.Debug("Face Commit Called");
-
-			foreach (Face face in items){
-				Database.ExecuteNonQuery(
-					new DbCommand("UPDATE faces SET photo_id = :photo_id"+
-					", tag_id = :tag_id, tag_confirm = :tag_confirm,"+
-					"auto_detected = :auto_detected, auto_recognized = :auto_recognized, "+				                                       
-				    "left_x = :left_x, top_y = :top_y,"+
-					"width = :width , photo_md5 = :photo_md5, icon = :icon  WHERE id= :id",
-						"photo_id", face.photo.Id,
-						"tag_id",face.Tag !=null ? (Object) face.Tag.Id : null,
-						"tag_confirm", face.TagConfirmed,
-				        "auto_detected",face.autoDetected,
-				        "auto_recognized",face.autoRecognized,
-						"left_x",face.LeftX,
-						"top_y",face.TopY,
-						"width",face.Width,
-						"photo_md5",face.photo.MD5Sum,
-				        "icon", GetIconString(face.iconPixbuf),                    
-				        "id",face.Id));
+			Log.Debug(">>> Face Commit Called");
+			
+			if(items.Length == 0){
+				Log.Debug("items length = 0");
+				return;
 			}
-			EmitChanged(items, new DbItemEventArgs<Face>(items));
+			
+			try {
+				foreach (Face face in items){
+					Database.ExecuteNonQuery(
+						new DbCommand("UPDATE faces SET photo_id = :photo_id"+
+						", tag_id = :tag_id, tag_confirm = :tag_confirm,"+
+						"auto_detected = :auto_detected, auto_recognized = :auto_recognized, "+				                                       
+					    "left_x = :left_x, top_y = :top_y,"+
+						"width = :width , photo_md5 = :photo_md5, icon = :icon  WHERE id= :id",
+							"photo_id", face.photo.Id,
+							"tag_id",face.Tag !=null ? (Object) face.Tag.Id : null,
+							"tag_confirm", face.TagConfirmed,
+					        "auto_detected",face.autoDetected,
+					        "auto_recognized",face.autoRecognized,
+							"left_x",face.LeftX,
+							"top_y",face.TopY,
+							"width",face.Width,
+							"photo_md5",face.photo.MD5Sum,
+					        "icon", GetIconString(face.iconPixbuf),                    
+					        "id",face.Id));
+				}
+				
+				//FIXME
+				Log.Debug(">> EmitChanged called");
+				// if the line below commented, no crash
+//				if(items != null && items.Length != 0)
+//					EmitChanged(items, new DbItemEventArgs<Face>(items));
+				Log.Debug(">> EmitChanged ended");
+				
+			} catch(Exception e) {
+				Log.Exception(e);
+			}
 			Log.DebugTimerPrint (timer, "Face Commit took {0}");
+			Log.Debug(">> Face Commit ended");
  		}
 		
 		private string GetIconString(Pixbuf pixbuf){

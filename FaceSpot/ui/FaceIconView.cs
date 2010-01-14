@@ -126,35 +126,51 @@ namespace FaceSpot
 			} catch(Exception ex) {
 				Log.Exception(ex);
 			}
-			if(faces!=null)
+			if(faces!=null && faces.Length > 0)
 				SetListStoreFaces(faces);
 		}
 
 		void SetListStoreFaces (Face[] faces)
-		{
-			listStore.Clear ();
-			this.faces = faces;
-			if(faces == null) return;
-			foreach (Face face in faces) {
-				//Log.Debug ("Append Face#" + (i++) + "  ");
-				if (face != null) {
-					string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
-					string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
-					Pixbuf facePixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
-					if (facePixbuf == null)
-						Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
-					if(IsBrowserType && IsShowFullImage){
-						Pixbuf fullPixbuf = ThumbnailCache.Default.GetThumbnailForUri(face.photo.DefaultVersionUri);
-						if(fullPixbuf == null){
-							fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
-							ThumbnailCache.Default.AddThumbnail(face.photo.DefaultVersionUri,fullPixbuf);
+		{						
+			
+			try {
+				Log.Debug(">>> SetListStoreFaces Called");
+				if(listStore != null)
+					listStore.Clear ();
+				
+				this.faces = faces;
+				
+				int i=0;
+				foreach (Face face in faces) {
+					Log.Debug ("Append Face#" + (i++) + "  ");
+					if (face != null && listStore != null) {
+						string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
+						string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
+						
+						Pixbuf facePixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
+						//Pixbuf facePixbuf = null;
+						//int thmSize = FaceSpot.THUMBNAIL_SIZE;
+						//Pixbuf facePixbuf = face.iconPixbuf != null ? ImageTypeConverter.ConvertCVImageToPixbuf(ImageTypeConverter.ConvertPixbufToCVImage(face.iconPixbuf).Resize(thmSize,thmSize)) : null;
+						
+						if (facePixbuf == null)
+							Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
+						if(IsBrowserType && IsShowFullImage){
+							Pixbuf fullPixbuf = ThumbnailCache.Default.GetThumbnailForUri(face.photo.DefaultVersionUri);
+							if(fullPixbuf == null){
+								fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
+								ThumbnailCache.Default.AddThumbnail(face.photo.DefaultVersionUri,fullPixbuf);
+							}
+							listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
 						}
-						listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
-					}
-					else
-						listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown);
-				} else
-					Log.Exception (new Exception ("Allowed null Face input to the faceiconview"));
+						else
+							listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown);
+					} else
+						Log.Exception (new Exception ("Allowed null Face input to the faceiconview"));
+				}
+				
+				Log.Debug(">>> SetListStoreFaces Ended");
+			} catch (Exception e) {				
+				Log.Exception(e);
 			}
 		}
 //		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)

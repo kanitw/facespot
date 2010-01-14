@@ -15,8 +15,9 @@ namespace FaceSpot
 	{				
 		public static BackpropagationNetwork bpnet;
 		
-		public static void Train(Face[] faces){			
-			TrainNetwork(EigenRecogizer.ProcessPCA(faces));
+		public static void Train(Face[] faces){	
+			
+			TrainNetwork(EigenRecognizer.Instance.ProcessPCA(faces));
 			FaceClassifier.Instance.LoadResource();
 			//FaceSpotDb.Instance.Faces.ClearAutoRecognized();
 		}
@@ -99,7 +100,7 @@ namespace FaceSpot
 			bpnet.JitterNoiseLimit = 0.0001;
 			bpnet.Initialize();
 			
-			int numEpoch = 250;			
+			int numEpoch = 200;			
 			bpnet.SetLearningRate(0.2);
 			bpnet.Learn(tset, numEpoch);
 						
@@ -144,7 +145,8 @@ namespace FaceSpot
 			//Save Train Status
 
 			
-//			Log.Debug("Saving Train Status...");
+			Log.Debug("Saving Train Status...");
+			
 			List<Tstate> tstateList = new List<Tstate>();
 			int[] num = new int[dLabels.Length];
 			Log.Debug("num length = {0}",num.Length);
