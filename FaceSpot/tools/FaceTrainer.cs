@@ -18,8 +18,7 @@ namespace FaceSpot
 		public static void Train(Face[] faces){	
 			
 			TrainNetwork(EigenRecognizer.Instance.ProcessPCA(faces));
-			FaceClassifier.Instance.LoadResource();
-			//FaceSpotDb.Instance.Faces.ClearAutoRecognized();
+			FaceClassifier.Instance.LoadResource();			
 		}
 		
 		/// <summary>

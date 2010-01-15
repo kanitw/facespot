@@ -31,6 +31,8 @@ namespace FaceSpot
 		/// A <see cref="EigenValueTags"/>
 		/// </returns>
 		public EigenValueTags RecordEigenValue(EigenObjectRecognizer eigenRec){
+			//DELETEME
+			FaceClassifier.WriteEigenValueFile(eigenRec,"","eigenvalue");
 			
 			EigenValueTags eigenValueTags = new EigenValueTags();
 			const int MAX_EIGEN_LENGTH = 30;
@@ -113,7 +115,7 @@ namespace FaceSpot
 			Image<Gray, Byte>[] train_images = train_imagesList.ToArray();
 			
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
-			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,3000,ref crit);
+			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,5000,ref crit);
 
 			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
 			// Serialize

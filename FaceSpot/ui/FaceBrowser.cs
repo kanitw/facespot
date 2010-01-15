@@ -21,6 +21,15 @@ namespace FaceSpot
 			xml = new Glade.XML(null,"FaceSpot.ui.FaceSpot.glade",dialog_name,"f-spot");
 			xml.Autoconnect(this);
 		}
+		public event EventHandler ActionPerformed;
+		public FaceBrowser(){
+			ActionPerformed += HandleActionPerformed;
+		}
+
+		void HandleActionPerformed (object sender, EventArgs e)
+		{
+			FaceIconView.UpdateAll();
+		}
 		
 		const int KnownFacePage = 0;
 		const int UnknownFacePage= 1;
@@ -111,13 +120,14 @@ namespace FaceSpot
 		{
 			IsShowFullImage = ! IsShowFullImage;
 		}
-
+		
 
 		void SuggestionDeclineButtonClicked (object sender, EventArgs e)
 		{
 			Face[] fs = suggestFaceIconView.SelectedFaces.ToArray();
 			foreach (Face f in fs)
 				FaceSpotDb.Instance.Faces.DeclineTag(f,true);
+			ActionPerformed(this,null);
 		}
 
 		void SuggestionConfirmButtonClicked (object sender, EventArgs e)
@@ -125,6 +135,7 @@ namespace FaceSpot
 			Face[] fs = suggestFaceIconView.SelectedFaces.ToArray();
 			foreach (Face f in fs)
 				FaceSpotDb.Instance.Faces.ConfirmTag(f);
+			ActionPerformed(this,null);
 		}
 
 

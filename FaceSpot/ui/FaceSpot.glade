@@ -257,7 +257,7 @@
                                 <property name="icon_size">1</property>
                                 <child>
                                   <widget class="GtkToolButton" id="SuggestionLabel">
-                                    <property name="width_request">400</property>
+                                    <property name="width_request">500</property>
                                     <property name="visible">True</property>
                                     <property name="sensitive">False</property>
                                     <property name="is_important">True</property>

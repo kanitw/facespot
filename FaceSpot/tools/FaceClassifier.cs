@@ -188,7 +188,7 @@ namespace FaceSpot
 		/// <param name="filename">
 		/// A <see cref="System.String"/>
 		/// </param>
-		private void WriteEigenValueFile(EigenObjectRecognizer eigenRec, string savepath, string filename){
+		public static void WriteEigenValueFile(EigenObjectRecognizer eigenRec, string savepath, string filename){
 			
 			// don't store eigen value more than this number
 			const int MAX_EIGEN_LENGTH = 30;
