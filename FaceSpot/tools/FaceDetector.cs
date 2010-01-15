@@ -62,6 +62,7 @@ namespace FaceSpot
 		/// </returns>
 		public static FaceImagePos[] DetectFace(Image<Bgr, Byte> image){
 			Log.Debug("DetectFace called...");	
+
 			double resizeRatio = 1;
 			Resize(ref image, ref resizeRatio);
 			

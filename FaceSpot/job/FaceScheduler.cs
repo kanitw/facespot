@@ -62,7 +62,7 @@ namespace FaceSpot
 				
 			}
 		}
-		const int QUEUE_ENTRY_LIMIT = 5;
+		const int QUEUE_ENTRY_LIMIT = 2;
 		public void QueueAnyUncheckedPhoto()
 		{
 			Photo[] undetectedPhotos = FaceSpotDb.Instance.PhotosAddOn.GetUnDetectedPhoto();

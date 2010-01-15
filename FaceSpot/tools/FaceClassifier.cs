@@ -42,6 +42,8 @@ namespace FaceSpot
 			
 			Log.Debug(">>> Classify() called - {0}", face.Id);
 			
+			System.Threading.Thread.Sleep(10);
+			
 			Emgu.CV.Image<Gray, byte> emFace = ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf);			
 			//emFace.Save("/home/hyperjump/out/"+face.Id + "a.png");
 			
@@ -79,13 +81,17 @@ namespace FaceSpot
 				Console.Write("{0},",output[j]);
 			Console.WriteLine();
 			
-			string suggestedName = AnalyseNetworkOutput(eigenVTags, output);			
+			// suggestedname from neural network
+			string suggestedName = AnalyseNetworkOutput(eigenVTags, output);					
+			// suggestedname from nearest neighbor
 			string sss = eigenRec.Recognize(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
+			
+			//Log.Debug("EigenObj = {0••••••••••••••••••}, ANN = {0}",sss,suggestedName);
 			if( sss == null || sss.Length == 0){								
 				suggestedName = null;
 			}
 			else{				
-				suggestedName = sss;				
+			//	suggestedName = sss;				
 			}
 				
 			Log.Debug("no suggestion - id = {0}, name = {0}",face.Id, face.Name);

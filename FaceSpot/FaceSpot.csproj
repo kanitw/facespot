@@ -102,7 +102,6 @@
     <Compile Include="ui\People.cs" />
     <Compile Include="job\FaceScheduler.cs" />
     <Compile Include="tools\SerializeUtil.cs" />
-    <Compile Include="tools\EigenRecogizer.cs" />
     <Compile Include="tools\FaceTrainer.cs" />
     <Compile Include="tools\EigenValueTags.cs" />
     <Compile Include="tools\FaceTag.cs" />
@@ -112,6 +111,7 @@
     <Compile Include="job\TrainingJob.cs" />
     <Compile Include="db\TrainingStore.cs" />
     <Compile Include="tools\FaceTStatTracker.cs" />
+    <Compile Include="tools\EigenRecognizer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

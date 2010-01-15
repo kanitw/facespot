@@ -76,7 +76,6 @@ namespace FaceSpot
 			//entryCompletion.Complete();
 		}
 		
-		
 		#endregion
 
 		protected new string dialog_name = "FaceEditorDialog";
