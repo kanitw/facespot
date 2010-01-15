@@ -157,7 +157,7 @@ namespace FaceSpot
 			} else {
 				Log.Debug ("FaceEditor OK : No Tag" + peopleComboBoxEntry.ActiveText);
 				if(face.Tag != null){
-					FaceSpotDb.Instance.Faces.DeclineTag(face);
+					FaceSpotDb.Instance.Faces.DeclineTag(face,true);
 				}
 			}
 			

@@ -117,7 +117,7 @@ namespace FaceSpot
 		{
 			Face[] fs = suggestFaceIconView.SelectedFaces.ToArray();
 			foreach (Face f in fs)
-				FaceSpotDb.Instance.Faces.DeclineTag(f);
+				FaceSpotDb.Instance.Faces.DeclineTag(f,true);
 		}
 
 		void SuggestionConfirmButtonClicked (object sender, EventArgs e)

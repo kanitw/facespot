@@ -513,8 +513,8 @@ namespace FaceSpot.Db
 				//FIXME
 				Log.Debug(">> EmitChanged called");
 				// if the line below commented, no crash
-				if(items != null && items.Length != 0)
-					EmitChanged(items, new DbItemEventArgs<Face>(items));
+				//if(items != null && items.Length != 0)
+				//	EmitChanged(items, new DbItemEventArgs<Face>(items));
 				Log.Debug(">> EmitChanged ended");
 				
 			} catch(Exception e) {

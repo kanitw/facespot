@@ -159,7 +159,8 @@ namespace FaceSpot
 						string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
 						string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
 						
-						Pixbuf facePixbuf = face.iconPixbuf != null ? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
+						Pixbuf facePixbuf = face.iconPixbuf != null
+							? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 						//Pixbuf facePixbuf = null;
 						//int thmSize = FaceSpot.THUMBNAIL_SIZE;
 						//Pixbuf facePixbuf = face.iconPixbuf != null ? ImageTypeConverter.ConvertCVImageToPixbuf(ImageTypeConverter.ConvertPixbufToCVImage(face.iconPixbuf).Resize(thmSize,thmSize)) : null;
