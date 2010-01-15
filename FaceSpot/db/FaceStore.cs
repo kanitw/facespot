@@ -437,7 +437,8 @@ namespace FaceSpot.Db
 			uint id = (uint)Database.Execute (					dbcom				);
 			Face face = new Face (id, leftX, topY, width, photo,tag,tagConfirmed,autoDetected,autoRecognized,iconPixbuf,unix_time);
 			Log.Debug("Finished createFace : Db Exec Query");
-			//EmitAdded(new Face[]{face});
+			//TODO Decide whether to emit Added
+			EmitAdded(new Face[]{face});
 			return face;
 		}
  		public override void Commit (Face item)
@@ -510,13 +511,12 @@ namespace FaceSpot.Db
 					        "icon", GetIconString(face.iconPixbuf),                    
 					        "id",face.Id));
 				}
-				
 				//FIXME
-				Log.Debug(">> EmitChanged called");
+				//Log.Debug(">> EmitChanged called");
 				// if the line below commented, no crash
 				if(items != null && items.Length != 0)
-					//EmitChanged(items, new DbItemEventArgs<Face>(items));
 					EmitChanged(items);
+				//EmitChanged(null);
 				//Log.Debug(">> EmitChanged ended");
 				
 			} catch(Exception e) {

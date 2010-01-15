@@ -146,6 +146,7 @@ public class FaceSidebarWidget : ScrolledWindow {
 				if(face!=null){
 					face.iconPixbuf = FaceSpotDb.Instance.Faces.GetFacePixbufFromView();
 					FaceSpotDb.Instance.Faces.Commit(face);
+					//FaceSpotDb.
 					AlertMove();
 				}
 				else 

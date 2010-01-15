@@ -17,7 +17,19 @@ namespace FaceSpot
 			get { return iconView.SelectedFaces.ToArray(); }	
 		}
 		FaceIconView iconView;
-		public FaceIconViewPopupMenu () : base(){}
+		public event EventHandler ActionActivated;
+		public FaceIconViewPopupMenu () : base(){
+			ActionActivated += HandleActionActivated;
+			
+		}
+
+		void HandleActionActivated (object sender, EventArgs e)
+		{
+			FaceIconView.UpdateAll();
+		}
+		void EmitActionActivated(){
+			ActionActivated(this,null);	
+		}
 		
 		private bool IsAllSelectionSuggested(){
 			if(SelectedFaces == null || SelectedFaces.Length == 0) return false;
@@ -54,11 +66,14 @@ namespace FaceSpot
 			if(SelectedFaces.Length == 1)
 				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			
-			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
+			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null,true);
 			
-			if(ChangePersonTo != null && ChangePersonTo.Submenu != null){
-				PopulatePeopleCategories (ChangePersonTo,People.Tag);			
-				GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
+			if(ChangePersonTo != null){
+				PopulatePeopleCategories (ChangePersonTo,People.Tag);	
+				if  ( ChangePersonTo.Submenu != null )
+					GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
+				else 
+					ChangePersonTo.Submenu = new Menu();
 				GtkUtil.MakeMenuItem((Menu)ChangePersonTo.Submenu,"-", new EventHandler(ChangePersonToNoOneActivated));
 			}
 			
@@ -72,11 +87,15 @@ namespace FaceSpot
 		{
 			foreach(Face f in SelectedFaces)
 				FaceSpotDb.Instance.Faces.ConfirmTag(f);
+			FaceIconView.UpdateAll();
+			EmitActionActivated();
 		}
 		void DeclineActivated (object sender, EventArgs e)
 		{
 			foreach(Face f in SelectedFaces)
 				FaceSpotDb.Instance.Faces.DeclineTag(f,true);
+			FaceIconView.UpdateAll();
+			EmitActionActivated();
 		}
 		void ShowImageActivated (object sender, EventArgs e)
 		{
@@ -96,6 +115,7 @@ namespace FaceSpot
 			//iconView.SelectedFace = face;
 			//FaceEditorDialog dialog = 
 				new FaceEditorDialog ( iconView.SelectedFace,this.Toplevel,false);
+			
 		}
 		void ChangePersonToNoOneActivated (object sender, EventArgs e)
 		{
@@ -103,6 +123,7 @@ namespace FaceSpot
 			foreach (Face face in SelectedFaces){
 				FaceSpotDb.Instance.Faces.DeclineTag(face,true);
 			}
+			EmitActionActivated();
 		}
 
 		void DeleteActivated (object sender, EventArgs e)
@@ -125,6 +146,7 @@ namespace FaceSpot
 				//MainWindow.Toplevel.UpdateQuery ();
 				Log.DebugTimerPrint (timer, "HandleDeleteCommand took {0}");
 			}
+			EmitActionActivated();
 		}
 		
 		void PopulatePeopleCategories (MenuItem menu ,Tag parent)
@@ -158,6 +180,7 @@ namespace FaceSpot
 						else 
 							FaceSpotDb.Instance.Faces.DeclineTag(face,true);
 					}	
+					EmitActionActivated();
 				};
 			}
 			if(tag !=null && tag.Icon != null){

@@ -172,6 +172,7 @@ namespace FaceSpot
 			FaceSpotDb.Instance.CommitTransaction ();
 		}
 
+		
 		private void ClearEditor ()
 		{
 			MainWindow.Toplevel.PhotoView.View.Selection = Rectangle.Zero;

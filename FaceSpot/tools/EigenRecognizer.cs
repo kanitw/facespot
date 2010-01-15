@@ -113,7 +113,7 @@ namespace FaceSpot
 			Image<Gray, Byte>[] train_images = train_imagesList.ToArray();
 			
 		    MCvTermCriteria crit = new MCvTermCriteria(0.0001);		 			
-			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,4000,ref crit);
+			EigenObjectRecognizer eigenRec = new EigenObjectRecognizer(train_images,train_labels,3000,ref crit);
 
 			string path = Path.Combine (FSpot.Global.BaseDirectory, "eigen.dat");
 			// Serialize

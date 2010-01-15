@@ -141,7 +141,7 @@ namespace FaceSpot
 			}	
 			Log.Debug("AnalyseNetwork... max = "+max);
 			
-			if(max < 0.8)
+			if(max < 0.75)
 				return null;
 			
 			string[] labels = eigenVTags.FacesLabel;

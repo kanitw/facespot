@@ -43,20 +43,19 @@ namespace FaceSpot
 		ListStore listStore;
 		public Face[] faces;
 		
+		private static List<FaceIconView> pool = new List<FaceIconView>();
+		public static void UpdateAll(){
+			foreach (FaceIconView iconView in pool)
+				iconView.UpdateFaces();
+		}
+		
+		
 		public FaceIconView(Type type) : base()
 		{
-			switch (type){
-				case Type.KnownFaceSidebar:
-				case Type.UnknownFaceSidebar :
-					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(string));
-					break;
-				case Type.KnownFaceBrowser:
-				case Type.SuggestedFaceBrowser:
-				case Type.UnknownFaceBrowser:
-					listStore = new ListStore(typeof(string),typeof(Pixbuf),typeof(Face),typeof(string),typeof(Pixbuf));
-					break;
-			}
+			InitListStore ();
 			this._type = type;
+			
+			pool.Add(this);
 			
 			//this.ModifierStyle 
 			//this.Style = 
@@ -76,28 +75,44 @@ namespace FaceSpot
 //				RowSpacing =0 ;
 //				ColumnSpacing =0;
 //				Margin =0;
-			FaceSpotDb.Instance.Faces.ItemsAdded += FaceSpotDbInstanceFacesItemsAdded;
-			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
-			FaceSpotDb.Instance.Faces.ItemsRemoved+= FaceSpotDbInstanceFacesItemsRemoved;
+//			FaceSpotDb.Instance.Faces.ItemsAdded += FaceSpotDbInstanceFacesItemsAdded;
+//			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
+//			FaceSpotDb.Instance.Faces.ItemsRemoved+= FaceSpotDbInstanceFacesItemsRemoved;
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
 		}
 
-		void FaceSpotDbInstanceFacesItemsAdded (object sender, DbItemEventArgs<Face> e)
+		void InitListStore ()
 		{
-			Log.Debug(type.ToString() + "Handle FaceDbInstanceAdded from " + sender.ToString() + "  " + e.ToString());
-			UpdateFaces();
+			switch (type) {
+			case Type.KnownFaceSidebar:
+			case Type.UnknownFaceSidebar:
+				listStore = new ListStore (typeof(string), typeof(Pixbuf), typeof(Face), typeof(string));
+				break;
+			case Type.KnownFaceBrowser:
+			case Type.SuggestedFaceBrowser:
+			case Type.UnknownFaceBrowser:
+				listStore = new ListStore (typeof(string), typeof(Pixbuf), typeof(Face), typeof(string), typeof(Pixbuf));
+				break;
+			}
 		}
-		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
-		{
-			Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
-			UpdateFaces();
-		}
-		void FaceSpotDbInstanceFacesItemsRemoved (object sender, DbItemEventArgs<Face> e)
-		{
-			Log.Debug(type.ToString() + "Handle FaceDbInstanceRemoved from " + sender.ToString() + "  " + e.ToString());
-			UpdateFaces();
-		}
+
+
+//		void FaceSpotDbInstanceFacesItemsAdded (object sender, DbItemEventArgs<Face> e)
+//		{
+//			Log.Debug(type.ToString() + "Handle FaceDbInstanceAdded from " + sender.ToString() + "  " + e.ToString());
+//			UpdateFaces();
+//		}
+//		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
+//		{
+//			Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
+//			UpdateFaces();
+//		}
+//		void FaceSpotDbInstanceFacesItemsRemoved (object sender, DbItemEventArgs<Face> e)
+//		{
+//			Log.Debug(type.ToString() + "Handle FaceDbInstanceRemoved from " + sender.ToString() + "  " + e.ToString());
+//			UpdateFaces();
+//		}
 		
 		Tag tag;
 		
@@ -151,8 +166,9 @@ namespace FaceSpot
 			
 			try {
 				//Log.Debug(">>> SetListStoreFaces Called");
-				if(listStore != null)
-					listStore.Clear ();
+				//if(listStore != null)
+				//	listStore.Clear ();
+				InitListStore();
 				
 				this.faces = faces;
 				
@@ -215,6 +231,7 @@ namespace FaceSpot
 			} catch (Exception e) {				
 				Log.Exception("Exception in List Store Faces!!!",e);
 			}
+			this.Model = listStore;
 		}
 //		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)
 //		{
