@@ -97,13 +97,13 @@ namespace FaceSpot
 			//FaceEditorDialog dialog = 
 				new FaceEditorDialog ( iconView.SelectedFace,this.Toplevel,false);
 		}
-//		void ChangePersonToNoOneActivated (object sender, EventArgs e)
-//		{
-//			if(SelectedFaces == null) return;
-//			foreach (Face face in SelectedFaces){
-//				FaceSpotDb.Instance.Faces.DeclineTag(face,true);
-//			}
-//		}
+		void ChangePersonToNoOneActivated (object sender, EventArgs e)
+		{
+			if(SelectedFaces == null) return;
+			foreach (Face face in SelectedFaces){
+				FaceSpotDb.Instance.Faces.DeclineTag(face,true);
+			}
+		}
 
 		void DeleteActivated (object sender, EventArgs e)
 		{

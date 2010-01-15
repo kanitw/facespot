@@ -16,7 +16,9 @@ namespace FaceSpot
 		public const string FACE_ICON_PREFIX = "faceicon";
 		/// <summary> Resize Method for all icon's simple resize
 		/// </summary>
-		public const Gdk.InterpType IconResizeInterpType = Gdk.InterpType.Hyper;
+		public const Gdk.InterpType IconResizeInterpType = 
+			//Gdk.InterpType.Hyper;
+			Gdk.InterpType.Bilinear;
 		
 		//public System.Collections.Generic.
 	}

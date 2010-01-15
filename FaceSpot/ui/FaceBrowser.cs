@@ -79,9 +79,9 @@ namespace FaceSpot
 			
 			unknownFaceIconView = new FaceIconView(FaceIconView.Type.UnknownFaceBrowser,null);
 			UnknownFaceScrolledWindow.Add(unknownFaceIconView);
-			FaceSpotDb.Instance.Faces.ItemsAdded += FaceSpotDbInstanceFacesItemsChanged;
-			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
-			FaceSpotDb.Instance.Faces.ItemsRemoved += FaceSpotDbInstanceFacesItemsChanged;
+//			FaceSpotDb.Instance.Faces.ItemsAdded += FaceSpotDbInstanceFacesItemsAdded;
+//			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
+//			FaceSpotDb.Instance.Faces.ItemsRemoved += FaceSpotDbInstanceFacesItemsRemoved;
 			
 			UnknownFaceButton.Clicked += UnknownFaceButtonClicked;
 			
@@ -117,7 +117,7 @@ namespace FaceSpot
 		{
 			Face[] fs = suggestFaceIconView.SelectedFaces.ToArray();
 			foreach (Face f in fs)
-				FaceSpotDb.Instance.Faces.DeclineTag(f);
+				FaceSpotDb.Instance.Faces.DeclineTag(f,true);
 		}
 
 		void SuggestionConfirmButtonClicked (object sender, EventArgs e)
