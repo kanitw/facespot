@@ -76,7 +76,7 @@ namespace FaceSpot
 		void DeclineActivated (object sender, EventArgs e)
 		{
 			foreach(Face f in SelectedFaces)
-				FaceSpotDb.Instance.Faces.DeclineTag(f);
+				FaceSpotDb.Instance.Faces.DeclineTag(f,true);
 		}
 		void ShowImageActivated (object sender, EventArgs e)
 		{
@@ -97,13 +97,13 @@ namespace FaceSpot
 			//FaceEditorDialog dialog = 
 				new FaceEditorDialog ( iconView.SelectedFace,this.Toplevel,false);
 		}
-		void ChangePersonToNoOneActivated (object sender, EventArgs e)
-		{
-			if(SelectedFaces == null) return;
-			foreach (Face face in SelectedFaces){
-				FaceSpotDb.Instance.Faces.DeclineTag(face);
-			}
-		}
+//		void ChangePersonToNoOneActivated (object sender, EventArgs e)
+//		{
+//			if(SelectedFaces == null) return;
+//			foreach (Face face in SelectedFaces){
+//				FaceSpotDb.Instance.Faces.DeclineTag(face,true);
+//			}
+//		}
 
 		void DeleteActivated (object sender, EventArgs e)
 		{
@@ -156,7 +156,7 @@ namespace FaceSpot
 						if(tag != null)
 							FaceSpotDb.Instance.Faces.SetTag(face,tag);
 						else 
-							FaceSpotDb.Instance.Faces.DeclineTag(face);
+							FaceSpotDb.Instance.Faces.DeclineTag(face,true);
 					}	
 				};
 			}

@@ -76,14 +76,26 @@ namespace FaceSpot
 //				RowSpacing =0 ;
 //				ColumnSpacing =0;
 //				Margin =0;
+			FaceSpotDb.Instance.Faces.ItemsAdded += FaceSpotDbInstanceFacesItemsAdded;
 			FaceSpotDb.Instance.Faces.ItemsChanged += FaceSpotDbInstanceFacesItemsChanged;
+			FaceSpotDb.Instance.Faces.ItemsRemoved+= FaceSpotDbInstanceFacesItemsRemoved;
 			//this.SelectionMode = SelectionMode.
 //			this.ButtonReleaseEvent += HandleButtonReleaseEvent;
 		}
 
+		void FaceSpotDbInstanceFacesItemsAdded (object sender, DbItemEventArgs<Face> e)
+		{
+			Log.Debug(type.ToString() + "Handle FaceDbInstanceAdded from " + sender.ToString() + "  " + e.ToString());
+			UpdateFaces();
+		}
 		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
 		{
-			//Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
+			Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
+			UpdateFaces();
+		}
+		void FaceSpotDbInstanceFacesItemsRemoved (object sender, DbItemEventArgs<Face> e)
+		{
+			Log.Debug(type.ToString() + "Handle FaceDbInstanceRemoved from " + sender.ToString() + "  " + e.ToString());
 			UpdateFaces();
 		}
 		
