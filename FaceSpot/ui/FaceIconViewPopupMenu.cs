@@ -28,6 +28,7 @@ namespace FaceSpot
 			FaceIconView.UpdateAll();
 		}
 		void EmitActionActivated(){
+			iconView.UnselectAll();
 			ActionActivated(this,null);	
 		}
 		
@@ -87,14 +88,14 @@ namespace FaceSpot
 		{
 			foreach(Face f in SelectedFaces)
 				FaceSpotDb.Instance.Faces.ConfirmTag(f);
-			FaceIconView.UpdateAll();
+			//FaceIconView.UpdateAll();
 			EmitActionActivated();
 		}
 		void DeclineActivated (object sender, EventArgs e)
 		{
 			foreach(Face f in SelectedFaces)
 				FaceSpotDb.Instance.Faces.DeclineTag(f,true);
-			FaceIconView.UpdateAll();
+			//FaceIconView.UpdateAll();
 			EmitActionActivated();
 		}
 		void ShowImageActivated (object sender, EventArgs e)
