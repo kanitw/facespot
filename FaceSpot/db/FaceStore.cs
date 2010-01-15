@@ -227,7 +227,8 @@ namespace FaceSpot.Db
 				} catch (Exception ex) {
 					Log.Exception ("Unable to load icon for Face#" + Convert.ToUInt32 (reader["id"]), ex);
 				}
-			}
+			}else
+				Log.Error("Unable to load icon for Face#" + Convert.ToUInt32 (reader["id"]),false);
 			face = new Face (Convert.ToUInt32 (reader["id"]), Convert.ToUInt32 (reader["left_x"]), 
 			                 Convert.ToUInt32 (reader["top_Y"]), Convert.ToUInt32 (reader["width"]), 
 			                 photo,tag,Convert.ToBoolean(reader["tag_confirm"]),
@@ -513,8 +514,9 @@ namespace FaceSpot.Db
 				//FIXME
 				Log.Debug(">> EmitChanged called");
 				// if the line below commented, no crash
-				//if(items != null && items.Length != 0)
+				if(items != null && items.Length != 0)
 					//EmitChanged(items, new DbItemEventArgs<Face>(items));
+					EmitChanged(items);
 				//Log.Debug(">> EmitChanged ended");
 				
 			} catch(Exception e) {

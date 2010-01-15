@@ -114,8 +114,12 @@ namespace FaceSpot
 				photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;
 			//Log.Debug("Get Faces");
 			if(!isShowFullImage){
-				ItemWidth =50;
-				//Font
+				//ItemWidth =50;
+				ItemWidth =-1;
+				Spacing = 0;
+				RowSpacing =0 ;
+				ColumnSpacing =0;
+				Margin =0;
 			}
 			try {
 				switch (type){
@@ -146,7 +150,7 @@ namespace FaceSpot
 		{						
 			
 			try {
-				Log.Debug(">>> SetListStoreFaces Called");
+				//Log.Debug(">>> SetListStoreFaces Called");
 				if(listStore != null)
 					listStore.Clear ();
 				
@@ -154,11 +158,11 @@ namespace FaceSpot
 				
 				int i=0;
 				foreach (Face face in faces) {
-					//Log.Debug ("Append Face#" + (i++) + "  ");
+					Log.Debug ("SetListStoreFaces Append Face#" + (i) + "  ");
 					if (face != null && listStore != null) {
 						string name = face.Name == null ? "?" /*+" : #"+face.Id.ToString ()*/ : face.Name;
 						string nameWithIdIfUnknown = face.Name == null ? "?" +" : #"+face.Id.ToString () : face.Name;
-						
+						Log.Debug("Scaling #"+i);
 						Pixbuf facePixbuf = face.iconPixbuf != null
 							? face.iconPixbuf.ScaleSimple (FaceSpot.THUMBNAIL_SIZE, FaceSpot.THUMBNAIL_SIZE, FaceSpot.IconResizeInterpType) : null;
 						//Pixbuf facePixbuf = null;
@@ -167,23 +171,49 @@ namespace FaceSpot
 						
 						if (facePixbuf == null)
 							Log.Exception (new Exception ("Allowed null Face Pixbuf to the faceiconview"));
-//						if(IsBrowserType && IsShowFullImage){
-//							Pixbuf fullPixbuf = ThumbnailCache.Default.GetThumbnailForUri(face.photo.DefaultVersionUri);
-//							if(fullPixbuf == null){
-//								fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
-//								ThumbnailCache.Default.AddThumbnail(face.photo.DefaultVersionUri,fullPixbuf);
-//							}
-//							listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
-//						}
-//						else
-							listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown);
+						if(IsBrowserType){
+							if(IsShowFullImage){
+								Log.Debug("BroswerIsShowFullImage #"+i);
+								Pixbuf fullPixbuf = ThumbnailCache.Default.GetThumbnailForUri(face.photo.DefaultVersionUri);
+								if(fullPixbuf == null){
+									fullPixbuf = ThumbnailGenerator.Create(face.photo.DefaultVersionUri);
+									ThumbnailCache.Default.AddThumbnail(face.photo.DefaultVersionUri,fullPixbuf);
+								}
+								try {
+									listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,fullPixbuf);
+								} catch (Exception e) {
+									Log.Exception("Exception in List Store appendvalue",e);
+								}
+							}
+							else {
+								Log.Debug("BroswerIsNotShowFullImage #"+i);
+								try {
+									listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown,facePixbuf);
+								}  catch (Exception e) {
+									Log.Exception("Exception in List Store appendvalue",e);
+								}
+								
+								
+							}
+						}
+						else {
+							Log.Debug("Sidebar IsNotShowFullImage #"+i+"    " + (facePixbuf == null) );
+							
+							try {
+								listStore.AppendValues (name, facePixbuf, face,nameWithIdIfUnknown);
+							}  catch (Exception e) {
+									Log.Exception("Exception in List Store appendvalue",e);
+								}
+						}
+						Log.Debug("Finish Append Value #"+i);
+						i++;
 					} else
 						Log.Exception (new Exception ("Allowed null Face input to the faceiconview"));
 				}
 				
 				Log.Debug(">>> SetListStoreFaces Ended");
 			} catch (Exception e) {				
-				Log.Exception(e);
+				Log.Exception("Exception in List Store Faces!!!",e);
 			}
 		}
 //		void HandleButtonReleaseEvent (object o, ButtonReleaseEventArgs args)

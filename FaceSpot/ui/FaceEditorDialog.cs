@@ -90,10 +90,14 @@ namespace FaceSpot
 			Dialog.Parent = parent;
 			Dialog.Modal  = true;
 			//Dialog.TransientFor = parent;
+			Gdk.Pixbuf pix = null;
+			if(face.iconPixbuf != null){
+				pix = face.iconPixbuf;
+				//TODO Determine Resize Method
+				faceImage.Pixbuf = pix.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType);
+			}else {
 				
-			Gdk.Pixbuf pix = face.iconPixbuf;
-			//TODO Determine Resize Method
-			faceImage.Pixbuf = pix.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType);
+			}
 			ok_button.Clicked += OkButtonClicked;
 			cancel_button.Clicked += CancelButtonClicked;
 			this.Dialog.Destroyed += DialoghandleDestroyed;
