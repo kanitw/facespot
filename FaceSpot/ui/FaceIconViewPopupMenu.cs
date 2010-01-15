@@ -80,7 +80,7 @@ namespace FaceSpot
 		}
 		void ShowImageActivated (object sender, EventArgs e)
 		{
-			MainWindow.Toplevel.ViewMode == MainWindow.ModeType.PhotoView;
+			//MainWindow.Toplevel.ViewMode = MainWindow.ModeType.PhotoView;
 			//MainWindow.Toplevel.Query.Terms.
 		}
 		void MoveActivated (object sender, EventArgs e)

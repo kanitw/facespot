@@ -237,11 +237,15 @@ namespace FaceSpot.Db
 			AddToCache (face);
 			return face;
 		}
-		public Face[] GetKnownFacesByPhoto(Photo photo){
-			return GetByPhoto(photo,"AND tag_confirm = 1 AND NOT tag_id IS NULL ");
+		public Face[] GetKnownFacesByPhoto(Photo photo, bool allVersion){
+			return GetByPhoto(photo,"AND tag_confirm = 1 AND NOT tag_id IS NULL "
+				+ (allVersion? "" : "AND photo_version_id = "+photo.DefaultVersionId + " ")
+			                  );
 		}
-		public Face[] GetNotKnownFacesByPhoto(Photo photo){
-			return GetByPhoto(photo," AND ( tag_id IS NULL OR tag_confirm = 0 )");	
+		public Face[] GetNotKnownFacesByPhoto(Photo photo, bool allVersion){
+			return GetByPhoto(photo," AND ( tag_id IS NULL OR tag_confirm = 0 ) "
+			    + (allVersion? "" : "AND photo_version_id = "+photo.DefaultVersionId + " ")              
+			                  );	
 		}
 		public Face[] GetByPhoto(Photo photo, string addWhereClause){
 			if(photo == null)
@@ -526,7 +530,6 @@ namespace FaceSpot.Db
 			RemoveFromCache (item);
 			Database.ExecuteNonQuery (
 				new DbCommand ("DELETE FROM faces WHERE id = :id", "id", item.Id));
-			//TODO Study What is EmitRemoved ();
 		}
 		
 		public void clearDatabase(){

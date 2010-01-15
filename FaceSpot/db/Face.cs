@@ -72,7 +72,8 @@ namespace FaceSpot.Db
 			}
 			set{
 				tagConfirmed = value;
-				FaceTStatTracker.Instance.TrackFaceDbStatus();
+				//FIXME Jump please fix this please
+			//	FaceTStatTracker.Instance.TrackFaceDbStatus();
 			}
 		}
 		private long unix_time;

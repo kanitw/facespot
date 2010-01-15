@@ -108,10 +108,10 @@ namespace FaceSpot
 			try {
 				switch (type){
 					case Type.KnownFaceSidebar:
-						faces = FaceSpotDb.Instance.Faces.GetKnownFacesByPhoto(photo);
+						faces = FaceSpotDb.Instance.Faces.GetKnownFacesByPhoto(photo,false);
 						break;
 					case Type.UnknownFaceSidebar:
-						faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo);
+						faces = FaceSpotDb.Instance.Faces.GetNotKnownFacesByPhoto(photo,false);
 						break;
 					case Type.KnownFaceBrowser:
 						faces = FaceSpotDb.Instance.Faces.GetConfirmedFaceByTag(Tag);
