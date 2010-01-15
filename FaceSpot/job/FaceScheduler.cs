@@ -79,11 +79,13 @@ namespace FaceSpot
 				return;
 			
 			i=0;
-			Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
-			Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
-			foreach( Face face in unRecognizedFace){
-				RecognitionJob.Create(face);
-				if(i++ == QUEUE_ENTRY_LIMIT) break;
+			if(FaceSpotDb.Instance.Faces.GetConfirmedFace().Length > FaceSpot.MIN_CONFIRMED_FACE_TO_RECOG){
+				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
+				Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
+				foreach( Face face in unRecognizedFace){
+					RecognitionJob.Create(face);
+					if(i++ == QUEUE_ENTRY_LIMIT) break;
+				}
 			}
 		}
 	}

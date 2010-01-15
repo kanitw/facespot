@@ -294,6 +294,14 @@ namespace FaceSpot.Db
 			return AddFacesFromReaderToCache(reader);
 		}
 		
+		public Face[] GetConfirmedFace(){
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE tag_confirm = 1 "));
+			return AddFacesFromReaderToCache(reader);
+		}
+		
 		public Face[] GetNotRecognizedFace(){
 			return GetUntaggedFace("AND auto_recognized = 0 AND tag_confirm = 0");
 		}

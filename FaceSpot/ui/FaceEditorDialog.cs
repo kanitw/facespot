@@ -1,4 +1,6 @@
 
+
+		
 using FSpot.UI.Dialog;
 using Glade;
 using Gtk;
@@ -34,7 +36,10 @@ namespace FaceSpot
 		//EntryCompletionMatchFunc entryCompletionMatchFunc;
 		
 		Face face;
-		
+		void HandleOnFinished (object sender, EventArgs e)
+		{
+			  FaceIconView.UpdateAll();
+		}
 		#region Category
 		bool transactionCleared = false;
 		 TreeStore peopleTreeStore;
@@ -82,6 +87,8 @@ namespace FaceSpot
 
 		bool newFace;
 		
+		public event EventHandler OnFinished;
+		
 		public FaceEditorDialog (Face face, Widget parent, bool newFace) 
 			: base("FaceEditorDialog", "FaceSpot.ui.FaceSpot.glade")
 		{
@@ -96,7 +103,7 @@ namespace FaceSpot
 				//TODO Determine Resize Method
 				faceImage.Pixbuf = pix.ScaleSimple (100, 100, FaceSpot.IconResizeInterpType);
 			}else {
-				
+				//TODO What's here???
 			}
 			ok_button.Clicked += OkButtonClicked;
 			cancel_button.Clicked += CancelButtonClicked;
@@ -112,6 +119,7 @@ namespace FaceSpot
 				Log.Debug("No Tag for this face yet"+face.Id);
 			
 			Dialog.ShowAll ();
+			OnFinished += HandleOnFinished;
 		}
 
 
@@ -125,6 +133,7 @@ namespace FaceSpot
 		{
 			if(newFace)
 				FaceSpotDb.Instance.RollbackTransaction ();
+			OnFinished(this,null);
 			ClearEditor();
 		}
 
@@ -135,6 +144,7 @@ namespace FaceSpot
 			else
 				HandleOkOldFace ();
 			//FaceSidebarWidget.Instance.UpdateFaceIconView();
+			OnFinished(this,null);
 			ClearEditor ();
 		}
 		private void HandleOkOldFace ()
