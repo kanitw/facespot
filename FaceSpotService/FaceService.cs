@@ -30,9 +30,11 @@ namespace FaceSpot
 //				new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);			
 //			md.Run ();
 //			md.Destroy ();
+		
+			//FIXME : if not declared, can't compile
+			TrainingJob.Equals("","");
 			
-			TrainingJob.Create();
-			
+			FaceTStatTracker.Instance.TrackFaceDbStatus();
 			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
 			
@@ -55,22 +57,7 @@ namespace FaceSpot
 			return true;
 		}
 		
-		public void TestDetect(uint timer){
-//			for(int i=0;i<4;i++){
-//				Photo p = MainWindow.Toplevel.Database.Photos.Get((uint)(i+201));
-				
-//				FacePixbufPos[] faces = FaceDetector.DetectToPixbuf(p);
-//				for(int j=0;j<faces.Length;j++)
-//					faces[j].pixbuf.Save("out/job_"+i+"_"+j+".jpeg","jpeg");
-//				FaceStore faceStore = FaceSpotDb.Instance.Faces;
-//				
-//				foreach(FacePixbufPos f in faces){
-//					Face face = faceStore.CreateFace(f.photo, f.leftX, f.topY, (uint)f.pixbuf.Width, f.pixbuf, null, false, true, false);
-//					faceStore.Commit(face);
-//					FaceSpotDb.Instance.PhotosAddOn.SetIsDetected(f.photo.DefaultVersion, true);
-//				}
-			}
-		}
+	}
 		//public void F(uint timer){
 //			Photo p = MainWindow.Toplevel.Database.Photos.Get(186);
 //			Log.DebugTimerPrint(timer,"path = " + p.DefaultVersionUri.AbsolutePath);

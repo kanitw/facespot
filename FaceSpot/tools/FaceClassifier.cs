@@ -59,7 +59,7 @@ namespace FaceSpot
 			double[] v = new double[inputNodes];
 					
 			//fixme - this is slow
-			EigenValueTags eigenVTags = EigenRecogizer.RecordEigenValue(eigenRec);
+			EigenValueTags eigenVTags = EigenRecognizer.Instance.RecordEigenValue(eigenRec);
 			
 			for(int j=0;j<inputNodes;j++){
 				v[j] = (double)eigenValue[j];	
@@ -67,12 +67,12 @@ namespace FaceSpot
 //				v[j] /= r.Next(1,3);
 //				if(r.Next(1,6) > 3)
 //					v[j] *= -1;
-				Console.Out.Write("{0},",v[j]);
+//				Console.Out.Write("{0},",v[j]);
 			}
-			Console.WriteLine();
+//			Console.WriteLine();
 			
-			Console.WriteLine("network output:");
-			Log.Debug("mean sqr error = {0}",bpnet.MeanSquaredError);
+			//Console.WriteLine("network output:");
+			//Log.Debug("mean sqr error = {0}",bpnet.MeanSquaredError);
 			double[] output = bpnet.Run(v);
 			
 			for(int j=0;j<output.Length;j++)
@@ -81,15 +81,11 @@ namespace FaceSpot
 			
 			string suggestedName = AnalyseNetworkOutput(eigenVTags, output);			
 			string sss = eigenRec.Recognize(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
-			if( sss == null || sss.Length == 0){
-				
-				Log.Debug("=========================== EIGENREC NULL=============================");
+			if( sss == null || sss.Length == 0){								
 				suggestedName = null;
 			}
-			else{
-				Log.Debug("=========================== "+sss);
-				suggestedName = sss;
-				
+			else{				
+				suggestedName = sss;				
 			}
 				
 			Log.Debug("no suggestion - id = {0}, name = {0}",face.Id, face.Name);
@@ -109,8 +105,10 @@ namespace FaceSpot
 			}else 
 				Log.Debug("Classify Face#"+face.Id+" Finished - No suggestions");
 			
-			face.autoRecognized = true;
-			FaceSpotDb.Instance.Faces.Commit(face);						
+			FaceSpotDb.Instance.Faces.Commit(face);	
+			face.autoRecognized = true;			
+			
+			Log.Debug(">>> Classify() ended - {0}", face.Id);
 		}
 		
 		/// <summary>
@@ -187,7 +185,7 @@ namespace FaceSpot
 		private void WriteEigenValueFile(EigenObjectRecognizer eigenRec, string savepath, string filename){
 			
 			// don't store eigen value more than this number
-			const int MAX_EIGEN_LENGTH = 50;
+			const int MAX_EIGEN_LENGTH = 30;
 			
 			int nums_train = eigenRec.Labels.Length;
 			

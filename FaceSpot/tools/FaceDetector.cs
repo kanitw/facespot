@@ -15,11 +15,7 @@ using Gdk;
 namespace FaceSpot
 {
 	public class FaceDetector
-	{
-
-		public FaceDetector ()
-		{			
-		}			
+	{		
 		
 		public static FacePixbufPos[] DetectFaceToPixbuf(Photo photo){
 			Log.Debug("DetectToPixbuf called...");
@@ -36,9 +32,23 @@ namespace FaceSpot
 			Uri uri = photo.DefaultVersionUri;				
 						
 			string s = uri.LocalPath;
-			//fixme - not sure about this
+			//FIXME - not sure about this
 			s.Replace("%20"," ");
 			return DetectFace(new Emgu.CV.Image<Bgr, Byte>(s));									
+		}
+		
+		private static void Resize(ref Image<Bgr, Byte> image, ref double ratio){
+			int width = image.Width;			
+			
+			if(image.Height < width)
+				width = image.Height;
+			
+			int MAXW = 1000;
+			if(width > MAXW){
+				ratio = (double)MAXW/(double)width;
+				//Log.Debug("imgw ={0}, imgh = {1}, width = {2}, ratio = {3}",image.Width, image.Height, width,ratio);
+				image = image.Resize(ratio);
+			}
 		}
 		
 		/// <summary>
@@ -52,8 +62,12 @@ namespace FaceSpot
 		/// </returns>
 		public static FaceImagePos[] DetectFace(Image<Bgr, Byte> image){
 			Log.Debug("DetectFace called...");	
+			double resizeRatio = 1;
+			Resize(ref image, ref resizeRatio);
 			
-			const int smallest_width = 25;
+			Log.Debug("Width = {0}, Height = {1}", image.Width,image.Height);
+			
+			const int smallest_width = 10;
 			const int cropped_width = 100;
 			
 			//Note that lowest confidence is 1 which means every face will be accepted
@@ -85,7 +99,7 @@ namespace FaceSpot
 			HaarCascade nose = new HaarCascade(xmlDirpath+ "haarcascade_mcs_nose.xml");					 					 				 
 				
 			// smallest dist between each face image, main criterian for images with more than one face
-			float smallestSqrDist = (float)(2 * Math.Pow(smallest_width ,2));
+			float smallestSqrDist = (float)Math.Pow(2*smallest_width ,2);
 				
 	        //Detect the faces  from the gray scale image and store the locations as rectangle
 	        //The first dimensional is the channel
@@ -112,8 +126,7 @@ namespace FaceSpot
 	            if ((lefteyesDetected[0].Length == 0 &&  righteyesDetected[0].Length == 0 ) ||
 					(mouthDetected[0].Length == 0 && noseDetected[0].Length == 0)) 
 						continue;            					
-					
-										
+															
 				int higesteyeY = 0;
 					
 	            foreach (MCvAvgComp e in lefteyesDetected[0])
@@ -196,7 +209,7 @@ namespace FaceSpot
 				{
 					faceImage = image.Copy(rect);
 					faceImage = faceImage.Resize(cropped_width, cropped_width);					
-					faceImagePosList.Add(new FaceImagePos(faceImage, (uint)f.rect.Left, (uint)f.rect.Top, (uint)f.rect.Width));
+					faceImagePosList.Add(new FaceImagePos(faceImage, (uint)(f.rect.Left/resizeRatio), (uint)(f.rect.Top/resizeRatio), (uint)(f.rect.Width/resizeRatio)));
 					Log.Debug("width = {0}, height = {1}",rect.Width, rect.Height);
 				}				
 			}

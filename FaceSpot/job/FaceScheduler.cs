@@ -43,13 +43,11 @@ namespace FaceSpot
 					RecognitionJob.Create(face,dJob.priority);
 				}
 			}
-			if( job is RecognitionJob){
-				
+			if( job is RecognitionJob){				
 				
 			}
 			if( job is TrainingJob){
-				Log.Debug(">>> SchedulerJobFinished : TrainingJob");
-				TrainingJob.finished = true;
+				Log.Debug(">>> SchedulerJobFinished : TrainingJob");				
 			}
 			Execute();
 		}

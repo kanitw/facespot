@@ -21,6 +21,8 @@ namespace FaceSpot
 				return trainstat;
 			}
 			set{
+				
+				trainstat = value;
 				SaveTrainState(value);
 			}
 		}
@@ -83,14 +85,15 @@ namespace FaceSpot
 		}
 		
 		public void SaveTrainState(List<Tstate> tstate){
-			Log.Debug("SaveTrainState called");
+			Log.Debug("** SaveTrainState called **");
+			//while(true);
 			try {
 				database.ExecuteNonQuery(new DbCommand("DELETE FROM trainstat"));
 			} catch (Exception ex){
 					Log.Exception(ex);
 			}
-			//Log.Debug("DELETE FROM trainstat ... done");
-			
+			Log.Debug("DELETE FROM trainstat ... done");
+			//while(true);
 			SqliteDataReader reader = null;
 			foreach(Tstate t in tstate){
 				uint tag_id = 0;

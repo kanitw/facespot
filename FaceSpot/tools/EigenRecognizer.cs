@@ -10,8 +10,17 @@ using System.IO;
 namespace FaceSpot
 {
 
-	public class EigenRecogizer
-	{
+	public class EigenRecognizer
+	{		
+		private static EigenRecognizer instance;		
+		public static EigenRecognizer Instance{
+			get {
+				if(instance == null)
+					instance = new EigenRecognizer();
+				return instance;
+			}
+		}				
+		
 		/// <summary>
 		/// load eigen value in EigenValueTags class
 		/// </summary>
@@ -21,10 +30,10 @@ namespace FaceSpot
 		/// <returns>
 		/// A <see cref="EigenValueTags"/>
 		/// </returns>
-		public static EigenValueTags RecordEigenValue(EigenObjectRecognizer eigenRec){
+		public EigenValueTags RecordEigenValue(EigenObjectRecognizer eigenRec){
 			
 			EigenValueTags eigenValueTags = new EigenValueTags();
-			const int MAX_EIGEN_LENGTH = 50;
+			const int MAX_EIGEN_LENGTH = 30;
 			int nums_train = eigenRec.Labels.Length;
 			
 			float[][] eigenMatrix = new float[nums_train][];						    
@@ -47,10 +56,7 @@ namespace FaceSpot
 			}		 				  		
 			Log.Debug("eigenVTags Length = "+ eigenValueTags.eigenTaglist.Count);
 			return eigenValueTags;
-		}				
-			
-		//fix me
-		//public static EigenObjectRecognizer processedEigen;
+		}					
 		
 		/// <summary>
 		/// Process PCA and save a serialized recognizer in specified savepath
@@ -65,19 +71,31 @@ namespace FaceSpot
 		/// A <see cref="System.String"/>
 		/// </param>
 		//private void ProcessPCA(List<FaceTag> faces){		
-		public static EigenValueTags ProcessPCA(Face[] faces){			
+		public EigenValueTags ProcessPCA(Face[] faces){			
 			Log.Debug("ProcessPCA Started...");		
-			
+			int MINFACES = 3;
 			int numsFaces = faces.Length;
 			
 			List<Image<Gray, Byte>> train_imagesList = new List<Image<Gray, byte>>();
 			List<string> train_labelsList = new List<string>();
 				
-			// load faces from detected data			
-			int i = 0;
+			// load faces from detected data						
+			List<int> banList = new List<int>();
+			
+			// filter too small number of faces
+			for(int i=0;i<faces.Length;i++){
+				uint cnt = 0;
+				for(int j=0;j<faces.Length;j++){
+					if(i==j || faces[i].Tag.Name.Equals(faces[j].Tag.Name)){
+						cnt++;
+					}
+				}
+				if(cnt < MINFACES)
+					banList.Add(i);
+			}
 			
 			for(int k=0;k<faces.Length;k++){				
-				if(faces[k].Tag == null){
+				if(faces[k].Tag == null || banList.Contains(k)){
 					//Log.Debug("null Tag :: id = {0}, name = {0}",faces[k].Id,faces[k].Name);
 					continue;
 				}
@@ -86,7 +104,7 @@ namespace FaceSpot
 				train_imagesList.Add(ImageTypeConverter.ConvertPixbufToGrayCVImage(faces[k].iconPixbuf));
 			}
 			
-			//fixme 
+			//FIXME
 			for(int k=0; k<train_imagesList.Count;k++){
 				train_imagesList[k] = train_imagesList[k].Resize(100,100);
 			}

@@ -11,9 +11,7 @@ namespace FaceSpot
 
 
 	public class TrainingJob : FaceJob
-	{
-		//fixme
-		public static bool finished;		
+	{		
 		protected override bool Execute ()
 		{
 			Log.Debug("Training Job Called # " + priority.ToString()
@@ -38,13 +36,13 @@ namespace FaceSpot
 		
 		public static TrainingJob Create()//,JobPriority priority)
 		{
-			Log.Debug("TrainingJob .Create ");
+			Log.Debug(">>> TrainingJob .Create ");
 			uint id = 0;	
 			JobPriority priority = JobPriority.Highest;
 			TrainingJob job = new TrainingJob(id,"",
 			                                    DateTime.Now,
 			                                    priority,
-			                                    persistent);
+			                                    persistent);			
 			Scheduler.Schedule(job,priority);
 			job.Status = FSpot.Jobs.JobStatus.Scheduled;
 			return job;

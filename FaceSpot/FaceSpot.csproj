@@ -62,13 +62,17 @@
     <Reference Include="FSpot.Utils, Version=0.0.0.0, Culture=neutral">
       <Package>f-spot</Package>
     </Reference>
-    <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Emgu.CV.dll</HintPath>
-    </Reference>
     <Reference Include="NeuronDotNet.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NeuronDotNet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\emgucv2\Emgu.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\emgucv2\Emgu.CV.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
