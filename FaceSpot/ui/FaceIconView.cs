@@ -83,7 +83,7 @@ namespace FaceSpot
 
 		void FaceSpotDbInstanceFacesItemsChanged (object sender, DbItemEventArgs<Face> e)
 		{
-			Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
+			//Log.Debug(type.ToString() + "Handle FaceDbInstanceChanged from " + sender.ToString() + "  " + e.ToString());
 			UpdateFaces();
 		}
 		
@@ -96,7 +96,7 @@ namespace FaceSpot
 		
 		public void UpdateFaces(){
 			Face[] faces = null;
-			Log.Debug(this.type.ToString() + " : Update Faces");
+			//Log.Debug(this.type.ToString() + " : Update Faces");
 			FSpot.Photo photo = null;
 			if(FaceSidebarWidget.Instance != null)
 			photo = (FSpot.Photo) FaceSidebarWidget.Instance.SelectedItem;

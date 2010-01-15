@@ -12,6 +12,8 @@ namespace FaceSpot
 
 	public class TrainingJob : FaceJob
 	{
+		//fixme
+		public static bool finished;		
 		protected override bool Execute ()
 		{
 			Log.Debug("Training Job Called # " + priority.ToString()
@@ -22,7 +24,7 @@ namespace FaceSpot
 			List<Face> faceList = new List<Face>();			
 			
 			foreach(Face f in faces){
-				if(f.tagConfirmed)
+				if(f.TagConfirmed)
 					faceList.Add(f);
 			}	
 			if(faceList.Count>0)

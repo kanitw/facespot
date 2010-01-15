@@ -60,11 +60,21 @@ namespace FaceSpot.Db
 		/// </summary>
 		private Tag tag;
 		//private Tag[] rejectedTag;
+		
 		private List<Tag> rejectedTag;
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool tagConfirmed;
+		
+
+		private bool tagConfirmed;
+		public bool TagConfirmed{
+			get{
+//				FaceTStatTracker.Instance.TrackFaceDbStatus();
+				return tagConfirmed;				
+			}
+			set{
+				tagConfirmed = value;
+				FaceTStatTracker.Instance.TrackFaceDbStatus();
+			}
+		}
 		private long unix_time;
 		
 		public Face (uint id,uint leftX,uint topY,uint width,Photo photo,

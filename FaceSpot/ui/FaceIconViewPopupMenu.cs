@@ -23,7 +23,7 @@ namespace FaceSpot
 			if(SelectedFaces == null || SelectedFaces.Length == 0) return false;
 			foreach (Face face in SelectedFaces)
 			{
-				if(face.tagConfirmed  || face.Tag == null) return false;
+				if(face.TagConfirmed  || face.Tag == null) return false;
 			}
 			return true;
 		}
@@ -42,11 +42,11 @@ namespace FaceSpot
 				GtkUtil.MakeMenuSeparator(this);
 			}
 			
-			if(SelectedFaces.Length == 1 && iconView.IsBrowserType)
-			{
-				GtkUtil.MakeMenuItem(this,"Show In Main Window",new EventHandler(ShowImageActivated),SelectedFaces.Length>0);
-				GtkUtil.MakeMenuSeparator(this);	
-			}
+//			if(SelectedFaces.Length == 1 && iconView.IsBrowserType)
+//			{
+//				GtkUtil.MakeMenuItem(this,"Show In Main Window",new EventHandler(ShowImageActivated),SelectedFaces.Length>0);
+//				GtkUtil.MakeMenuSeparator(this);	
+//			}
 			   
 			if(SelectedFaces.Length == 1 && iconView.IsSideBarType)
 				GtkUtil.MakeMenuItem(this,"Move Face",new EventHandler(MoveActivated),true);
@@ -55,9 +55,12 @@ namespace FaceSpot
 				GtkUtil.MakeMenuItem(this,"Change Person",new EventHandler(EditActivated),true);
 			
 			MenuItem ChangePersonTo = GtkUtil.MakeMenuItem(this, "Change Person to",null);
-			PopulatePeopleCategories (ChangePersonTo,People.Tag);
-			GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
-			GtkUtil.MakeMenuItem((Menu)ChangePersonTo.Submenu,"-", new EventHandler(ChangePersonToNoOneActivated));
+			
+			if(ChangePersonTo != null && ChangePersonTo.Submenu != null){
+				PopulatePeopleCategories (ChangePersonTo,People.Tag);			
+				GtkUtil.MakeMenuSeparator((Menu)ChangePersonTo.Submenu);
+				GtkUtil.MakeMenuItem((Menu)ChangePersonTo.Submenu,"-", new EventHandler(ChangePersonToNoOneActivated));
+			}
 			
 			GtkUtil.MakeMenuItem(this,
 			                     Catalog.GetPluralString("Delete Face","Delete Faces",SelectedFaces.Length),
