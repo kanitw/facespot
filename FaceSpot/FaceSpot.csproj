@@ -66,13 +66,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NeuronDotNet.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.Util, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+    <Reference Include="Emgu.CV, Version=2.1.0.658, Culture=neutral, PublicKeyToken=7281126722ab4438">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\emgucv2\Emgu.Util.dll</HintPath>
+      <HintPath>..\..\..\emgucv\bin\Emgu.CV.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.CV, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438">
+    <Reference Include="Emgu.Util, Version=2.1.0.658, Culture=neutral, PublicKeyToken=7281126722ab4438">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\emgucv2\Emgu.CV.dll</HintPath>
+      <HintPath>..\..\..\emgucv\bin\Emgu.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.ML, Version=2.1.0.658, Culture=neutral, PublicKeyToken=7281126722ab4438">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\emgucv\bin\Emgu.CV.ML.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.UI, Version=2.1.0.658, Culture=neutral, PublicKeyToken=7281126722ab4438">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\emgucv\bin\Emgu.CV.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +120,7 @@
     <Compile Include="db\TrainingStore.cs" />
     <Compile Include="tools\FaceTStatTracker.cs" />
     <Compile Include="tools\EigenRecognizer.cs" />
+    <Compile Include="ui\RemovePeopleTagFromPhotoDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

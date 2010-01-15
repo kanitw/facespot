@@ -44,13 +44,13 @@ namespace FaceSpot.Db
 		{
 			Log.Debug("Tags Item Change Handled By FaceStore");
 			//Check for Removed Tags
-//			List<Tag> removed_tag = new List<Tag>();
-//			foreach(Tag tag in e.Items){
-//				Tag t = MainWindow.Toplevel.Database.Tags.Get(tag.Id);
-//				if(t ==null)
-//					removed_tag.Add(tag);
-//			}
-//			RemoveTag(removed_tag.ToArray());	
+			List<Tag> removed_tag = new List<Tag>();
+			foreach(Tag tag in e.Items){
+				Tag t = MainWindow.Toplevel.Database.Tags.Get(tag.Id);
+				if(t ==null)
+					removed_tag.Add(tag);
+			}
+			RemoveTag(removed_tag.ToArray());	
 			
 		}
 		
@@ -58,13 +58,13 @@ namespace FaceSpot.Db
 		{
 			Log.Debug("Photo Item Change Handled By FaceStore");
 			//Check for Removed Photo 
-//			List<Photo> removed_photo = new List<Photo>();
-//			foreach(Photo photo in e.Items){
-//				Photo p = MainWindow.Toplevel.Database.Photos.Get(photo.Id);
-//				if(p ==null)
-//					removed_photo.Add(photo);
-//			}
-//			RemoveAllFacesOfPhotos(removed_photo.ToArray());	
+			List<Photo> removed_photo = new List<Photo>();
+			foreach(Photo photo in e.Items){
+				Photo p = MainWindow.Toplevel.Database.Photos.Get(photo.Id);
+				if(p ==null)
+					removed_photo.Add(photo);
+			}
+			RemoveAllFacesOfPhotos(removed_photo.ToArray());	
 		}
 
 		void MainWindowToplevelDatabaseTagsItemsRemoved (object sender, DbItemEventArgs<Tag> e)
@@ -81,7 +81,7 @@ namespace FaceSpot.Db
 			foreach (Tag tag in tags) {
 				Face[] faces = GetByTag (tag, "");
 				foreach (Face face in faces) {
-					FaceSpotDb.Instance.Faces.DeclineTag (face);
+					FaceSpotDb.Instance.Faces.DeclineTag (face,false);
 				}
 			}
 		}
@@ -436,6 +436,7 @@ namespace FaceSpot.Db
 			uint id = (uint)Database.Execute (					dbcom				);
 			Face face = new Face (id, leftX, topY, width, photo,tag,tagConfirmed,autoDetected,autoRecognized,iconPixbuf,unix_time);
 			Log.Debug("Finished createFace : Db Exec Query");
+			//EmitAdded(new Face[]{face});
 			return face;
 		}
  		public override void Commit (Face item)
@@ -463,7 +464,7 @@ namespace FaceSpot.Db
 			}
 		}
 		
-		public void DeclineTag(Face face)
+		public void DeclineTag(Face face,bool interactive)
 		{
 			Log.Debug("Declining Face#"+face.Id);
 			face.TagConfirmed = false;			
@@ -472,6 +473,10 @@ namespace FaceSpot.Db
 			else
 				Log.Debug("Decline Null Tag!!");			
 			face.Tag = null;
+			if( interactive ){
+				
+				
+			}
 			Commit(face);
 		}
 		
@@ -508,8 +513,8 @@ namespace FaceSpot.Db
 				//FIXME
 				Log.Debug(">> EmitChanged called");
 				// if the line below commented, no crash
-//				if(items != null && items.Length != 0)
-//					EmitChanged(items, new DbItemEventArgs<Face>(items));
+				if(items != null && items.Length != 0)
+					EmitChanged(items, new DbItemEventArgs<Face>(items));
 				Log.Debug(">> EmitChanged ended");
 				
 			} catch(Exception e) {
@@ -539,15 +544,17 @@ namespace FaceSpot.Db
 		}
 		
 		public void Remove(Face[] faces){
-			foreach(Face face in faces)	
-				Remove(face);
+			foreach(Face item in faces){
+				RemoveFromCache (item);
+				Database.ExecuteNonQuery (
+					new DbCommand ("DELETE FROM faces WHERE id = :id", "id", item.Id));
+			}
+			EmitRemoved(faces);
 		}
 		
 		public override void Remove (Face item)
 		{
-			RemoveFromCache (item);
-			Database.ExecuteNonQuery (
-				new DbCommand ("DELETE FROM faces WHERE id = :id", "id", item.Id));
+			Remove(new Face[]{item});
 		}
 		
 		public void clearDatabase(){
