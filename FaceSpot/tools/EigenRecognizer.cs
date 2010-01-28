@@ -31,8 +31,8 @@ namespace FaceSpot
 		/// A <see cref="EigenValueTags"/>
 		/// </returns>
 		public EigenValueTags RecordEigenValue(EigenObjectRecognizer eigenRec){
-			//DELETEME
-			FaceClassifier.WriteEigenValueFile(eigenRec,"","eigenvalue");
+			//DELETEME			
+			//FaceClassifier.WriteEigenValueFile(eigenRec,"","eigenvalue");
 			
 			EigenValueTags eigenValueTags = new EigenValueTags();
 			const int MAX_EIGEN_LENGTH = 30;

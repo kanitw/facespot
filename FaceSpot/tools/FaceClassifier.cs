@@ -42,7 +42,7 @@ namespace FaceSpot
 			
 			Log.Debug(">>> Classify() called - {0}", face.Id);
 			
-			System.Threading.Thread.Sleep(10);
+			//System.Threading.Thread.Sleep(10);
 			
 			Emgu.CV.Image<Gray, byte> emFace = ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf);			
 			//emFace.Save("/home/hyperjump/out/"+face.Id + "a.png");
@@ -141,7 +141,7 @@ namespace FaceSpot
 			}	
 			Log.Debug("AnalyseNetwork... max = "+max);
 			
-			if(max < 0.75)
+			if(max < 0.70)
 				return null;
 			
 			string[] labels = eigenVTags.FacesLabel;

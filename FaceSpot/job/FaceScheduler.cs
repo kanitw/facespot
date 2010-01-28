@@ -80,9 +80,16 @@ namespace FaceSpot
 			
 			i=0;
 			if(FaceSpotDb.Instance.Faces.GetConfirmedFace().Length > FaceSpot.MIN_CONFIRMED_FACE_TO_RECOG){
-				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
-				Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
-				foreach( Face face in unRecognizedFace){
+//				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
+//				Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
+//				
+//				foreach( Face face in unRecognizedFace){
+//					RecognitionJob.Create(face);
+//					if(i++ == QUEUE_ENTRY_LIMIT) break;
+//				}
+				
+				Face[] notConfirmedFace = FaceSpotDb.Instance.Faces.GetNotConfirmedFace();
+				foreach(Face face in notConfirmedFace){
 					RecognitionJob.Create(face);
 					if(i++ == QUEUE_ENTRY_LIMIT) break;
 				}

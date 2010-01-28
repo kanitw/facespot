@@ -112,10 +112,10 @@ namespace FaceSpot
 				TrainingJob job = TrainingJob.Create();
 				
 //				while(job.Status != FSpot.Jobs.JobStatus.Finished)
-//					System.Threading.Thread.Sleep(100);
-											
-				FaceSpotDb.Instance.Faces.ClearAutoRecognized();
-				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
+//					System.Threading.Thread.Sleep(100);			
+				
+				FaceSpotDb.Instance.Faces.ClearAutoRecognized();				
+//				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
 				FaceScheduler.Instance.Execute();
 			}
 			

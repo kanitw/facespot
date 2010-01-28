@@ -267,7 +267,15 @@ namespace FaceSpot.Db
 		public Face[] GetNotConfirmedFaceByTag(Tag tag){
 			return GetByTag(tag,"AND tag_confirm = 0");	
 		}
-		
+		public Face[] GetNotConfirmedFace(){		
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE tag_confirm = 0"				       
+				      )
+			);
+			return AddFacesFromReaderToCache(reader);
+		}
 		public Face[] GetByTag(Tag tag,string addWhereClause){
 			if(tag == null) return new Face[0]{};
 			SqliteDataReader reader = Database.Query (
