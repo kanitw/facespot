@@ -65,6 +65,7 @@ namespace FaceSpot
 		const int QUEUE_ENTRY_LIMIT = 2;
 		public void QueueAnyUncheckedPhoto()
 		{
+			Log.Debug("QueueAnyUncheckedPhoto Called...");
 			Photo[] undetectedPhotos = FaceSpotDb.Instance.PhotosAddOn.GetUnDetectedPhoto();
 			int i=0;
 			foreach( Photo photo in undetectedPhotos)	
@@ -79,21 +80,23 @@ namespace FaceSpot
 				return;
 			
 			i=0;
-			if(FaceSpotDb.Instance.Faces.GetConfirmedFace().Length > FaceSpot.MIN_CONFIRMED_FACE_TO_RECOG){
-//				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
-//				Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
-//				
-//				foreach( Face face in unRecognizedFace){
-//					RecognitionJob.Create(face);
-//					if(i++ == QUEUE_ENTRY_LIMIT) break;
-//				}
+			//Jump Commented
+//			if(FaceSpotDb.Instance.Faces.GetConfirmedFace().Length >= FaceSpot.MIN_CONFIRMED_FACE_TO_RECOG){
+				//Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
+				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetFaceToTrain();
+				Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
 				
-				Face[] notConfirmedFace = FaceSpotDb.Instance.Faces.GetNotConfirmedFace();
-				foreach(Face face in notConfirmedFace){
+				foreach( Face face in unRecognizedFace){
 					RecognitionJob.Create(face);
 					if(i++ == QUEUE_ENTRY_LIMIT) break;
 				}
-			}
+				
+//				Face[] notConfirmedFace = FaceSpotDb.Instance.Faces.GetNotConfirmedFace();
+//				foreach(Face face in notConfirmedFace){
+//					RecognitionJob.Create(face);
+//					if(i++ == QUEUE_ENTRY_LIMIT) break;
+//				}
+//			}
 		}
 	}
 }

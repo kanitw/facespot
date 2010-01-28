@@ -76,10 +76,11 @@ namespace FaceSpot
 				if(diffNumsInstaceExceed) break;
 				bool found = false;
 				foreach(Tstate t_ in shorter){
-//					Log.Debug("name = {0}, diff = {1}",t_.name, Math.Abs(t_.num-t.num));
+					Log.Debug("name = {0}, diff = {1}",t_.name, Math.Abs(t_.num-t.num));
 					if(t_.name.Equals(t.name)){						
 						found = true;
-						if((float)Math.Abs(t_.num-t.num)/(float)t.num  >= (float)diffPercnt/100f){
+						//if((float)Math.Abs(t_.num-t.num)/(float)t.num  >= (float)diffPercnt/100f){
+						if(t.num - t_.num >= 2){
 							diffNumsInstaceExceed = true;							
 							break;
 						}

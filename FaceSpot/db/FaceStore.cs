@@ -302,6 +302,13 @@ namespace FaceSpot.Db
 			return AddFacesFromReaderToCache(reader);
 		}
 		
+		public Face[] GetFaceToTrain(){
+			SqliteDataReader reader = Database.Query (
+				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
+				       "FROM faces " + 
+				       "WHERE tag_id IS NOT NULL AND auto_recognized=0 AND tag_confirm=0"));
+			return AddFacesFromReaderToCache(reader);
+		}
 		public Face[] GetConfirmedFace(){
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 

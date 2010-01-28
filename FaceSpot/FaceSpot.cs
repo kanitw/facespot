@@ -15,7 +15,7 @@ namespace FaceSpot
 			
 		public const string FACE_ICON_PREFIX = "faceicon";
 		
-		public const int MIN_CONFIRMED_FACE_TO_RECOG = 15;
+		public const int MIN_CONFIRMED_FACE_TO_RECOG = 3;
 		/// <summary> Resize Method for all icon's simple resize
 		/// </summary>
 		public const Gdk.InterpType IconResizeInterpType = 
