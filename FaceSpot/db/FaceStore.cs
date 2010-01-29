@@ -306,7 +306,7 @@ namespace FaceSpot.Db
 			SqliteDataReader reader = Database.Query (
 				new DbCommand ("SELECT " + ALL_FIELD_NAME + 
 				       "FROM faces " + 
-				       "WHERE tag_id IS NOT NULL AND auto_recognized=0 AND tag_confirm=0"));
+				       "WHERE auto_recognized=0 AND tag_confirm=0"));
 			return AddFacesFromReaderToCache(reader);
 		}
 		public Face[] GetConfirmedFace(){
@@ -371,6 +371,18 @@ namespace FaceSpot.Db
 				Database.Execute ( dbcom);
 				face.RejectedTagList.Add(tag);
 			}catch (Exception ex){
+				Log.Exception(ex);
+			}
+		}
+		public void RemoveTagbyId(uint id){
+			Log.Debug("RemoveTagbyId {0}",id);
+			try {
+				DbCommand dbcom = new DbCommand (
+						"UPDATE faces SET tag_id = null WHERE id = :face_id",
+				        "face_id", id
+				        );
+				Database.Execute (dbcom);
+			} catch (Exception ex) {
 				Log.Exception(ex);
 			}
 		}
@@ -487,6 +499,8 @@ namespace FaceSpot.Db
 				face.photo.AddTag(face.Tag);
 				MainWindow.Toplevel.Database.Photos.Commit(face.photo);
 			}
+			
+			FaceTStatTracker.Instance.Execute();
 		}
 		
 		public void DeclineTag(Face face,bool interactive)
@@ -547,6 +561,8 @@ namespace FaceSpot.Db
 			}
 			Log.DebugTimerPrint (timer, "Face Commit took {0}");
 			Log.Debug(">> Face Commit ended");
+			
+//			FaceTStatTracker.Instance.Execute();
  		}
 		
 		private string GetIconString(Pixbuf pixbuf){

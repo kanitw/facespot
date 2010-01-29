@@ -65,15 +65,8 @@ namespace FaceSpot
 			
 			for(int j=0;j<inputNodes;j++){
 				v[j] = (double)eigenValue[j];	
-				
-//				v[j] /= r.Next(1,3);
-//				if(r.Next(1,6) > 3)
-//					v[j] *= -1;
-//				Console.Out.Write("{0},",v[j]);
+
 			}
-//			Console.WriteLine();
-			
-			//Console.WriteLine("network output:");
 			//Log.Debug("mean sqr error = {0}",bpnet.MeanSquaredError);
 			double[] output = bpnet.Run(v);
 			
@@ -86,7 +79,6 @@ namespace FaceSpot
 			// suggestedname from nearest neighbor
 			string sss = eigenRec.Recognize(ImageTypeConverter.ConvertPixbufToGrayCVImage(face.iconPixbuf));
 			
-			//Log.Debug("EigenObj = {0••••••••••••••••••}, ANN = {0}",sss,suggestedName);
 			if( sss == null || sss.Length == 0){								
 				suggestedName = null;
 			}
@@ -105,12 +97,16 @@ namespace FaceSpot
 					Log.Debug("Classify Face#"+face.Id+" Finished : ="+suggestedName+"?");
 					face.Tag = tag;
 				}
-				else 
-					Log.Debug("Unfortunately Face#"+face.Id+" has already rejected ="+suggestedName+"!");
+				else {
+					Log.Debug("Unfortunately Face#"+face.Id+" has already rejected ="+suggestedName+"!");					
+				}
 								
-			}else 
+			}else {
 				Log.Debug("Classify Face#"+face.Id+" Finished - No suggestions");
-			
+				// this will removed the previous suggested tag
+				//FaceSpotDb.Instance.Faces.RemoveTagbyId(face.Id);
+				
+			}
 			FaceSpotDb.Instance.Faces.Commit(face);	
 			face.autoRecognized = true;			
 			

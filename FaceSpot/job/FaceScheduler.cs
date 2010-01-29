@@ -82,8 +82,8 @@ namespace FaceSpot
 			i=0;
 			//Jump Commented
 //			if(FaceSpotDb.Instance.Faces.GetConfirmedFace().Length >= FaceSpot.MIN_CONFIRMED_FACE_TO_RECOG){
-				//Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
-				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetFaceToTrain();
+				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetNotRecognizedFace();
+//				Face[] unRecognizedFace = FaceSpotDb.Instance.Faces.GetFaceToTrain();
 				Log.Debug("Unrecognized Face : "+unRecognizedFace.Length);
 				
 				foreach( Face face in unRecognizedFace){

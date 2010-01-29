@@ -22,30 +22,13 @@ namespace FaceSpot
 		public bool Start ()
 		{
 			uint timer = Log.InformationTimerStart ("Starting FaceService");
-			
-//			string msg = Catalog.GetString ("Face Service Start");
-//			string desc = Catalog.GetString ("FaceSpot Face Service is running. You can turn" +
-//											" it by choosing Edit>manage Extensions");			
-//			FSpot.UI.Dialog.HigMessageDialog md = 
-//				new FSpot.UI.Dialog.HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent, Gtk.MessageType.Error, ButtonsType.Ok, msg, desc);			
-//			md.Run ();
-//			md.Destroy ();
 		
-			//FIXME : if not declared, can't compile
+			//FIXME : if not declared, this can't be compiled
 			TrainingJob.Equals("","");
 			
-			FaceTStatTracker.Instance.TrackFaceDbStatus();
+			FaceTStatTracker.Instance.Execute();
 			FaceScheduler.Instance.Execute();
 			Log.DebugTimerPrint (timer, "FaceService startup took {0}");
-			
-									
-//			foreach(Face f in faces){
-//				if(f.iconPixbuf == null)
-//					Log.Debug("id = {0}, name = {0}, audodetected = {0}",f.Id,f.Name,f.autoDetected);
-//			}
-//			Log.Debug("#faces to ProcessPCA() = {0}",faces.Length);
-//			
-//			EigenRecogizer.ProcessPCA(faces);
 			
 			return true;
 		}
@@ -58,70 +41,4 @@ namespace FaceSpot
 		}
 		
 	}
-		//public void F(uint timer){
-//			Photo p = MainWindow.Toplevel.Database.Photos.Get(186);
-//			Log.DebugTimerPrint(timer,"path = " + p.DefaultVersionUri.AbsolutePath);
-//			Gdk.Pixbuf p186 = new Gdk.Pixbuf(p.DefaultVersionUri.AbsolutePath);
-//			p186.Save("jump","jpeg");
-//			
-//			
-//			Gdk.Pixbuf pixbuf = new Gdk.Pixbuf("/home/hyperjump/faces/testDetect/cp33.jpg");
-//			Log.DebugTimerPrint (timer, "================");															
-//			byte [] testdata = pixbuf.SaveToBuffer("jpeg", new string [] {"quality" }, new string [] { "100" });
-//			Log.DebugTimerPrint (timer, "test data length = " +testdata.Length);			
-//			
-//			pixbuf.Save("temp","jpeg");
-//			
-//			byte [] pixbuf_bmpbyte = pixbuf.SaveToBuffer("bmp");
-//			System.IO.MemoryStream m = new System.IO.MemoryStream(pixbuf_bmpbyte);
-//			
-//			
-//			
-//			Bitmap bmpt = new Bitmap(m);
-//			Emgu.CV.Image<Bgr, byte> blankImage = new Emgu.CV.Image<Bgr, byte>(pixbuf.Width,pixbuf.Height);
-//			
-//			blankImage.Bitmap = bmpt;			
-//			blankImage.Save("haha");
-//			
-//			//Emgu.CV.Image<Bgr, Byte> ccc = new Emgu.CV.Image<Bgr, Byte>(100,100);
-//			//Emgu.CV.Image<Gray, Byte> img = new Emgu.CV.Image<Gray, Byte>("/home/hyperjump/faces/testDetect/cp33.jpg");
-//			//Emgu.CV.Image<Bgr, Byte> cPicture = new Emgu.CV.Image<Bgr, Byte>("/home/hyperjump/faces/testDetect/cp33.jpg");
-//			
-//			
-//			Emgu.CV.Image<Bgr, byte> ccc = new Emgu.CV.Image<Bgr, byte>("temp");
-//
-//			
-//			ccc.Save("abc.jpg");
-//			System.Drawing.Bitmap bmp = ccc.Bitmap;
-//			System.IO.MemoryStream ms = new System.IO.MemoryStream();
-//			bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-			
-			
-				
-			//ccc.Bytes = testdata;
-//			for(int i=0;i<100;i++)
-//				Log.DebugTimerPrint( timer, ccc.Bytes[i].ToString());
-//			
-//				Log.DebugTimerPrint( timer, "---------------------");
-//			for(int i=0;i<100;i++)
-//				Log.DebugTimerPrint( timer, testdata[i].ToString());
-//			
-//			Log.DebugTimerPrint( timer, testdata[testdata.Length-1].ToString());
-//			Log.DebugTimerPrint( timer, testdata[testdata.Length-2].ToString());
-			
-//			
-//			Gdk.Pixbuf loadedPix = new Gdk.Pixbuf("abc.jpg");
-//			
-//			loadedPix.Save("zzz.jpg","jpeg");
-//			
-//						
-//
-//			//loadedPix = new Gdk.Pixbuf(intPtr,
-//			loadedPix = new Gdk.Pixbuf(ms.GetBuffer());
-//				
-//			loadedPix.Save("buffer.jpg","jpeg");
-		//}
 	}
-	
-	//public lass
-//}

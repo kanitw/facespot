@@ -40,7 +40,7 @@ namespace FaceSpot
 			return faceDbStat;
 		}
 		
-		public void TrackFaceDbStatus(){										
+		public void Execute(){										
 			Log.Debug(">>> TrackFacesStatus started");
 			bool validToTrain = false;
 			//bool classNumsChanged = false;
@@ -76,11 +76,13 @@ namespace FaceSpot
 				if(diffNumsInstaceExceed) break;
 				bool found = false;
 				foreach(Tstate t_ in shorter){
-					Log.Debug("name = {0}, diff = {1}",t_.name, Math.Abs(t_.num-t.num));
+					
 					if(t_.name.Equals(t.name)){						
 						found = true;
+						Log.Debug("name = {0}, diff = {1}",t_.name, Math.Abs(t_.num-t.num));
+						
 						//if((float)Math.Abs(t_.num-t.num)/(float)t.num  >= (float)diffPercnt/100f){
-						if(t.num - t_.num >= 2){
+						if(Math.Abs(t.num - t_.num) >= 2){
 							diffNumsInstaceExceed = true;							
 							break;
 						}
@@ -116,7 +118,7 @@ namespace FaceSpot
 //					System.Threading.Thread.Sleep(100);			
 				
 				FaceSpotDb.Instance.Faces.ClearAutoRecognized();				
-//				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
+				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
 				FaceScheduler.Instance.Execute();
 			}
 			

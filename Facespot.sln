@@ -28,7 +28,7 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		version = 0.8
-		StartupItem = FaceSpotService\FaceSpotService.csproj
+		StartupItem = FaceSpot\FaceSpot.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
