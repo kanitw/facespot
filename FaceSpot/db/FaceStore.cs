@@ -500,6 +500,7 @@ namespace FaceSpot.Db
 				MainWindow.Toplevel.Database.Photos.Commit(face.photo);
 			}
 			
+			// execute tracker here
 			FaceTStatTracker.Instance.Execute();
 		}
 		
@@ -550,8 +551,8 @@ namespace FaceSpot.Db
 				}
 				//FIXME
 				//Log.Debug(">> EmitChanged called");
-				// if the line below commented, no crash
-				if(items != null && items.Length != 0)
+				// with the line 'EmitChanged' line below commented, no crash
+				if(items != null && items.Length != 0);
 					EmitChanged(items);
 				//EmitChanged(null);
 				//Log.Debug(">> EmitChanged ended");
@@ -560,9 +561,7 @@ namespace FaceSpot.Db
 				Log.Exception(e);
 			}
 			Log.DebugTimerPrint (timer, "Face Commit took {0}");
-			Log.Debug(">> Face Commit ended");
-			
-//			FaceTStatTracker.Instance.Execute();
+			Log.Debug(">> Face Commit ended");		
  		}
 		
 		private string GetIconString(Pixbuf pixbuf){

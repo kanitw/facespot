@@ -118,7 +118,7 @@ namespace FaceSpot
 //					System.Threading.Thread.Sleep(100);			
 				
 				FaceSpotDb.Instance.Faces.ClearAutoRecognized();				
-				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
+//				FaceSpotDb.Instance.Faces.RemoveNotConfirmTag();
 				FaceScheduler.Instance.Execute();
 			}
 			
